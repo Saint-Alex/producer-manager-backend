@@ -34,18 +34,18 @@ npm install
 cp .env.example .env
 
 # 3. Iniciar infraestrutura
-docker-compose up -d
+npm run docker:db
 
 # 4. Configurar banco de dados
-npm run typeorm:migration:run
+npm run migration:run
 npm run seed
 
 # 5. Iniciar em desenvolvimento
 npm run start:dev
 
 # 6. Acessar a API
-http://localhost:3000 (API)
-http://localhost:3000/api (Swagger)
+http://localhost:3001 (API)
+http://localhost:3001/api/docs (Swagger)
 ```
 
 ## API Endpoints
