@@ -1,0 +1,26 @@
+#!/bin/sh
+
+echo "🚀 Running pre-push validation..."
+
+# Run type checking
+echo "🔍 Checking TypeScript types..."
+npm run build
+
+if [ $? -ne 0 ]; then
+    echo "❌ TypeScript build failed!"
+    exit 1
+fi
+
+echo "✅ TypeScript build successful!"
+
+# Run tests
+echo "🧪 Running tests..."
+npm run test
+
+if [ $? -ne 0 ]; then
+    echo "❌ Tests failed!"
+    exit 1
+fi
+
+echo "✅ All tests passed!"
+echo "🎉 Pre-push validation completed successfully!"
