@@ -8,9 +8,9 @@ import { DashboardService } from './dashboard.service';
 
 describe('DashboardService', () => {
   let service: DashboardService;
-  let produtorRepository: Repository<Produtor>;
-  let propriedadeRepository: Repository<PropriedadeRural>;
-  let cultivoRepository: Repository<Cultivo>;
+  let _produtorRepository: Repository<Produtor>;
+  let _propriedadeRepository: Repository<PropriedadeRural>;
+  let _cultivoRepository: Repository<Cultivo>;
 
   const mockProdutorRepository = {
     count: jest.fn(),
@@ -44,11 +44,11 @@ describe('DashboardService', () => {
     }).compile();
 
     service = module.get<DashboardService>(DashboardService);
-    produtorRepository = module.get<Repository<Produtor>>(getRepositoryToken(Produtor));
-    propriedadeRepository = module.get<Repository<PropriedadeRural>>(
+    _produtorRepository = module.get<Repository<Produtor>>(getRepositoryToken(Produtor));
+    _propriedadeRepository = module.get<Repository<PropriedadeRural>>(
       getRepositoryToken(PropriedadeRural),
     );
-    cultivoRepository = module.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
+    _cultivoRepository = module.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
   });
 
   beforeEach(() => {

@@ -12,10 +12,10 @@ import { CultivoService } from '../src/modules/cultivo/cultivo.service';
 
 describe('CultivoController (e2e)', () => {
   let app: INestApplication;
-  let cultivoRepository: Repository<Cultivo>;
-  let propriedadeRepository: Repository<PropriedadeRural>;
-  let culturaRepository: Repository<Cultura>;
-  let safraRepository: Repository<Safra>;
+  let _cultivoRepository: Repository<Cultivo>;
+  let _propriedadeRepository: Repository<PropriedadeRural>;
+  let _culturaRepository: Repository<Cultura>;
+  let _safraRepository: Repository<Safra>;
 
   const mockCultivoRepository = {
     create: jest.fn(),
@@ -70,12 +70,12 @@ describe('CultivoController (e2e)', () => {
       }),
     );
 
-    cultivoRepository = moduleFixture.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
-    propriedadeRepository = moduleFixture.get<Repository<PropriedadeRural>>(
+    _cultivoRepository = moduleFixture.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
+    _propriedadeRepository = moduleFixture.get<Repository<PropriedadeRural>>(
       getRepositoryToken(PropriedadeRural),
     );
-    culturaRepository = moduleFixture.get<Repository<Cultura>>(getRepositoryToken(Cultura));
-    safraRepository = moduleFixture.get<Repository<Safra>>(getRepositoryToken(Safra));
+    _culturaRepository = moduleFixture.get<Repository<Cultura>>(getRepositoryToken(Cultura));
+    _safraRepository = moduleFixture.get<Repository<Safra>>(getRepositoryToken(Safra));
 
     await app.init();
   });

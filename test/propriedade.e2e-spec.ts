@@ -10,8 +10,8 @@ import { PropriedadeService } from '../src/modules/propriedade/propriedade.servi
 
 describe('PropriedadeController (e2e)', () => {
   let app: INestApplication;
-  let propriedadeRepository: Repository<PropriedadeRural>;
-  let produtorRepository: Repository<Produtor>;
+  let _propriedadeRepository: Repository<PropriedadeRural>;
+  let _produtorRepository: Repository<Produtor>;
 
   const mockPropriedadeRepository = {
     create: jest.fn(),
@@ -52,10 +52,10 @@ describe('PropriedadeController (e2e)', () => {
       }),
     );
 
-    propriedadeRepository = moduleFixture.get<Repository<PropriedadeRural>>(
+    _propriedadeRepository = moduleFixture.get<Repository<PropriedadeRural>>(
       getRepositoryToken(PropriedadeRural),
     );
-    produtorRepository = moduleFixture.get<Repository<Produtor>>(getRepositoryToken(Produtor));
+    _produtorRepository = moduleFixture.get<Repository<Produtor>>(getRepositoryToken(Produtor));
 
     await app.init();
   });

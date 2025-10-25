@@ -12,7 +12,7 @@ describe('AppModule', () => {
 
   beforeEach(async () => {
     // Mock database connection for testing
-    const mockDataSource = {
+    const _mockDataSource = {
       initialize: jest.fn().mockResolvedValue(true),
       isInitialized: true,
       options: {},

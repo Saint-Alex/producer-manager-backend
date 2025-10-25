@@ -11,9 +11,9 @@ import { DashboardService } from '../src/modules/dashboard/dashboard.service';
 
 describe('DashboardController (e2e)', () => {
   let app: INestApplication;
-  let produtorRepository: Repository<Produtor>;
-  let propriedadeRepository: Repository<PropriedadeRural>;
-  let cultivoRepository: Repository<Cultivo>;
+  let _produtorRepository: Repository<Produtor>;
+  let _propriedadeRepository: Repository<PropriedadeRural>;
+  let _cultivoRepository: Repository<Cultivo>;
 
   const mockProdutorRepository = {
     count: jest.fn(),
@@ -49,11 +49,11 @@ describe('DashboardController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
 
-    produtorRepository = moduleFixture.get<Repository<Produtor>>(getRepositoryToken(Produtor));
-    propriedadeRepository = moduleFixture.get<Repository<PropriedadeRural>>(
+    _produtorRepository = moduleFixture.get<Repository<Produtor>>(getRepositoryToken(Produtor));
+    _propriedadeRepository = moduleFixture.get<Repository<PropriedadeRural>>(
       getRepositoryToken(PropriedadeRural),
     );
-    cultivoRepository = moduleFixture.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
+    _cultivoRepository = moduleFixture.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
 
     await app.init();
   });

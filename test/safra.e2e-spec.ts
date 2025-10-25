@@ -9,7 +9,7 @@ import { SafraService } from '../src/modules/safra/safra.service';
 
 describe('SafraController (e2e)', () => {
   let app: INestApplication;
-  let safraRepository: Repository<Safra>;
+  let _safraRepository: Repository<Safra>;
 
   const mockSafraRepository = {
     create: jest.fn(),
@@ -40,7 +40,7 @@ describe('SafraController (e2e)', () => {
       }),
     );
 
-    safraRepository = moduleFixture.get<Repository<Safra>>(getRepositoryToken(Safra));
+    _safraRepository = moduleFixture.get<Repository<Safra>>(getRepositoryToken(Safra));
 
     await app.init();
   });

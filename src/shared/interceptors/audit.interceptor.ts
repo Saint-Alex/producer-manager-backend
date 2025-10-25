@@ -32,7 +32,7 @@ export class AuditInterceptor implements NestInterceptor {
     }
 
     const method = request.method;
-    const { params, body } = request;
+    const { params, body: _body } = request;
     const entityId = params.id;
 
     // Capturar contexto do usuário
@@ -89,7 +89,7 @@ export class AuditInterceptor implements NestInterceptor {
     );
   }
 
-  private extractUserId(request: any): string | undefined {
+  private extractUserId(_request: any): string | undefined {
     // Aqui você implementaria a extração do user ID do token JWT
     // Por enquanto, retornamos undefined (usuário anônimo)
     //

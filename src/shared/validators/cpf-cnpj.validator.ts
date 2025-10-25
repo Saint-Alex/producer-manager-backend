@@ -8,7 +8,7 @@ import {
 
 @ValidatorConstraint({ name: 'isCpfCnpj', async: false })
 export class IsCpfCnpjConstraint implements ValidatorConstraintInterface {
-  validate(value: string, args: ValidationArguments) {
+  validate(value: string, _args: ValidationArguments) {
     if (!value || typeof value !== 'string') {
       return false;
     }
@@ -83,13 +83,13 @@ export class IsCpfCnpjConstraint implements ValidatorConstraintInterface {
     return true;
   }
 
-  defaultMessage(args: ValidationArguments) {
+  defaultMessage(_args: ValidationArguments) {
     return 'CPF ou CNPJ inválido';
   }
 }
 
 export function IsCpfCnpj(validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,

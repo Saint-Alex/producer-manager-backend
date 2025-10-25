@@ -9,7 +9,7 @@ import { CulturaService } from '../src/modules/cultura/cultura.service';
 
 describe('CulturaController (e2e)', () => {
   let app: INestApplication;
-  let culturaRepository: Repository<Cultura>;
+  let _culturaRepository: Repository<Cultura>;
 
   const mockRepository = {
     create: jest.fn(),
@@ -41,7 +41,7 @@ describe('CulturaController (e2e)', () => {
       }),
     );
 
-    culturaRepository = moduleFixture.get<Repository<Cultura>>(getRepositoryToken(Cultura));
+    _culturaRepository = moduleFixture.get<Repository<Cultura>>(getRepositoryToken(Cultura));
 
     await app.init();
   });

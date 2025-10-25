@@ -12,10 +12,10 @@ import { UpdateCultivoDto } from './dto/update-cultivo.dto';
 
 describe('CultivoService', () => {
   let service: CultivoService;
-  let cultivoRepository: Repository<Cultivo>;
-  let propriedadeRepository: Repository<PropriedadeRural>;
-  let culturaRepository: Repository<Cultura>;
-  let safraRepository: Repository<Safra>;
+  let _cultivoRepository: Repository<Cultivo>;
+  let _propriedadeRepository: Repository<PropriedadeRural>;
+  let _culturaRepository: Repository<Cultura>;
+  let _safraRepository: Repository<Safra>;
 
   const mockCultivoRepository = {
     create: jest.fn(),
@@ -61,12 +61,12 @@ describe('CultivoService', () => {
     }).compile();
 
     service = module.get<CultivoService>(CultivoService);
-    cultivoRepository = module.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
-    propriedadeRepository = module.get<Repository<PropriedadeRural>>(
+    _cultivoRepository = module.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
+    _propriedadeRepository = module.get<Repository<PropriedadeRural>>(
       getRepositoryToken(PropriedadeRural),
     );
-    culturaRepository = module.get<Repository<Cultura>>(getRepositoryToken(Cultura));
-    safraRepository = module.get<Repository<Safra>>(getRepositoryToken(Safra));
+    _culturaRepository = module.get<Repository<Cultura>>(getRepositoryToken(Cultura));
+    _safraRepository = module.get<Repository<Safra>>(getRepositoryToken(Safra));
   });
 
   beforeEach(() => {

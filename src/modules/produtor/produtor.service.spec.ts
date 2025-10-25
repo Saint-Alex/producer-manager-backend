@@ -8,7 +8,7 @@ import { ProdutorService } from './produtor.service';
 
 describe('ProdutorService', () => {
   let service: ProdutorService;
-  let repository: Repository<Produtor>;
+  let _repository: Repository<Produtor>;
 
   const mockRepository = {
     create: jest.fn(),
@@ -36,7 +36,7 @@ describe('ProdutorService', () => {
     }).compile();
 
     service = module.get<ProdutorService>(ProdutorService);
-    repository = module.get<Repository<Produtor>>(getRepositoryToken(Produtor));
+    _repository = module.get<Repository<Produtor>>(getRepositoryToken(Produtor));
   });
 
   beforeEach(() => {

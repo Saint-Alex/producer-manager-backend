@@ -9,7 +9,7 @@ import { ProdutorService } from '../src/modules/produtor/produtor.service';
 
 describe('ProdutorController (e2e)', () => {
   let app: INestApplication;
-  let produtorRepository: Repository<Produtor>;
+  let _produtorRepository: Repository<Produtor>;
 
   const mockRepository = {
     create: jest.fn(),
@@ -46,7 +46,7 @@ describe('ProdutorController (e2e)', () => {
       }),
     );
 
-    produtorRepository = moduleFixture.get<Repository<Produtor>>(getRepositoryToken(Produtor));
+    _produtorRepository = moduleFixture.get<Repository<Produtor>>(getRepositoryToken(Produtor));
 
     await app.init();
   });

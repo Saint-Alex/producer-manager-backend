@@ -57,7 +57,7 @@ describe('AuditService', () => {
 
   describe('logCreate', () => {
     it('should create audit log for CREATE operation', async () => {
-      const mockSave = auditRepository.save.mockResolvedValue({} as AuditLog);
+      const _mockSave = auditRepository.save.mockResolvedValue({} as AuditLog);
 
       const context = {
         userId: 'user-123',
@@ -105,7 +105,7 @@ describe('AuditService', () => {
 
   describe('logUpdate', () => {
     it('should create audit log for UPDATE operation with changed fields', async () => {
-      const mockSave = auditRepository.save.mockResolvedValue({} as AuditLog);
+      const _mockSave = auditRepository.save.mockResolvedValue({} as AuditLog);
 
       const oldData = { id: 'prod-123', nome: 'João Silva', idade: 30 };
       const newData = { id: 'prod-123', nome: 'João Santos', idade: 30 };

@@ -23,13 +23,13 @@ export class IsValidAreaSumConstraint implements ValidatorConstraintInterface {
     return agricultavel + vegetacao <= total;
   }
 
-  defaultMessage(args: ValidationArguments) {
+  defaultMessage(_args: ValidationArguments) {
     return 'A soma da área agricultável e área de vegetação não pode ser maior que a área total';
   }
 }
 
 export function IsValidAreaSum(validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,

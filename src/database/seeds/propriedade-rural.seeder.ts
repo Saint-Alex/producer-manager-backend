@@ -152,7 +152,8 @@ export class PropriedadeRuralSeeder {
 
       if (!existingPropriedade) {
         // Criar a propriedade sem o campo produtorCpfCnpj
-        const { produtorCpfCnpj, ...propriedadeWithoutProdutor } = propriedadeData;
+        const { produtorCpfCnpj: _produtorCpfCnpj, ...propriedadeWithoutProdutor } =
+          propriedadeData;
         const propriedade = propriedadeRepository.create(propriedadeWithoutProdutor);
 
         // Associar o produtor

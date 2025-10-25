@@ -138,7 +138,7 @@ describe('AuditInterceptor', () => {
         of({ id: 'test-id', name: 'Patched Producer' }),
       );
 
-      const result = await interceptor.intercept(executionContext, callHandler).toPromise();
+      const _result = await interceptor.intercept(executionContext, callHandler).toPromise();
 
       expect(auditService.logUpdate).toHaveBeenCalledWith(
         'Producer',
