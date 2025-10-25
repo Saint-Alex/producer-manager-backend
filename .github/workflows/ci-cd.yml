@@ -81,7 +81,9 @@ jobs:
           DATABASE_PASSWORD: test
           DATABASE_NAME: producer_manager_test
           NODE_ENV: test
-          JWT_SECRET: test-secret
+          JWT_SECRET: test-jwt-secret-key-for-testing-32-chars-minimum
+          LOG_LEVEL: error
+          CORS_ORIGINS: http://localhost:3000
 
       - name: Run e2e tests
         run: npm run test:e2e
@@ -92,7 +94,9 @@ jobs:
           DATABASE_PASSWORD: test
           DATABASE_NAME: producer_manager_test
           NODE_ENV: test
-          JWT_SECRET: test-secret
+          JWT_SECRET: test-jwt-secret-key-for-testing-32-chars-minimum
+          LOG_LEVEL: error
+          CORS_ORIGINS: http://localhost:3000
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
