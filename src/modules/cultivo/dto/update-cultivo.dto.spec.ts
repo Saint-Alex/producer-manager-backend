@@ -12,7 +12,7 @@ describe('UpdateCultivoDto', () => {
 
     it('should pass with only areaCultivada provided', async () => {
       const dto = plainToClass(UpdateCultivoDto, {
-        areaCultivada: 75.5
+        areaCultivada: 75.5,
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -21,7 +21,7 @@ describe('UpdateCultivoDto', () => {
     it('should pass with only IDs provided', async () => {
       const dto = plainToClass(UpdateCultivoDto, {
         propriedadeId: '550e8400-e29b-41d4-a716-446655440000',
-        culturaId: '550e8400-e29b-41d4-a716-446655440001'
+        culturaId: '550e8400-e29b-41d4-a716-446655440001',
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -31,36 +31,36 @@ describe('UpdateCultivoDto', () => {
   describe('inherited validation when fields are provided', () => {
     it('should fail with invalid UUID when provided', async () => {
       const dto = plainToClass(UpdateCultivoDto, {
-        propriedadeId: 'invalid-uuid'
+        propriedadeId: 'invalid-uuid',
       });
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'propriedadeId');
+      const propertyError = errors.find((error) => error.property === 'propriedadeId');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isUuid');
     });
 
     it('should fail with negative area when provided', async () => {
       const dto = plainToClass(UpdateCultivoDto, {
-        areaCultivada: -50
+        areaCultivada: -50,
       });
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'areaCultivada');
+      const propertyError = errors.find((error) => error.property === 'areaCultivada');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isPositive');
     });
 
     it('should fail with zero area when provided', async () => {
       const dto = plainToClass(UpdateCultivoDto, {
-        areaCultivada: 0
+        areaCultivada: 0,
       });
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'areaCultivada');
+      const propertyError = errors.find((error) => error.property === 'areaCultivada');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isPositive');
     });
@@ -72,7 +72,7 @@ describe('UpdateCultivoDto', () => {
         propriedadeId: '550e8400-e29b-41d4-a716-446655440000',
         culturaId: '550e8400-e29b-41d4-a716-446655440001',
         safraId: '550e8400-e29b-41d4-a716-446655440002',
-        areaCultivada: 125.75
+        areaCultivada: 125.75,
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -80,7 +80,7 @@ describe('UpdateCultivoDto', () => {
 
     it('should handle area-only update', async () => {
       const dto = plainToClass(UpdateCultivoDto, {
-        areaCultivada: 200
+        areaCultivada: 200,
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -89,7 +89,7 @@ describe('UpdateCultivoDto', () => {
     it('should handle relationship updates', async () => {
       const dto = plainToClass(UpdateCultivoDto, {
         culturaId: '550e8400-e29b-41d4-a716-446655440003',
-        safraId: '550e8400-e29b-41d4-a716-446655440004'
+        safraId: '550e8400-e29b-41d4-a716-446655440004',
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -100,7 +100,7 @@ describe('UpdateCultivoDto', () => {
     it('should handle null values', async () => {
       const dto = plainToClass(UpdateCultivoDto, {
         areaCultivada: null,
-        culturaId: null
+        culturaId: null,
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -109,7 +109,7 @@ describe('UpdateCultivoDto', () => {
     it('should handle undefined values', async () => {
       const dto = plainToClass(UpdateCultivoDto, {
         propriedadeId: undefined,
-        areaCultivada: undefined
+        areaCultivada: undefined,
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);

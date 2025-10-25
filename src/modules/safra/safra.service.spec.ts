@@ -69,7 +69,7 @@ describe('SafraService', () => {
       const result = await service.create(createSafraDto);
 
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { ano: 2025 }
+        where: { ano: 2025 },
       });
       expect(repository.create).toHaveBeenCalledWith(createSafraDto);
       expect(repository.save).toHaveBeenCalledWith(newSafra);
@@ -87,7 +87,7 @@ describe('SafraService', () => {
       await expect(service.create(createSafraDto)).rejects.toThrow(ConflictException);
 
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { ano: 2024 }
+        where: { ano: 2024 },
       });
       expect(repository.create).not.toHaveBeenCalled();
       expect(repository.save).not.toHaveBeenCalled();
@@ -103,7 +103,7 @@ describe('SafraService', () => {
 
       expect(repository.find).toHaveBeenCalledWith({
         relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
-        order: { ano: 'DESC' }
+        order: { ano: 'DESC' },
       });
       expect(result).toEqual(safras);
     });
@@ -125,7 +125,7 @@ describe('SafraService', () => {
 
       expect(repository.findOne).toHaveBeenCalledWith({
         where: { id: '1' },
-        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural']
+        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
       });
       expect(result).toEqual(mockSafra);
     });
@@ -145,7 +145,7 @@ describe('SafraService', () => {
 
       expect(repository.findOne).toHaveBeenCalledWith({
         where: { ano: 2024 },
-        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural']
+        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
       });
       expect(result).toEqual(mockSafra);
     });
@@ -172,11 +172,9 @@ describe('SafraService', () => {
 
       expect(repository.findOne).toHaveBeenCalledWith({
         where: { id: '1' },
-        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural']
+        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
       });
-      expect(repository.save).toHaveBeenCalledWith(
-        expect.objectContaining(updateSafraDto)
-      );
+      expect(repository.save).toHaveBeenCalledWith(expect.objectContaining(updateSafraDto));
       expect(result).toEqual(updatedSafra);
     });
 
@@ -209,7 +207,7 @@ describe('SafraService', () => {
       // Mock safra atual com ano diferente
       const currentSafra = {
         ...mockSafra,
-        ano: 2024 // Ano diferente do que estamos tentando atualizar
+        ano: 2024, // Ano diferente do que estamos tentando atualizar
       };
 
       const existingSafra = {
@@ -220,7 +218,7 @@ describe('SafraService', () => {
         dataFim: new Date(),
         cultivos: [],
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       repository.findOne
@@ -228,7 +226,7 @@ describe('SafraService', () => {
         .mockResolvedValueOnce(existingSafra as any); // Para verificação de conflito - existe
 
       await expect(service.update('1', updateSafraDto)).rejects.toThrow(
-        'Safra para o ano 2025 já existe'
+        'Safra para o ano 2025 já existe',
       );
     });
 
@@ -270,7 +268,7 @@ describe('SafraService', () => {
 
       expect(repository.findOne).toHaveBeenCalledWith({
         where: { id: '1' },
-        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural']
+        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
       });
       expect(repository.remove).toHaveBeenCalledWith(mockSafra);
     });

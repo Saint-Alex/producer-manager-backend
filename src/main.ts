@@ -15,9 +15,11 @@ async function bootstrap() {
   app.useLogger(logger);
 
   // Security headers
-  app.use(helmet({
-    contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false,
-  }));
+  app.use(
+    helmet({
+      contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false,
+    }),
+  );
 
   // Global validation pipe
   app.useGlobalPipes(
@@ -29,9 +31,10 @@ async function bootstrap() {
   );
 
   // CORS
-  const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? process.env.CORS_ORIGINS?.split(',') || ['https://yourdomain.com']
-    : ['http://localhost:3000', 'http://localhost:3001'];
+  const allowedOrigins =
+    process.env.NODE_ENV === 'production'
+      ? process.env.CORS_ORIGINS?.split(',') || ['https://yourdomain.com']
+      : ['http://localhost:3000', 'http://localhost:3001'];
 
   app.enableCors({
     origin: allowedOrigins,
@@ -75,7 +78,10 @@ async function bootstrap() {
     });
   });
 
-  logger.log(`🚀 Producer Manager API is running on: http://localhost:${port}/${apiPrefix}`, 'Bootstrap');
+  logger.log(
+    `🚀 Producer Manager API is running on: http://localhost:${port}/${apiPrefix}`,
+    'Bootstrap',
+  );
   logger.log(`📚 Swagger documentation: http://localhost:${port}/${swaggerPath}`, 'Bootstrap');
   logger.log(`🔍 Health checks: http://localhost:${port}/${apiPrefix}/health`, 'Bootstrap');
   logger.log(`📊 Metrics: http://localhost:${port}/${apiPrefix}/metrics`, 'Bootstrap');

@@ -96,7 +96,12 @@ describe('LoggingInterceptor', () => {
         }),
         'HTTP',
       );
-      expect(logger.logRequest).toHaveBeenCalledWith('GET', '/api/produtores', 200, expect.any(Number));
+      expect(logger.logRequest).toHaveBeenCalledWith(
+        'GET',
+        '/api/produtores',
+        200,
+        expect.any(Number),
+      );
       expect(result).toEqual(responseData);
     });
 
@@ -104,7 +109,7 @@ describe('LoggingInterceptor', () => {
       mockRequest.method = 'POST';
       mockRequest.url = '/api/produtores';
       mockRequest.params = { id: 'new-id' };
-      
+
       const responseData = { id: 'new-id', name: 'New Producer' };
       (callHandler.handle as jest.Mock).mockReturnValue(of(responseData));
 
@@ -115,7 +120,7 @@ describe('LoggingInterceptor', () => {
 
     it('should not log business operations for GET requests', async () => {
       mockRequest.method = 'GET';
-      
+
       const responseData = { id: 'test-id', name: 'Producer' };
       (callHandler.handle as jest.Mock).mockReturnValue(of(responseData));
 
@@ -126,7 +131,7 @@ describe('LoggingInterceptor', () => {
 
     it('should handle requests with empty body', async () => {
       mockRequest.body = {};
-      
+
       const responseData = { message: 'success' };
       (callHandler.handle as jest.Mock).mockReturnValue(of(responseData));
 
@@ -144,7 +149,7 @@ describe('LoggingInterceptor', () => {
 
     it('should handle requests with no body', async () => {
       mockRequest.body = undefined;
-      
+
       const responseData = { message: 'success' };
       (callHandler.handle as jest.Mock).mockReturnValue(of(responseData));
 
@@ -163,7 +168,7 @@ describe('LoggingInterceptor', () => {
     it('should handle requests with empty query and params', async () => {
       mockRequest.query = {};
       mockRequest.params = {};
-      
+
       const responseData = { message: 'success' };
       (callHandler.handle as jest.Mock).mockReturnValue(of(responseData));
 
@@ -183,7 +188,7 @@ describe('LoggingInterceptor', () => {
     it('should handle requests with undefined query and params', async () => {
       mockRequest.query = undefined;
       mockRequest.params = undefined;
-      
+
       const responseData = { message: 'success' };
       (callHandler.handle as jest.Mock).mockReturnValue(of(responseData));
 
@@ -202,7 +207,7 @@ describe('LoggingInterceptor', () => {
 
     it('should handle missing user-agent header', async () => {
       mockRequest.headers = {};
-      
+
       const responseData = { message: 'success' };
       (callHandler.handle as jest.Mock).mockReturnValue(of(responseData));
 
@@ -220,7 +225,7 @@ describe('LoggingInterceptor', () => {
 
     it('should handle missing headers', async () => {
       mockRequest.headers = undefined;
-      
+
       const responseData = { message: 'success' };
       (callHandler.handle as jest.Mock).mockReturnValue(of(responseData));
 
@@ -245,7 +250,7 @@ describe('LoggingInterceptor', () => {
         getRequest: jest.fn().mockReturnValue(mockRequestWithoutIp),
         getResponse: jest.fn().mockReturnValue(mockResponse),
       });
-      
+
       const responseData = { message: 'success' };
       (callHandler.handle as jest.Mock).mockReturnValue(of(responseData));
 
@@ -271,7 +276,7 @@ describe('LoggingInterceptor', () => {
         getRequest: jest.fn().mockReturnValue(mockRequestWithoutIpAndConnection),
         getResponse: jest.fn().mockReturnValue(mockResponse),
       });
-      
+
       const responseData = { message: 'success' };
       (callHandler.handle as jest.Mock).mockReturnValue(of(responseData));
 
@@ -292,9 +297,16 @@ describe('LoggingInterceptor', () => {
       error['status'] = 400;
       (callHandler.handle as jest.Mock).mockReturnValue(throwError(error));
 
-      await expect(interceptor.intercept(executionContext, callHandler).toPromise()).rejects.toThrow('Test error');
+      await expect(
+        interceptor.intercept(executionContext, callHandler).toPromise(),
+      ).rejects.toThrow('Test error');
 
-      expect(logger.logRequest).toHaveBeenCalledWith('GET', '/api/produtores', 400, expect.any(Number));
+      expect(logger.logRequest).toHaveBeenCalledWith(
+        'GET',
+        '/api/produtores',
+        400,
+        expect.any(Number),
+      );
       expect(logger.logError).toHaveBeenCalledWith(
         error,
         'HTTP Request Error',
@@ -312,9 +324,16 @@ describe('LoggingInterceptor', () => {
       const error = new Error('Test error without status');
       (callHandler.handle as jest.Mock).mockReturnValue(throwError(error));
 
-      await expect(interceptor.intercept(executionContext, callHandler).toPromise()).rejects.toThrow('Test error without status');
+      await expect(
+        interceptor.intercept(executionContext, callHandler).toPromise(),
+      ).rejects.toThrow('Test error without status');
 
-      expect(logger.logRequest).toHaveBeenCalledWith('GET', '/api/produtores', 500, expect.any(Number));
+      expect(logger.logRequest).toHaveBeenCalledWith(
+        'GET',
+        '/api/produtores',
+        500,
+        expect.any(Number),
+      );
     });
 
     it('should measure response time correctly', async () => {
@@ -421,7 +440,7 @@ describe('LoggingInterceptor', () => {
     it('should handle POST requests correctly', async () => {
       mockRequest.method = 'POST';
       mockRequest.url = '/api/produtores';
-      
+
       const responseData = { id: 'new-id', name: 'New Producer' };
       (callHandler.handle as jest.Mock).mockReturnValue(of(responseData));
 
@@ -433,7 +452,7 @@ describe('LoggingInterceptor', () => {
     it('should handle PUT requests correctly', async () => {
       mockRequest.method = 'PUT';
       mockRequest.url = '/api/produtores/123';
-      
+
       const responseData = { id: '123', name: 'Updated Producer' };
       (callHandler.handle as jest.Mock).mockReturnValue(of(responseData));
 
@@ -445,7 +464,7 @@ describe('LoggingInterceptor', () => {
     it('should handle DELETE requests correctly', async () => {
       mockRequest.method = 'DELETE';
       mockRequest.url = '/api/produtores/123';
-      
+
       (callHandler.handle as jest.Mock).mockReturnValue(of(undefined));
 
       await interceptor.intercept(executionContext, callHandler).toPromise();
@@ -456,7 +475,7 @@ describe('LoggingInterceptor', () => {
     it('should handle PATCH requests correctly', async () => {
       mockRequest.method = 'PATCH';
       mockRequest.url = '/api/propriedades/456';
-      
+
       const responseData = { id: '456', name: 'Patched Property' };
       (callHandler.handle as jest.Mock).mockReturnValue(of(responseData));
 
@@ -472,7 +491,9 @@ describe('LoggingInterceptor', () => {
       timeoutError['code'] = 'ETIMEDOUT';
       (callHandler.handle as jest.Mock).mockReturnValue(throwError(timeoutError));
 
-      await expect(interceptor.intercept(executionContext, callHandler).toPromise()).rejects.toThrow('Request timeout');
+      await expect(
+        interceptor.intercept(executionContext, callHandler).toPromise(),
+      ).rejects.toThrow('Request timeout');
 
       expect(logger.logError).toHaveBeenCalledWith(
         timeoutError,
@@ -489,9 +510,16 @@ describe('LoggingInterceptor', () => {
       validationError['status'] = 422;
       (callHandler.handle as jest.Mock).mockReturnValue(throwError(validationError));
 
-      await expect(interceptor.intercept(executionContext, callHandler).toPromise()).rejects.toThrow('Validation failed');
+      await expect(
+        interceptor.intercept(executionContext, callHandler).toPromise(),
+      ).rejects.toThrow('Validation failed');
 
-      expect(logger.logRequest).toHaveBeenCalledWith('GET', '/api/produtores', 422, expect.any(Number));
+      expect(logger.logRequest).toHaveBeenCalledWith(
+        'GET',
+        '/api/produtores',
+        422,
+        expect.any(Number),
+      );
     });
   });
 });

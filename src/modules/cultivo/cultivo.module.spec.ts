@@ -95,7 +95,9 @@ describe('CultivoModule', () => {
     cultivoService = module.get<CultivoService>(CultivoService);
     cultivoController = module.get<CultivoController>(CultivoController);
     cultivoRepository = module.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
-    propriedadeRepository = module.get<Repository<PropriedadeRural>>(getRepositoryToken(PropriedadeRural));
+    propriedadeRepository = module.get<Repository<PropriedadeRural>>(
+      getRepositoryToken(PropriedadeRural),
+    );
     culturaRepository = module.get<Repository<Cultura>>(getRepositoryToken(Cultura));
     safraRepository = module.get<Repository<Safra>>(getRepositoryToken(Safra));
   });
@@ -194,11 +196,11 @@ describe('CultivoModule', () => {
         cultivoRepository,
         propriedadeRepository,
         culturaRepository,
-        safraRepository
+        safraRepository,
       ];
 
       // All repositories should be defined
-      repositories.forEach(repo => {
+      repositories.forEach((repo) => {
         expect(repo).toBeDefined();
       });
 

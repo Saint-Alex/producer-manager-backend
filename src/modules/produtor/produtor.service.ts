@@ -14,7 +14,7 @@ export class ProdutorService {
   async create(createProdutorDto: CreateProdutorDto): Promise<Produtor> {
     // Check if CPF/CNPJ already exists
     const existingProdutor = await this.produtorRepository.findOne({
-      where: { cpfCnpj: createProdutorDto.cpfCnpj }
+      where: { cpfCnpj: createProdutorDto.cpfCnpj },
     });
 
     if (existingProdutor) {
@@ -51,7 +51,7 @@ export class ProdutorService {
     // Check if new CPF/CNPJ already exists (if being updated)
     if (updateProdutorDto.cpfCnpj && updateProdutorDto.cpfCnpj !== produtor.cpfCnpj) {
       const existingProdutor = await this.produtorRepository.findOne({
-        where: { cpfCnpj: updateProdutorDto.cpfCnpj }
+        where: { cpfCnpj: updateProdutorDto.cpfCnpj },
       });
 
       if (existingProdutor) {
@@ -83,7 +83,7 @@ export class ProdutorService {
       for (const propriedade of produtor.propriedades) {
         if (propriedade.cultivos && propriedade.cultivos.length > 0) {
           await queryRunner.manager.delete('Cultivo', {
-            propriedadeRural: { id: propriedade.id }
+            propriedadeRural: { id: propriedade.id },
           });
         }
       }

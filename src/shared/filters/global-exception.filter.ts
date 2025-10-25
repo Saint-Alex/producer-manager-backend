@@ -1,10 +1,10 @@
 import {
-    ArgumentsHost,
-    Catch,
-    ExceptionFilter,
-    HttpException,
-    HttpStatus,
-    Injectable,
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+  Injectable,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AppLoggerService } from '../logging/logger.service';
@@ -129,11 +129,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     return error.message;
   }
 
-  private logError(
-    exception: unknown,
-    request: RequestWithCorrelation,
-    status: number,
-  ): void {
+  private logError(exception: unknown, request: RequestWithCorrelation, status: number): void {
     const { method, url, body, query, headers, ip } = request;
     const userAgent = headers['user-agent'] || '';
 
@@ -151,7 +147,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     if (exception instanceof Error) {
       this.logger.logError(exception, 'GlobalExceptionFilter', errorContext);
     } else {
-      this.logger.error('Unknown error occurred', JSON.stringify(exception), 'GlobalExceptionFilter');
+      this.logger.error(
+        'Unknown error occurred',
+        JSON.stringify(exception),
+        'GlobalExceptionFilter',
+      );
     }
 
     // Log específico para erros críticos (5xx)

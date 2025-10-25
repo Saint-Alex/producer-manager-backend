@@ -10,7 +10,7 @@ describe('CulturaResponseDto', () => {
         id: '550e8400-e29b-41d4-a716-446655440000',
         nome: 'Soja',
         createdAt: mockDate,
-        updatedAt: mockDate
+        updatedAt: mockDate,
       };
 
       const dto = plainToClass(CulturaResponseDto, data);
@@ -25,7 +25,7 @@ describe('CulturaResponseDto', () => {
     it('should handle partial data', () => {
       const data = {
         id: '550e8400-e29b-41d4-a716-446655440000',
-        nome: 'Milho'
+        nome: 'Milho',
       };
 
       const dto = plainToClass(CulturaResponseDto, data);
@@ -39,7 +39,7 @@ describe('CulturaResponseDto', () => {
     it('should handle different culture names', () => {
       const cultures = ['Soja', 'Milho', 'Algodão', 'Café', 'Cana-de-açúcar'];
 
-      cultures.forEach(cultureName => {
+      cultures.forEach((cultureName) => {
         const data = { id: '550e8400-e29b-41d4-a716-446655440000', nome: cultureName };
         const dto = plainToClass(CulturaResponseDto, data);
 
@@ -70,7 +70,7 @@ describe('CulturaResponseDto', () => {
     it('should handle special characters in nome', () => {
       const data = {
         id: '550e8400-e29b-41d4-a716-446655440000',
-        nome: 'Açaí'
+        nome: 'Açaí',
       };
 
       const dto = plainToClass(CulturaResponseDto, data);

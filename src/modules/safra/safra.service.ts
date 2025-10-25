@@ -15,7 +15,7 @@ export class SafraService {
   async create(createSafraDto: CreateSafraDto): Promise<Safra> {
     // Verificar se já existe uma safra para o mesmo ano
     const existingSafra = await this.safraRepository.findOne({
-      where: { ano: createSafraDto.ano }
+      where: { ano: createSafraDto.ano },
     });
 
     if (existingSafra) {
@@ -29,14 +29,14 @@ export class SafraService {
   async findAll(): Promise<Safra[]> {
     return this.safraRepository.find({
       relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
-      order: { ano: 'DESC' }
+      order: { ano: 'DESC' },
     });
   }
 
   async findOne(id: string): Promise<Safra> {
     const safra = await this.safraRepository.findOne({
       where: { id },
-      relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural']
+      relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
     });
 
     if (!safra) {
@@ -49,7 +49,7 @@ export class SafraService {
   async findByYear(ano: number): Promise<Safra> {
     const safra = await this.safraRepository.findOne({
       where: { ano },
-      relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural']
+      relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
     });
 
     if (!safra) {
@@ -65,7 +65,7 @@ export class SafraService {
     // Se o ano está sendo atualizado, verificar se não há conflito
     if (updateSafraDto.ano && updateSafraDto.ano !== safra.ano) {
       const existingSafra = await this.safraRepository.findOne({
-        where: { ano: updateSafraDto.ano }
+        where: { ano: updateSafraDto.ano },
       });
 
       if (existingSafra) {

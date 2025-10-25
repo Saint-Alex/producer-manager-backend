@@ -1,4 +1,3 @@
-
 // Mock dotenv config
 jest.mock('dotenv', () => ({
   config: jest.fn(),

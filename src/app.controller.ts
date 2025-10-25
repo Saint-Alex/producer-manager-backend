@@ -10,7 +10,7 @@ export class AppController {
   @Get()
   @ApiOperation({
     summary: 'API Info',
-    description: 'Informações básicas da API'
+    description: 'Informações básicas da API',
   })
   @ApiResponse({
     status: 200,
@@ -20,11 +20,14 @@ export class AppController {
       properties: {
         name: { type: 'string', example: 'Producer Manager API' },
         version: { type: 'string', example: '1.0.0' },
-        description: { type: 'string', example: 'Brain Agriculture - Producer Management System API' },
+        description: {
+          type: 'string',
+          example: 'Brain Agriculture - Producer Management System API',
+        },
         environment: { type: 'string', example: 'development' },
-        timestamp: { type: 'string', format: 'date-time' }
-      }
-    }
+        timestamp: { type: 'string', format: 'date-time' },
+      },
+    },
   })
   getInfo() {
     return this.appService.getInfo();

@@ -39,19 +39,14 @@ export class DashboardService {
   ) {}
 
   async getStats(): Promise<DashboardStats> {
-    const [
-      totalProdutores,
-      propriedadesStats,
-      areaPorEstado,
-      areaPorCultura,
-      usoSolo
-    ] = await Promise.all([
-      this.getTotalProdutores(),
-      this.getPropriedadesStats(),
-      this.getAreaPorEstado(),
-      this.getAreaPorCultura(),
-      this.getUsoSolo()
-    ]);
+    const [totalProdutores, propriedadesStats, areaPorEstado, areaPorCultura, usoSolo] =
+      await Promise.all([
+        this.getTotalProdutores(),
+        this.getPropriedadesStats(),
+        this.getAreaPorEstado(),
+        this.getAreaPorCultura(),
+        this.getUsoSolo(),
+      ]);
 
     return {
       totalProdutores,
@@ -59,7 +54,7 @@ export class DashboardService {
       totalAreaHectares: propriedadesStats.areaTotal,
       areaPorEstado,
       areaPorCultura,
-      usoSolo
+      usoSolo,
     };
   }
 
@@ -76,15 +71,17 @@ export class DashboardService {
 
     return {
       total: parseInt(result.total),
-      areaTotal: parseFloat(result.areatotal) || 0
+      areaTotal: parseFloat(result.areatotal) || 0,
     };
   }
 
-  private async getAreaPorEstado(): Promise<Array<{
-    estado: string;
-    area: number;
-    fazendas: number;
-  }>> {
+  private async getAreaPorEstado(): Promise<
+    Array<{
+      estado: string;
+      area: number;
+      fazendas: number;
+    }>
+  > {
     const result = await this.propriedadeRepository
       .createQueryBuilder('propriedade')
       .select('propriedade.estado', 'estado')
@@ -94,18 +91,20 @@ export class DashboardService {
       .orderBy('area', 'DESC')
       .getRawMany();
 
-    return result.map(item => ({
+    return result.map((item) => ({
       estado: item.estado,
       fazendas: parseInt(item.fazendas),
-      area: parseFloat(item.area) || 0
+      area: parseFloat(item.area) || 0,
     }));
   }
 
-  private async getAreaPorCultura(): Promise<Array<{
-    cultura: string;
-    area: number;
-    percentual: number;
-  }>> {
+  private async getAreaPorCultura(): Promise<
+    Array<{
+      cultura: string;
+      area: number;
+      percentual: number;
+    }>
+  > {
     const result = await this.cultivoRepository
       .createQueryBuilder('cultivo')
       .innerJoin('cultivo.cultura', 'cultura')
@@ -117,12 +116,12 @@ export class DashboardService {
 
     const totalArea = result.reduce((acc, item) => acc + (parseFloat(item.area) || 0), 0);
 
-    return result.map(item => {
+    return result.map((item) => {
       const area = parseFloat(item.area) || 0;
       return {
         cultura: item.cultura,
         area,
-        percentual: totalArea > 0 ? (area / totalArea) * 100 : 0
+        percentual: totalArea > 0 ? (area / totalArea) * 100 : 0,
       };
     });
   }
@@ -148,7 +147,7 @@ export class DashboardService {
       areaAgricultavel,
       areaVegetacao,
       percentualAgricultavel: areaTotal > 0 ? (areaAgricultavel / areaTotal) * 100 : 0,
-      percentualVegetacao: areaTotal > 0 ? (areaVegetacao / areaTotal) * 100 : 0
+      percentualVegetacao: areaTotal > 0 ? (areaVegetacao / areaTotal) * 100 : 0,
     };
   }
 }

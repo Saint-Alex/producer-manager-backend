@@ -49,15 +49,11 @@ describe('DashboardController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
 
-    produtorRepository = moduleFixture.get<Repository<Produtor>>(
-      getRepositoryToken(Produtor)
-    );
+    produtorRepository = moduleFixture.get<Repository<Produtor>>(getRepositoryToken(Produtor));
     propriedadeRepository = moduleFixture.get<Repository<PropriedadeRural>>(
-      getRepositoryToken(PropriedadeRural)
+      getRepositoryToken(PropriedadeRural),
     );
-    cultivoRepository = moduleFixture.get<Repository<Cultivo>>(
-      getRepositoryToken(Cultivo)
-    );
+    cultivoRepository = moduleFixture.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
 
     await app.init();
   });
@@ -81,8 +77,8 @@ describe('DashboardController (e2e)', () => {
         addSelect: jest.fn().mockReturnThis(),
         getRawOne: jest.fn().mockResolvedValue({
           total: '150',
-          areatotal: '75000.0'
-        })
+          areatotal: '75000.0',
+        }),
       };
 
       // Mock da área por estado
@@ -94,8 +90,8 @@ describe('DashboardController (e2e)', () => {
         getRawMany: jest.fn().mockResolvedValue([
           { estado: 'SP', fazendas: '80', area: '35000.0' },
           { estado: 'MT', fazendas: '40', area: '25000.0' },
-          { estado: 'MG', fazendas: '30', area: '15000.5' }
-        ])
+          { estado: 'MG', fazendas: '30', area: '15000.5' },
+        ]),
       };
 
       // Mock da área por cultura
@@ -108,8 +104,8 @@ describe('DashboardController (e2e)', () => {
         getRawMany: jest.fn().mockResolvedValue([
           { cultura: 'Soja', area: '30000.0' },
           { cultura: 'Milho', area: '20000.0' },
-          { cultura: 'Algodão', area: '10000.0' }
-        ])
+          { cultura: 'Algodão', area: '10000.0' },
+        ]),
       };
 
       // Mock do uso do solo
@@ -119,22 +115,19 @@ describe('DashboardController (e2e)', () => {
         getRawOne: jest.fn().mockResolvedValue({
           areaagricultavel: '45000.0',
           areavegetacao: '30000.0',
-          areatotal: '75000.0'
-        })
+          areatotal: '75000.0',
+        }),
       };
 
       // Configurar mocks dos QueryBuilders
       mockPropriedadeRepository.createQueryBuilder
         .mockReturnValueOnce(mockPropriedadeQueryBuilder) // Para getPropriedadesStats
-        .mockReturnValueOnce(mockAreaEstadoQueryBuilder)   // Para getAreaPorEstado
-        .mockReturnValueOnce(mockUsoSoloQueryBuilder);     // Para getUsoSolo
+        .mockReturnValueOnce(mockAreaEstadoQueryBuilder) // Para getAreaPorEstado
+        .mockReturnValueOnce(mockUsoSoloQueryBuilder); // Para getUsoSolo
 
-      mockCultivoRepository.createQueryBuilder
-        .mockReturnValueOnce(mockAreaCulturaQueryBuilder); // Para getAreaPorCultura
+      mockCultivoRepository.createQueryBuilder.mockReturnValueOnce(mockAreaCulturaQueryBuilder); // Para getAreaPorCultura
 
-      const response = await request(app.getHttpServer())
-        .get('/dashboard/stats')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/dashboard/stats').expect(200);
 
       // Verificar estrutura da resposta
       expect(response.body).toHaveProperty('totalProdutores', 25);
@@ -145,21 +138,21 @@ describe('DashboardController (e2e)', () => {
       expect(response.body.areaPorEstado[0]).toMatchObject({
         estado: 'SP',
         fazendas: 80,
-        area: 35000.0
+        area: 35000.0,
       });
 
       expect(response.body.areaPorCultura).toHaveLength(3);
       expect(response.body.areaPorCultura[0]).toMatchObject({
         cultura: 'Soja',
         area: 30000.0,
-        percentual: 50.0
+        percentual: 50.0,
       });
 
       expect(response.body.usoSolo).toMatchObject({
         areaAgricultavel: 45000.0,
         areaVegetacao: 30000.0,
         percentualAgricultavel: 60.0,
-        percentualVegetacao: 40.0
+        percentualVegetacao: 40.0,
       });
 
       // Verificar se os repositórios foram chamados corretamente
@@ -178,8 +171,8 @@ describe('DashboardController (e2e)', () => {
         addSelect: jest.fn().mockReturnThis(),
         getRawOne: jest.fn().mockResolvedValue({
           total: '0',
-          areatotal: null
-        })
+          areatotal: null,
+        }),
       };
 
       // Mock da área por estado - nenhuma
@@ -188,7 +181,7 @@ describe('DashboardController (e2e)', () => {
         addSelect: jest.fn().mockReturnThis(),
         groupBy: jest.fn().mockReturnThis(),
         orderBy: jest.fn().mockReturnThis(),
-        getRawMany: jest.fn().mockResolvedValue([])
+        getRawMany: jest.fn().mockResolvedValue([]),
       };
 
       // Mock da área por cultura - nenhuma
@@ -198,7 +191,7 @@ describe('DashboardController (e2e)', () => {
         addSelect: jest.fn().mockReturnThis(),
         groupBy: jest.fn().mockReturnThis(),
         orderBy: jest.fn().mockReturnThis(),
-        getRawMany: jest.fn().mockResolvedValue([])
+        getRawMany: jest.fn().mockResolvedValue([]),
       };
 
       // Mock do uso do solo - nenhum
@@ -208,8 +201,8 @@ describe('DashboardController (e2e)', () => {
         getRawOne: jest.fn().mockResolvedValue({
           areaagricultavel: null,
           areavegetacao: null,
-          areatotal: null
-        })
+          areatotal: null,
+        }),
       };
 
       // Configurar mocks dos QueryBuilders
@@ -218,12 +211,9 @@ describe('DashboardController (e2e)', () => {
         .mockReturnValueOnce(mockAreaEstadoQueryBuilder)
         .mockReturnValueOnce(mockUsoSoloQueryBuilder);
 
-      mockCultivoRepository.createQueryBuilder
-        .mockReturnValueOnce(mockAreaCulturaQueryBuilder);
+      mockCultivoRepository.createQueryBuilder.mockReturnValueOnce(mockAreaCulturaQueryBuilder);
 
-      const response = await request(app.getHttpServer())
-        .get('/dashboard/stats')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/dashboard/stats').expect(200);
 
       const expectedStats = {
         totalProdutores: 0,
@@ -235,8 +225,8 @@ describe('DashboardController (e2e)', () => {
           areaAgricultavel: 0,
           areaVegetacao: 0,
           percentualAgricultavel: 0,
-          percentualVegetacao: 0
-        }
+          percentualVegetacao: 0,
+        },
       };
 
       expect(response.body).toMatchObject(expectedStats);
@@ -252,8 +242,8 @@ describe('DashboardController (e2e)', () => {
         addSelect: jest.fn().mockReturnThis(),
         getRawOne: jest.fn().mockResolvedValue({
           total: '5',
-          areatotal: '1000.0'
-        })
+          areatotal: '1000.0',
+        }),
       };
 
       // Mock da área por estado - apenas um estado
@@ -262,9 +252,7 @@ describe('DashboardController (e2e)', () => {
         addSelect: jest.fn().mockReturnThis(),
         groupBy: jest.fn().mockReturnThis(),
         orderBy: jest.fn().mockReturnThis(),
-        getRawMany: jest.fn().mockResolvedValue([
-          { estado: 'SP', fazendas: '5', area: '1000.0' }
-        ])
+        getRawMany: jest.fn().mockResolvedValue([{ estado: 'SP', fazendas: '5', area: '1000.0' }]),
       };
 
       // Mock da área por cultura - apenas uma cultura
@@ -274,9 +262,7 @@ describe('DashboardController (e2e)', () => {
         addSelect: jest.fn().mockReturnThis(),
         groupBy: jest.fn().mockReturnThis(),
         orderBy: jest.fn().mockReturnThis(),
-        getRawMany: jest.fn().mockResolvedValue([
-          { cultura: 'Soja', area: '500.0' }
-        ])
+        getRawMany: jest.fn().mockResolvedValue([{ cultura: 'Soja', area: '500.0' }]),
       };
 
       // Mock do uso do solo
@@ -286,8 +272,8 @@ describe('DashboardController (e2e)', () => {
         getRawOne: jest.fn().mockResolvedValue({
           areaagricultavel: '600.0',
           areavegetacao: '400.0',
-          areatotal: '1000.0'
-        })
+          areatotal: '1000.0',
+        }),
       };
 
       // Configurar mocks dos QueryBuilders
@@ -296,29 +282,22 @@ describe('DashboardController (e2e)', () => {
         .mockReturnValueOnce(mockAreaEstadoQueryBuilder)
         .mockReturnValueOnce(mockUsoSoloQueryBuilder);
 
-      mockCultivoRepository.createQueryBuilder
-        .mockReturnValueOnce(mockAreaCulturaQueryBuilder);
+      mockCultivoRepository.createQueryBuilder.mockReturnValueOnce(mockAreaCulturaQueryBuilder);
 
-      const response = await request(app.getHttpServer())
-        .get('/dashboard/stats')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/dashboard/stats').expect(200);
 
       expect(response.body).toMatchObject({
         totalProdutores: 10,
         totalFazendas: 5,
         totalAreaHectares: 1000.0,
-        areaPorEstado: [
-          { estado: 'SP', fazendas: 5, area: 1000.0 }
-        ],
-        areaPorCultura: [
-          { cultura: 'Soja', area: 500.0, percentual: 100.0 }
-        ],
+        areaPorEstado: [{ estado: 'SP', fazendas: 5, area: 1000.0 }],
+        areaPorCultura: [{ cultura: 'Soja', area: 500.0, percentual: 100.0 }],
         usoSolo: {
           areaAgricultavel: 600.0,
           areaVegetacao: 400.0,
           percentualAgricultavel: 60.0,
-          percentualVegetacao: 40.0
-        }
+          percentualVegetacao: 40.0,
+        },
       });
     });
 
@@ -332,8 +311,8 @@ describe('DashboardController (e2e)', () => {
         addSelect: jest.fn().mockReturnThis(),
         getRawOne: jest.fn().mockResolvedValue({
           total: '3',
-          areatotal: null // Valor null do banco
-        })
+          areatotal: null, // Valor null do banco
+        }),
       };
 
       // Mock da área por estado com alguns valores null
@@ -344,8 +323,8 @@ describe('DashboardController (e2e)', () => {
         orderBy: jest.fn().mockReturnThis(),
         getRawMany: jest.fn().mockResolvedValue([
           { estado: 'SP', fazendas: '2', area: '500.0' },
-          { estado: 'RJ', fazendas: '1', area: null } // Valor null
-        ])
+          { estado: 'RJ', fazendas: '1', area: null }, // Valor null
+        ]),
       };
 
       // Mock da área por cultura com valores null
@@ -356,8 +335,8 @@ describe('DashboardController (e2e)', () => {
         groupBy: jest.fn().mockReturnThis(),
         orderBy: jest.fn().mockReturnThis(),
         getRawMany: jest.fn().mockResolvedValue([
-          { cultura: 'Soja', area: null } // Valor null
-        ])
+          { cultura: 'Soja', area: null }, // Valor null
+        ]),
       };
 
       // Mock do uso do solo com valores null
@@ -367,8 +346,8 @@ describe('DashboardController (e2e)', () => {
         getRawOne: jest.fn().mockResolvedValue({
           areaagricultavel: null,
           areavegetacao: null,
-          areatotal: null
-        })
+          areatotal: null,
+        }),
       };
 
       // Configurar mocks dos QueryBuilders
@@ -377,12 +356,9 @@ describe('DashboardController (e2e)', () => {
         .mockReturnValueOnce(mockAreaEstadoQueryBuilder)
         .mockReturnValueOnce(mockUsoSoloQueryBuilder);
 
-      mockCultivoRepository.createQueryBuilder
-        .mockReturnValueOnce(mockAreaCulturaQueryBuilder);
+      mockCultivoRepository.createQueryBuilder.mockReturnValueOnce(mockAreaCulturaQueryBuilder);
 
-      const response = await request(app.getHttpServer())
-        .get('/dashboard/stats')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/dashboard/stats').expect(200);
 
       expect(response.body).toMatchObject({
         totalProdutores: 5,
@@ -390,17 +366,17 @@ describe('DashboardController (e2e)', () => {
         totalAreaHectares: 0, // null convertido para 0
         areaPorEstado: [
           { estado: 'SP', fazendas: 2, area: 500.0 },
-          { estado: 'RJ', fazendas: 1, area: 0 } // null convertido para 0
+          { estado: 'RJ', fazendas: 1, area: 0 }, // null convertido para 0
         ],
         areaPorCultura: [
-          { cultura: 'Soja', area: 0, percentual: 0 } // null convertido para 0
+          { cultura: 'Soja', area: 0, percentual: 0 }, // null convertido para 0
         ],
         usoSolo: {
           areaAgricultavel: 0,
           areaVegetacao: 0,
           percentualAgricultavel: 0,
-          percentualVegetacao: 0
-        }
+          percentualVegetacao: 0,
+        },
       });
     });
   });

@@ -56,7 +56,9 @@ describe('PropriedadeModule', () => {
 
     propriedadeService = module.get<PropriedadeService>(PropriedadeService);
     propriedadeController = module.get<PropriedadeController>(PropriedadeController);
-    propriedadeRepository = module.get<Repository<PropriedadeRural>>(getRepositoryToken(PropriedadeRural));
+    propriedadeRepository = module.get<Repository<PropriedadeRural>>(
+      getRepositoryToken(PropriedadeRural),
+    );
     produtorRepository = module.get<Repository<Produtor>>(getRepositoryToken(Produtor));
   });
 

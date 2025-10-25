@@ -12,7 +12,7 @@ describe('ProdutorResponseDto', () => {
         nome: 'João Silva Santos',
         createdAt: mockDate,
         updatedAt: mockDate,
-        propriedades: []
+        propriedades: [],
       };
 
       const dto = plainToClass(ProdutorResponseDto, data);
@@ -30,7 +30,7 @@ describe('ProdutorResponseDto', () => {
       const data = {
         id: '550e8400-e29b-41d4-a716-446655440000',
         nome: 'Maria Santos',
-        cpfCnpj: '98765432100'
+        cpfCnpj: '98765432100',
       };
 
       const dto = plainToClass(ProdutorResponseDto, data);
@@ -54,9 +54,9 @@ describe('ProdutorResponseDto', () => {
             nomeFazenda: 'Fazenda Esperança',
             cidade: 'Ribeirão Preto',
             estado: 'SP',
-            areaTotal: 1000.5
-          }
-        ]
+            areaTotal: 1000.5,
+          },
+        ],
       };
 
       const dto = plainToClass(ProdutorResponseDto, data);
@@ -75,7 +75,7 @@ describe('ProdutorResponseDto', () => {
         cpfCnpj: '12345678901',
         nome: 'João Silva Santos',
         createdAt: mockDate,
-        updatedAt: mockDate
+        updatedAt: mockDate,
       };
 
       const dto = plainToClass(ProdutorResponseDto, data);
@@ -103,7 +103,7 @@ describe('ProdutorResponseDto', () => {
         id: null,
         nome: null,
         cpfCnpj: null,
-        propriedades: null
+        propriedades: null,
       };
 
       const dto = plainToClass(ProdutorResponseDto, data);
@@ -124,7 +124,7 @@ describe('PropriedadeResponseDto', () => {
         nomeFazenda: 'Fazenda São João',
         cidade: 'Uberlândia',
         estado: 'MG',
-        areaTotal: 500.75
+        areaTotal: 500.75,
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);
@@ -140,7 +140,7 @@ describe('PropriedadeResponseDto', () => {
     it('should handle partial data', () => {
       const data = {
         id: '550e8400-e29b-41d4-a716-446655440000',
-        nomeFazenda: 'Fazenda Parcial'
+        nomeFazenda: 'Fazenda Parcial',
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);
@@ -158,7 +158,7 @@ describe('PropriedadeResponseDto', () => {
         nomeFazenda: 'Fazenda Numérica',
         cidade: 'São Paulo',
         estado: 'SP',
-        areaTotal: 1234.56
+        areaTotal: 1234.56,
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);
@@ -181,7 +181,7 @@ describe('PropriedadeResponseDto', () => {
       const data = {
         id: null,
         nomeFazenda: null,
-        areaTotal: null
+        areaTotal: null,
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);

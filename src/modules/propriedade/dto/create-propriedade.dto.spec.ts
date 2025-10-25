@@ -103,7 +103,7 @@ describe('CreatePropriedadeDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const areaError = errors.find(error => error.property === 'areaTotal');
+      const areaError = errors.find((error) => error.property === 'areaTotal');
       expect(areaError).toBeDefined();
       expect(areaError.constraints).toHaveProperty('isPositive');
     });
@@ -113,7 +113,7 @@ describe('CreatePropriedadeDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const areaError = errors.find(error => error.property === 'areaTotal');
+      const areaError = errors.find((error) => error.property === 'areaTotal');
       expect(areaError).toBeDefined();
       expect(areaError.constraints).toHaveProperty('isPositive');
     });
@@ -123,7 +123,7 @@ describe('CreatePropriedadeDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const areaError = errors.find(error => error.property === 'areaTotal');
+      const areaError = errors.find((error) => error.property === 'areaTotal');
       expect(areaError).toBeDefined();
       expect(areaError.constraints).toHaveProperty('isNumber');
     });
@@ -141,7 +141,7 @@ describe('CreatePropriedadeDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const areaError = errors.find(error => error.property === 'areaAgricultavel');
+      const areaError = errors.find((error) => error.property === 'areaAgricultavel');
       expect(areaError).toBeDefined();
       expect(areaError.constraints).toHaveProperty('isPositive');
     });
@@ -151,7 +151,7 @@ describe('CreatePropriedadeDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const areaError = errors.find(error => error.property === 'areaAgricultavel');
+      const areaError = errors.find((error) => error.property === 'areaAgricultavel');
       expect(areaError).toBeDefined();
       expect(areaError.constraints).toHaveProperty('isNumber');
     });
@@ -169,7 +169,7 @@ describe('CreatePropriedadeDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const areaError = errors.find(error => error.property === 'areaVegetacao');
+      const areaError = errors.find((error) => error.property === 'areaVegetacao');
       expect(areaError).toBeDefined();
       expect(areaError.constraints).toHaveProperty('isPositive');
     });
@@ -179,7 +179,7 @@ describe('CreatePropriedadeDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const areaError = errors.find(error => error.property === 'areaVegetacao');
+      const areaError = errors.find((error) => error.property === 'areaVegetacao');
       expect(areaError).toBeDefined();
       expect(areaError.constraints).toHaveProperty('isNumber');
     });
@@ -189,7 +189,10 @@ describe('CreatePropriedadeDto', () => {
     it('should pass with valid UUID array', async () => {
       const dto = plainToClass(CreatePropriedadeDto, {
         ...validDto,
-        produtorIds: ['550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440001']
+        produtorIds: [
+          '550e8400-e29b-41d4-a716-446655440000',
+          '550e8400-e29b-41d4-a716-446655440001',
+        ],
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -216,7 +219,7 @@ describe('CreatePropriedadeDto', () => {
     it('should fail with invalid UUIDs', async () => {
       const dto = plainToClass(CreatePropriedadeDto, {
         ...validDto,
-        produtorIds: ['invalid-uuid', '550e8400-e29b-41d4-a716-446655440000']
+        produtorIds: ['invalid-uuid', '550e8400-e29b-41d4-a716-446655440000'],
       });
       const errors = await validate(dto);
 
@@ -228,7 +231,7 @@ describe('CreatePropriedadeDto', () => {
     it('should fail with mixed types in array', async () => {
       const dto = plainToClass(CreatePropriedadeDto, {
         ...validDto,
-        produtorIds: ['550e8400-e29b-41d4-a716-446655440000', 123]
+        produtorIds: ['550e8400-e29b-41d4-a716-446655440000', 123],
       });
       const errors = await validate(dto);
 
@@ -272,8 +275,10 @@ describe('CreatePropriedadeDto', () => {
 
       expect(errors).toHaveLength(1);
       expect(errors[0].property).toBe('_validateAreaSum');
-      expect(errors[0].constraints).toHaveProperty('isValidAreaSum',
-        'A soma da área agricultável e de vegetação não pode ser maior que a área total');
+      expect(errors[0].constraints).toHaveProperty(
+        'isValidAreaSum',
+        'A soma da área agricultável e de vegetação não pode ser maior que a área total',
+      );
     });
   });
 
@@ -292,7 +297,7 @@ describe('CreatePropriedadeDto', () => {
 
       expect(errors.length).toBeGreaterThan(1);
 
-      const properties = errors.map(error => error.property);
+      const properties = errors.map((error) => error.property);
       expect(properties).toContain('nomeFazenda');
       expect(properties).toContain('cidade');
       expect(properties).toContain('estado');

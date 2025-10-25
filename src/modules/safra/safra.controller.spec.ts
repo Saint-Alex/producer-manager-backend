@@ -23,7 +23,7 @@ describe('SafraController', () => {
     ano: 2025,
     createdAt: new Date('2023-01-01'),
     updatedAt: new Date('2023-01-01'),
-    cultivos: []
+    cultivos: [],
   };
 
   const mockSafras = [
@@ -34,8 +34,8 @@ describe('SafraController', () => {
       ano: 2024,
       createdAt: new Date('2023-01-02'),
       updatedAt: new Date('2023-01-02'),
-      cultivos: []
-    }
+      cultivos: [],
+    },
   ];
 
   beforeEach(async () => {
@@ -65,7 +65,7 @@ describe('SafraController', () => {
     it('should create a safra successfully', async () => {
       const createDto: CreateSafraDto = {
         nome: 'Safra 2025',
-        ano: 2025
+        ano: 2025,
       };
 
       mockSafraService.create.mockResolvedValue(mockSafra);
@@ -80,7 +80,7 @@ describe('SafraController', () => {
     it('should create safra with different year', async () => {
       const createDto: CreateSafraDto = {
         nome: 'Safra 2026',
-        ano: 2026
+        ano: 2026,
       };
 
       const mockSafra2026 = { ...mockSafra, ...createDto };
@@ -95,7 +95,7 @@ describe('SafraController', () => {
     it('should handle duplicate year errors', async () => {
       const createDto: CreateSafraDto = {
         nome: 'Safra 2025',
-        ano: 2025
+        ano: 2025,
       };
 
       const error = new Error('Safra para este ano já existe');
@@ -108,26 +108,30 @@ describe('SafraController', () => {
     it('should handle invalid year range errors', async () => {
       const createDto: CreateSafraDto = {
         nome: 'Safra Inválida',
-        ano: 1999 // Ano anterior ao mínimo permitido
+        ano: 1999, // Ano anterior ao mínimo permitido
       };
 
       const error = new Error('Ano deve estar entre 2000 e 2050');
       mockSafraService.create.mockRejectedValue(error);
 
-      await expect(controller.create(createDto)).rejects.toThrow('Ano deve estar entre 2000 e 2050');
+      await expect(controller.create(createDto)).rejects.toThrow(
+        'Ano deve estar entre 2000 e 2050',
+      );
       expect(service.create).toHaveBeenCalledWith(createDto);
     });
 
     it('should handle future year validation', async () => {
       const createDto: CreateSafraDto = {
         nome: 'Safra 2051',
-        ano: 2051 // Ano posterior ao máximo permitido
+        ano: 2051, // Ano posterior ao máximo permitido
       };
 
       const error = new Error('Ano deve estar entre 2000 e 2050');
       mockSafraService.create.mockRejectedValue(error);
 
-      await expect(controller.create(createDto)).rejects.toThrow('Ano deve estar entre 2000 e 2050');
+      await expect(controller.create(createDto)).rejects.toThrow(
+        'Ano deve estar entre 2000 e 2050',
+      );
       expect(service.create).toHaveBeenCalledWith(createDto);
     });
   });
@@ -198,8 +202,8 @@ describe('SafraController', () => {
         ...mockSafra,
         cultivos: [
           { id: '123', areaCultivada: 100 },
-          { id: '456', areaCultivada: 200 }
-        ]
+          { id: '456', areaCultivada: 200 },
+        ],
       };
       mockSafraService.findOne.mockResolvedValue(detailedSafra);
 
@@ -238,7 +242,9 @@ describe('SafraController', () => {
       const error = new Error('Safra não encontrada para este ano');
       mockSafraService.findByYear.mockRejectedValue(error);
 
-      await expect(controller.findByYear(year)).rejects.toThrow('Safra não encontrada para este ano');
+      await expect(controller.findByYear(year)).rejects.toThrow(
+        'Safra não encontrada para este ano',
+      );
       expect(service.findByYear).toHaveBeenCalledWith(year);
     });
 
@@ -256,7 +262,9 @@ describe('SafraController', () => {
       const error = new Error('Safra não encontrada para este ano');
       mockSafraService.findByYear.mockRejectedValue(error);
 
-      await expect(controller.findByYear(year)).rejects.toThrow('Safra não encontrada para este ano');
+      await expect(controller.findByYear(year)).rejects.toThrow(
+        'Safra não encontrada para este ano',
+      );
       expect(service.findByYear).toHaveBeenCalledWith(year);
     });
   });
@@ -266,7 +274,7 @@ describe('SafraController', () => {
 
     it('should update a safra successfully', async () => {
       const updateDto: UpdateSafraDto = {
-        nome: 'Safra 2025 Atualizada'
+        nome: 'Safra 2025 Atualizada',
       };
 
       const updatedSafra = { ...mockSafra, ...updateDto };
@@ -281,7 +289,7 @@ describe('SafraController', () => {
 
     it('should update year', async () => {
       const updateDto: UpdateSafraDto = {
-        ano: 2026
+        ano: 2026,
       };
 
       const updatedSafra = { ...mockSafra, ...updateDto };
@@ -295,7 +303,7 @@ describe('SafraController', () => {
 
     it('should update date range', async () => {
       const updateDto: UpdateSafraDto = {
-        nome: 'Safra com datas atualizadas'
+        nome: 'Safra com datas atualizadas',
       };
 
       const updatedSafra = { ...mockSafra, ...updateDto };
@@ -310,7 +318,7 @@ describe('SafraController', () => {
     it('should update multiple fields', async () => {
       const updateDto: UpdateSafraDto = {
         nome: 'Safra Completa 2025',
-        ano: 2025
+        ano: 2025,
       };
 
       const updatedSafra = { ...mockSafra, ...updateDto };
@@ -325,7 +333,7 @@ describe('SafraController', () => {
 
     it('should handle not found error during update', async () => {
       const updateDto: UpdateSafraDto = {
-        nome: 'Safra Atualizada'
+        nome: 'Safra Atualizada',
       };
 
       const error = new Error('Safra not found');
@@ -337,25 +345,29 @@ describe('SafraController', () => {
 
     it('should handle duplicate year errors during update', async () => {
       const updateDto: UpdateSafraDto = {
-        ano: 2024 // Ano já existente
+        ano: 2024, // Ano já existente
       };
 
       const error = new Error('Safra para este ano já existe');
       mockSafraService.update.mockRejectedValue(error);
 
-      await expect(controller.update(validId, updateDto)).rejects.toThrow('Safra para este ano já existe');
+      await expect(controller.update(validId, updateDto)).rejects.toThrow(
+        'Safra para este ano já existe',
+      );
       expect(service.update).toHaveBeenCalledWith(validId, updateDto);
     });
 
     it('should handle invalid date range during update', async () => {
       const updateDto: UpdateSafraDto = {
-        nome: 'Safra com nome inválido'
+        nome: 'Safra com nome inválido',
       };
 
       const error = new Error('Nome inválido para safra');
       mockSafraService.update.mockRejectedValue(error);
 
-      await expect(controller.update(validId, updateDto)).rejects.toThrow('Nome inválido para safra');
+      await expect(controller.update(validId, updateDto)).rejects.toThrow(
+        'Nome inválido para safra',
+      );
       expect(service.update).toHaveBeenCalledWith(validId, updateDto);
     });
 
@@ -396,7 +408,9 @@ describe('SafraController', () => {
       const error = new Error('Cannot delete safra with associated cultivos');
       mockSafraService.remove.mockRejectedValue(error);
 
-      await expect(controller.remove(validId)).rejects.toThrow('Cannot delete safra with associated cultivos');
+      await expect(controller.remove(validId)).rejects.toThrow(
+        'Cannot delete safra with associated cultivos',
+      );
       expect(service.remove).toHaveBeenCalledWith(validId);
     });
 
@@ -466,7 +480,7 @@ describe('SafraController', () => {
 
       const createDto: CreateSafraDto = {
         nome: 'Test',
-        ano: 2025
+        ano: 2025,
       };
       const updateDto: UpdateSafraDto = { nome: 'Test' };
       const id = '550e8400-e29b-41d4-a716-446655440000';

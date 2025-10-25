@@ -13,16 +13,16 @@ describe('CultivoResponseDto', () => {
         updatedAt: mockDate,
         propriedadeRural: {
           id: '550e8400-e29b-41d4-a716-446655440001',
-          nomeFazenda: 'Fazenda Test'
+          nomeFazenda: 'Fazenda Test',
         },
         cultura: {
           id: '550e8400-e29b-41d4-a716-446655440002',
-          nome: 'Soja'
+          nome: 'Soja',
         },
         safra: {
           id: '550e8400-e29b-41d4-a716-446655440003',
-          ano: 2023
-        }
+          ano: 2023,
+        },
       };
 
       const dto = plainToClass(CultivoResponseDto, data);
@@ -37,7 +37,7 @@ describe('CultivoResponseDto', () => {
     it('should handle partial data', () => {
       const data = {
         id: '550e8400-e29b-41d4-a716-446655440000',
-        areaCultivada: 75.5
+        areaCultivada: 75.5,
       };
 
       const dto = plainToClass(CultivoResponseDto, data);
@@ -51,10 +51,10 @@ describe('CultivoResponseDto', () => {
     it('should handle numeric area values correctly', () => {
       const areaValues = [0.5, 100, 250.75, 1000.25, 5000];
 
-      areaValues.forEach(areaCultivada => {
+      areaValues.forEach((areaCultivada) => {
         const data = {
           id: '550e8400-e29b-41d4-a716-446655440000',
-          areaCultivada
+          areaCultivada,
         };
         const dto = plainToClass(CultivoResponseDto, data);
 
@@ -71,8 +71,8 @@ describe('CultivoResponseDto', () => {
         areaCultivada: 100,
         propriedadeRural: {
           id: '550e8400-e29b-41d4-a716-446655440001',
-          nomeFazenda: 'Fazenda Relacionamento'
-        }
+          nomeFazenda: 'Fazenda Relacionamento',
+        },
       };
 
       const dto = plainToClass(CultivoResponseDto, data);
@@ -85,7 +85,7 @@ describe('CultivoResponseDto', () => {
     it('should handle missing relationships', () => {
       const data = {
         id: '550e8400-e29b-41d4-a716-446655440000',
-        areaCultivada: 100
+        areaCultivada: 100,
       };
 
       const dto = plainToClass(CultivoResponseDto, data);
@@ -113,7 +113,7 @@ describe('CultivoResponseDto', () => {
         updatedAt: null,
         propriedadeRural: null,
         cultura: null,
-        safra: null
+        safra: null,
       };
       const dto = plainToClass(CultivoResponseDto, data);
 
@@ -129,7 +129,7 @@ describe('CultivoResponseDto', () => {
     it('should handle zero area cultiva', () => {
       const data = {
         id: '550e8400-e29b-41d4-a716-446655440000',
-        areaCultivada: 0
+        areaCultivada: 0,
       };
 
       const dto = plainToClass(CultivoResponseDto, data);
@@ -139,7 +139,7 @@ describe('CultivoResponseDto', () => {
     it('should handle very large area values', () => {
       const data = {
         id: '550e8400-e29b-41d4-a716-446655440000',
-        areaCultivada: 999999.99
+        areaCultivada: 999999.99,
       };
 
       const dto = plainToClass(CultivoResponseDto, data);
@@ -153,7 +153,7 @@ describe('CultivoResponseDto', () => {
         id: '550e8400-e29b-41d4-a716-446655440000',
         areaCultivada: 100,
         createdAt: '2023-01-01T00:00:00.000Z',
-        updatedAt: '2023-01-02T00:00:00.000Z'
+        updatedAt: '2023-01-02T00:00:00.000Z',
       };
 
       const dto = plainToClass(CultivoResponseDto, data);

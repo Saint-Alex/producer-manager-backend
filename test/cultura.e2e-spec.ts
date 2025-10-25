@@ -33,11 +33,13 @@ describe('CulturaController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }));
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
 
     culturaRepository = moduleFixture.get<Repository<Cultura>>(getRepositoryToken(Cultura));
 
@@ -102,10 +104,7 @@ describe('CulturaController (e2e)', () => {
     it('should reject request without required nome field', async () => {
       const invalidDto = {};
 
-      await request(app.getHttpServer())
-        .post('/culturas')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/culturas').send(invalidDto).expect(400);
 
       expect(mockRepository.create).not.toHaveBeenCalled();
       expect(mockRepository.save).not.toHaveBeenCalled();
@@ -116,10 +115,7 @@ describe('CulturaController (e2e)', () => {
         nome: '',
       };
 
-      await request(app.getHttpServer())
-        .post('/culturas')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/culturas').send(invalidDto).expect(400);
 
       expect(mockRepository.create).not.toHaveBeenCalled();
       expect(mockRepository.save).not.toHaveBeenCalled();
@@ -135,9 +131,7 @@ describe('CulturaController (e2e)', () => {
 
       mockRepository.find.mockResolvedValue(mockCulturas);
 
-      const response = await request(app.getHttpServer())
-        .get('/culturas')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/culturas').expect(200);
 
       expect(response.body).toHaveLength(2);
       expect(response.body[0]).toMatchObject({ nome: 'Soja' });
@@ -147,9 +141,7 @@ describe('CulturaController (e2e)', () => {
     it('should return empty array when no culturas exist', async () => {
       mockRepository.find.mockResolvedValue([]);
 
-      const response = await request(app.getHttpServer())
-        .get('/culturas')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/culturas').expect(200);
 
       expect(response.body).toEqual([]);
     });

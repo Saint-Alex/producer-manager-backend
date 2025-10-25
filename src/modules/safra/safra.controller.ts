@@ -1,22 +1,16 @@
 import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    HttpStatus,
-    Param,
-    ParseIntPipe,
-    ParseUUIDPipe,
-    Patch,
-    Post
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  ParseUUIDPipe,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import {
-    ApiBody,
-    ApiOperation,
-    ApiParam,
-    ApiResponse,
-    ApiTags
-} from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Auditable } from '../../shared/interceptors/audit.interceptor';
 import { CreateSafraDto } from './dto/create-safra.dto';
 import { SafraResponseDto } from './dto/safra-response.dto';
@@ -32,7 +26,7 @@ export class SafraController {
   @Auditable('Safra')
   @ApiOperation({
     summary: 'Criar nova safra',
-    description: 'Cria uma nova safra para um ano específico'
+    description: 'Cria uma nova safra para um ano específico',
   })
   @ApiBody({
     type: CreateSafraDto,
@@ -44,8 +38,8 @@ export class SafraController {
           nome: 'Safra 2025',
           ano: 2025,
           dataInicio: '2025-01-01',
-          dataFim: '2025-12-31'
-        }
+          dataFim: '2025-12-31',
+        },
       },
       'safra-passada': {
         summary: 'Safra 2024',
@@ -54,19 +48,19 @@ export class SafraController {
           nome: 'Safra 2024',
           ano: 2024,
           dataInicio: '2024-01-01',
-          dataFim: '2024-12-31'
-        }
-      }
-    }
+          dataFim: '2024-12-31',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Safra criada com sucesso',
-    type: SafraResponseDto
+    type: SafraResponseDto,
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'Safra para este ano já existe'
+    description: 'Safra para este ano já existe',
   })
   async create(@Body() createSafraDto: CreateSafraDto) {
     return this.safraService.create(createSafraDto);
@@ -75,12 +69,12 @@ export class SafraController {
   @Get()
   @ApiOperation({
     summary: 'Listar todas as safras',
-    description: 'Retorna todas as safras cadastradas ordenadas por ano (mais recente primeiro)'
+    description: 'Retorna todas as safras cadastradas ordenadas por ano (mais recente primeiro)',
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Lista de safras retornada com sucesso',
-    type: [SafraResponseDto]
+    type: [SafraResponseDto],
   })
   async findAll() {
     return this.safraService.findAll();
@@ -89,22 +83,22 @@ export class SafraController {
   @Get(':id')
   @ApiOperation({
     summary: 'Buscar safra por ID',
-    description: 'Retorna uma safra específica com informações dos cultivos'
+    description: 'Retorna uma safra específica com informações dos cultivos',
   })
   @ApiParam({
     name: 'id',
     description: 'ID único da safra',
     type: 'string',
-    format: 'uuid'
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Safra encontrada',
-    type: SafraResponseDto
+    type: SafraResponseDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Safra não encontrada'
+    description: 'Safra não encontrada',
   })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.safraService.findOne(id);
@@ -113,22 +107,22 @@ export class SafraController {
   @Get('year/:year')
   @ApiOperation({
     summary: 'Buscar safra por ano',
-    description: 'Retorna a safra de um ano específico'
+    description: 'Retorna a safra de um ano específico',
   })
   @ApiParam({
     name: 'year',
     description: 'Ano da safra',
     type: 'number',
-    example: 2023
+    example: 2023,
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Safra encontrada',
-    type: SafraResponseDto
+    type: SafraResponseDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Safra não encontrada para este ano'
+    description: 'Safra não encontrada para este ano',
   })
   async findByYear(@Param('year', ParseIntPipe) year: number) {
     return this.safraService.findByYear(year);
@@ -138,31 +132,28 @@ export class SafraController {
   @Auditable('Safra')
   @ApiOperation({
     summary: 'Atualizar safra',
-    description: 'Atualiza parcialmente uma safra'
+    description: 'Atualiza parcialmente uma safra',
   })
   @ApiParam({
     name: 'id',
     description: 'ID único da safra',
     type: 'string',
-    format: 'uuid'
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Safra atualizada com sucesso',
-    type: SafraResponseDto
+    type: SafraResponseDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Safra não encontrada'
+    description: 'Safra não encontrada',
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'Safra para este ano já existe'
+    description: 'Safra para este ano já existe',
   })
-  async update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateSafraDto: UpdateSafraDto
-  ) {
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateSafraDto: UpdateSafraDto) {
     return this.safraService.update(id, updateSafraDto);
   }
 
@@ -170,21 +161,21 @@ export class SafraController {
   @Auditable('Safra')
   @ApiOperation({
     summary: 'Remover safra',
-    description: 'Remove uma safra do sistema'
+    description: 'Remove uma safra do sistema',
   })
   @ApiParam({
     name: 'id',
     description: 'ID único da safra',
     type: 'string',
-    format: 'uuid'
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: 'Safra removida com sucesso'
+    description: 'Safra removida com sucesso',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Safra não encontrada'
+    description: 'Safra não encontrada',
   })
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.safraService.remove(id);

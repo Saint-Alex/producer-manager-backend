@@ -45,7 +45,9 @@ describe('DashboardService', () => {
 
     service = module.get<DashboardService>(DashboardService);
     produtorRepository = module.get<Repository<Produtor>>(getRepositoryToken(Produtor));
-    propriedadeRepository = module.get<Repository<PropriedadeRural>>(getRepositoryToken(PropriedadeRural));
+    propriedadeRepository = module.get<Repository<PropriedadeRural>>(
+      getRepositoryToken(PropriedadeRural),
+    );
     cultivoRepository = module.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
   });
 
@@ -68,8 +70,8 @@ describe('DashboardService', () => {
         addSelect: jest.fn().mockReturnThis(),
         getRawOne: jest.fn().mockResolvedValue({
           total: '150',
-          areatotal: '75000.0'
-        })
+          areatotal: '75000.0',
+        }),
       };
 
       // Mock da área por estado
@@ -81,8 +83,8 @@ describe('DashboardService', () => {
         getRawMany: jest.fn().mockResolvedValue([
           { estado: 'SP', fazendas: '80', area: '35000.0' },
           { estado: 'MT', fazendas: '40', area: '25000.0' },
-          { estado: 'MG', fazendas: '30', area: '15000.0' }
-        ])
+          { estado: 'MG', fazendas: '30', area: '15000.0' },
+        ]),
       };
 
       // Mock da área por cultura
@@ -95,8 +97,8 @@ describe('DashboardService', () => {
         getRawMany: jest.fn().mockResolvedValue([
           { cultura: 'Soja', area: '30000.0' },
           { cultura: 'Milho', area: '20000.0' },
-          { cultura: 'Algodão', area: '10000.0' }
-        ])
+          { cultura: 'Algodão', area: '10000.0' },
+        ]),
       };
 
       // Mock do uso do solo
@@ -106,18 +108,17 @@ describe('DashboardService', () => {
         getRawOne: jest.fn().mockResolvedValue({
           areaagricultavel: '45000.0',
           areavegetacao: '30000.0',
-          areatotal: '75000.0'
-        })
+          areatotal: '75000.0',
+        }),
       };
 
       // Configurar mocks dos QueryBuilders
       mockPropriedadeRepository.createQueryBuilder
         .mockReturnValueOnce(mockPropriedadeQueryBuilder) // Para getPropriedadesStats
-        .mockReturnValueOnce(mockAreaEstadoQueryBuilder)   // Para getAreaPorEstado
-        .mockReturnValueOnce(mockUsoSoloQueryBuilder);     // Para getUsoSolo
+        .mockReturnValueOnce(mockAreaEstadoQueryBuilder) // Para getAreaPorEstado
+        .mockReturnValueOnce(mockUsoSoloQueryBuilder); // Para getUsoSolo
 
-      mockCultivoRepository.createQueryBuilder
-        .mockReturnValueOnce(mockAreaCulturaQueryBuilder); // Para getAreaPorCultura
+      mockCultivoRepository.createQueryBuilder.mockReturnValueOnce(mockAreaCulturaQueryBuilder); // Para getAreaPorCultura
 
       const result = await service.getStats();
 
@@ -128,11 +129,15 @@ describe('DashboardService', () => {
       expect(result.areaPorEstado).toEqual([
         { estado: 'SP', fazendas: 80, area: 35000.0 },
         { estado: 'MT', fazendas: 40, area: 25000.0 },
-        { estado: 'MG', fazendas: 30, area: 15000.0 }
+        { estado: 'MG', fazendas: 30, area: 15000.0 },
       ]);
 
       expect(result.areaPorCultura).toHaveLength(3);
-      expect(result.areaPorCultura[0]).toEqual({ cultura: 'Soja', area: 30000.0, percentual: 50.0 });
+      expect(result.areaPorCultura[0]).toEqual({
+        cultura: 'Soja',
+        area: 30000.0,
+        percentual: 50.0,
+      });
       expect(result.areaPorCultura[1].cultura).toBe('Milho');
       expect(result.areaPorCultura[1].area).toBe(20000.0);
       expect(result.areaPorCultura[1].percentual).toBeCloseTo(33.33, 2);
@@ -144,7 +149,7 @@ describe('DashboardService', () => {
         areaAgricultavel: 45000.0,
         areaVegetacao: 30000.0,
         percentualAgricultavel: 60.0,
-        percentualVegetacao: 40.0
+        percentualVegetacao: 40.0,
       });
 
       // Verificar se os repositórios foram chamados corretamente
@@ -163,8 +168,8 @@ describe('DashboardService', () => {
         addSelect: jest.fn().mockReturnThis(),
         getRawOne: jest.fn().mockResolvedValue({
           total: '0',
-          areatotal: null
-        })
+          areatotal: null,
+        }),
       };
 
       // Mock da área por estado - nenhuma
@@ -173,7 +178,7 @@ describe('DashboardService', () => {
         addSelect: jest.fn().mockReturnThis(),
         groupBy: jest.fn().mockReturnThis(),
         orderBy: jest.fn().mockReturnThis(),
-        getRawMany: jest.fn().mockResolvedValue([])
+        getRawMany: jest.fn().mockResolvedValue([]),
       };
 
       // Mock da área por cultura - nenhuma
@@ -183,7 +188,7 @@ describe('DashboardService', () => {
         addSelect: jest.fn().mockReturnThis(),
         groupBy: jest.fn().mockReturnThis(),
         orderBy: jest.fn().mockReturnThis(),
-        getRawMany: jest.fn().mockResolvedValue([])
+        getRawMany: jest.fn().mockResolvedValue([]),
       };
 
       // Mock do uso do solo - nenhum
@@ -193,8 +198,8 @@ describe('DashboardService', () => {
         getRawOne: jest.fn().mockResolvedValue({
           areaagricultavel: null,
           areavegetacao: null,
-          areatotal: null
-        })
+          areatotal: null,
+        }),
       };
 
       // Configurar mocks dos QueryBuilders
@@ -203,8 +208,7 @@ describe('DashboardService', () => {
         .mockReturnValueOnce(mockAreaEstadoQueryBuilder)
         .mockReturnValueOnce(mockUsoSoloQueryBuilder);
 
-      mockCultivoRepository.createQueryBuilder
-        .mockReturnValueOnce(mockAreaCulturaQueryBuilder);
+      mockCultivoRepository.createQueryBuilder.mockReturnValueOnce(mockAreaCulturaQueryBuilder);
 
       const result = await service.getStats();
 
@@ -218,8 +222,8 @@ describe('DashboardService', () => {
           areaAgricultavel: 0,
           areaVegetacao: 0,
           percentualAgricultavel: 0,
-          percentualVegetacao: 0
-        }
+          percentualVegetacao: 0,
+        },
       });
     });
 
@@ -233,8 +237,8 @@ describe('DashboardService', () => {
         addSelect: jest.fn().mockReturnThis(),
         getRawOne: jest.fn().mockResolvedValue({
           total: '3',
-          areatotal: null // Valor null do banco
-        })
+          areatotal: null, // Valor null do banco
+        }),
       };
 
       // Mock da área por estado com alguns valores null
@@ -245,8 +249,8 @@ describe('DashboardService', () => {
         orderBy: jest.fn().mockReturnThis(),
         getRawMany: jest.fn().mockResolvedValue([
           { estado: 'SP', fazendas: '2', area: '500.0' },
-          { estado: 'RJ', fazendas: '1', area: null } // Valor null
-        ])
+          { estado: 'RJ', fazendas: '1', area: null }, // Valor null
+        ]),
       };
 
       // Mock da área por cultura com valores null
@@ -257,8 +261,8 @@ describe('DashboardService', () => {
         groupBy: jest.fn().mockReturnThis(),
         orderBy: jest.fn().mockReturnThis(),
         getRawMany: jest.fn().mockResolvedValue([
-          { cultura: 'Soja', area: null } // Valor null
-        ])
+          { cultura: 'Soja', area: null }, // Valor null
+        ]),
       };
 
       // Mock do uso do solo com valores null
@@ -268,8 +272,8 @@ describe('DashboardService', () => {
         getRawOne: jest.fn().mockResolvedValue({
           areaagricultavel: null,
           areavegetacao: null,
-          areatotal: null
-        })
+          areatotal: null,
+        }),
       };
 
       // Configurar mocks dos QueryBuilders
@@ -278,8 +282,7 @@ describe('DashboardService', () => {
         .mockReturnValueOnce(mockAreaEstadoQueryBuilder)
         .mockReturnValueOnce(mockUsoSoloQueryBuilder);
 
-      mockCultivoRepository.createQueryBuilder
-        .mockReturnValueOnce(mockAreaCulturaQueryBuilder);
+      mockCultivoRepository.createQueryBuilder.mockReturnValueOnce(mockAreaCulturaQueryBuilder);
 
       const result = await service.getStats();
 
@@ -289,17 +292,17 @@ describe('DashboardService', () => {
         totalAreaHectares: 0, // null convertido para 0
         areaPorEstado: [
           { estado: 'SP', fazendas: 2, area: 500.0 },
-          { estado: 'RJ', fazendas: 1, area: 0 } // null convertido para 0
+          { estado: 'RJ', fazendas: 1, area: 0 }, // null convertido para 0
         ],
         areaPorCultura: [
-          { cultura: 'Soja', area: 0, percentual: 0 } // null convertido para 0
+          { cultura: 'Soja', area: 0, percentual: 0 }, // null convertido para 0
         ],
         usoSolo: {
           areaAgricultavel: 0,
           areaVegetacao: 0,
           percentualAgricultavel: 0,
-          percentualVegetacao: 0
-        }
+          percentualVegetacao: 0,
+        },
       });
     });
 
@@ -313,8 +316,8 @@ describe('DashboardService', () => {
         addSelect: jest.fn().mockReturnThis(),
         getRawOne: jest.fn().mockResolvedValue({
           total: '1',
-          areatotal: '100.0'
-        })
+          areatotal: '100.0',
+        }),
       };
 
       // Mock da área por estado
@@ -323,9 +326,7 @@ describe('DashboardService', () => {
         addSelect: jest.fn().mockReturnThis(),
         groupBy: jest.fn().mockReturnThis(),
         orderBy: jest.fn().mockReturnThis(),
-        getRawMany: jest.fn().mockResolvedValue([
-          { estado: 'SP', fazendas: '1', area: '100.0' }
-        ])
+        getRawMany: jest.fn().mockResolvedValue([{ estado: 'SP', fazendas: '1', area: '100.0' }]),
       };
 
       // Mock da área por cultura - todas com área zero
@@ -337,8 +338,8 @@ describe('DashboardService', () => {
         orderBy: jest.fn().mockReturnThis(),
         getRawMany: jest.fn().mockResolvedValue([
           { cultura: 'Soja', area: '0' },
-          { cultura: 'Milho', area: '0' }
-        ])
+          { cultura: 'Milho', area: '0' },
+        ]),
       };
 
       // Mock do uso do solo
@@ -348,8 +349,8 @@ describe('DashboardService', () => {
         getRawOne: jest.fn().mockResolvedValue({
           areaagricultavel: '60.0',
           areavegetacao: '40.0',
-          areatotal: '100.0'
-        })
+          areatotal: '100.0',
+        }),
       };
 
       // Configurar mocks dos QueryBuilders
@@ -358,14 +359,13 @@ describe('DashboardService', () => {
         .mockReturnValueOnce(mockAreaEstadoQueryBuilder)
         .mockReturnValueOnce(mockUsoSoloQueryBuilder);
 
-      mockCultivoRepository.createQueryBuilder
-        .mockReturnValueOnce(mockAreaCulturaQueryBuilder);
+      mockCultivoRepository.createQueryBuilder.mockReturnValueOnce(mockAreaCulturaQueryBuilder);
 
       const result = await service.getStats();
 
       expect(result.areaPorCultura).toEqual([
         { cultura: 'Soja', area: 0, percentual: 0 },
-        { cultura: 'Milho', area: 0, percentual: 0 }
+        { cultura: 'Milho', area: 0, percentual: 0 },
       ]);
       expect(result.usoSolo.percentualAgricultavel).toBe(60.0);
       expect(result.usoSolo.percentualVegetacao).toBe(40.0);

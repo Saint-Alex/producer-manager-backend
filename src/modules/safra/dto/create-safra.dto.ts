@@ -6,7 +6,7 @@ export class CreateSafraDto {
     description: 'Nome da safra',
     example: 'Safra 2023',
     minLength: 1,
-    maxLength: 100
+    maxLength: 100,
   })
   @IsString()
   @MinLength(1)
@@ -17,7 +17,7 @@ export class CreateSafraDto {
     description: 'Ano da safra',
     example: 2023,
     minimum: 2000,
-    maximum: 2050
+    maximum: 2050,
   })
   @IsNumber()
   @Min(2000)

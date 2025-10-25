@@ -1,4 +1,9 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cultivo } from '../../database/entities/cultivo.entity';
@@ -28,7 +33,7 @@ export class CultivoService {
     const [propriedade, cultura, safra] = await Promise.all([
       this.propriedadeRepository.findOne({ where: { id: propriedadeId } }),
       this.culturaRepository.findOne({ where: { id: culturaId } }),
-      this.safraRepository.findOne({ where: { id: safraId } })
+      this.safraRepository.findOne({ where: { id: safraId } }),
     ]);
 
     if (!propriedade) {
@@ -46,13 +51,13 @@ export class CultivoService {
       where: {
         propriedadeRural: { id: propriedadeId },
         cultura: { id: culturaId },
-        safra: { id: safraId }
-      }
+        safra: { id: safraId },
+      },
     });
 
     if (existingCultivo) {
       throw new ConflictException(
-        `Já existe um cultivo de ${cultura.nome} na propriedade ${propriedade.nomeFazenda} para a safra ${safra.ano}`
+        `Já existe um cultivo de ${cultura.nome} na propriedade ${propriedade.nomeFazenda} para a safra ${safra.ano}`,
       );
     }
 
@@ -60,16 +65,19 @@ export class CultivoService {
     const cultivosExistentes = await this.cultivoRepository.find({
       where: {
         propriedadeRural: { id: propriedadeId },
-        safra: { id: safraId }
-      }
+        safra: { id: safraId },
+      },
     });
 
-    const areaJaCultivada = cultivosExistentes.reduce((total, cultivo) => total + cultivo.areaPlantada, 0);
+    const areaJaCultivada = cultivosExistentes.reduce(
+      (total, cultivo) => total + cultivo.areaPlantada,
+      0,
+    );
     const areaTotalComNovo = areaJaCultivada + areaCultivada;
 
     if (areaTotalComNovo > propriedade.areaAgricultavel) {
       throw new BadRequestException(
-        `A área cultivada total (${areaTotalComNovo}ha) excederia a área agricultável da propriedade (${propriedade.areaAgricultavel}ha)`
+        `A área cultivada total (${areaTotalComNovo}ha) excederia a área agricultável da propriedade (${propriedade.areaAgricultavel}ha)`,
       );
     }
 
@@ -77,7 +85,7 @@ export class CultivoService {
       areaPlantada: areaCultivada,
       propriedadeRural: propriedade,
       cultura,
-      safra
+      safra,
     });
 
     return this.cultivoRepository.save(cultivo);
@@ -86,14 +94,14 @@ export class CultivoService {
   async findAll(): Promise<Cultivo[]> {
     return this.cultivoRepository.find({
       relations: ['propriedadeRural', 'cultura', 'safra'],
-      order: { createdAt: 'DESC' }
+      order: { createdAt: 'DESC' },
     });
   }
 
   async findOne(id: string): Promise<Cultivo> {
     const cultivo = await this.cultivoRepository.findOne({
       where: { id },
-      relations: ['propriedadeRural', 'cultura', 'safra']
+      relations: ['propriedadeRural', 'cultura', 'safra'],
     });
 
     if (!cultivo) {
@@ -107,7 +115,7 @@ export class CultivoService {
     return this.cultivoRepository.find({
       where: { propriedadeRural: { id: propriedadeId } },
       relations: ['propriedadeRural', 'cultura', 'safra'],
-      order: { createdAt: 'DESC' }
+      order: { createdAt: 'DESC' },
     });
   }
 
@@ -115,7 +123,7 @@ export class CultivoService {
     return this.cultivoRepository.find({
       where: { safra: { id: safraId } },
       relations: ['propriedadeRural', 'cultura', 'safra'],
-      order: { createdAt: 'DESC' }
+      order: { createdAt: 'DESC' },
     });
   }
 
@@ -123,7 +131,7 @@ export class CultivoService {
     return this.cultivoRepository.find({
       where: { cultura: { id: culturaId } },
       relations: ['propriedadeRural', 'cultura', 'safra'],
-      order: { createdAt: 'DESC' }
+      order: { createdAt: 'DESC' },
     });
   }
 
@@ -135,7 +143,9 @@ export class CultivoService {
     const updates: any = {};
 
     if (propriedadeId && propriedadeId !== cultivo.propriedadeRural.id) {
-      const propriedade = await this.propriedadeRepository.findOne({ where: { id: propriedadeId } });
+      const propriedade = await this.propriedadeRepository.findOne({
+        where: { id: propriedadeId },
+      });
       if (!propriedade) {
         throw new NotFoundException(`Propriedade com ID ${propriedadeId} não encontrada`);
       }
@@ -166,18 +176,18 @@ export class CultivoService {
       const cultivosExistentes = await this.cultivoRepository.find({
         where: {
           propriedadeRural: { id: propriedadeParaValidacao.id },
-          safra: { id: safraParaValidacao.id }
-        }
+          safra: { id: safraParaValidacao.id },
+        },
       });
 
       // Excluir o cultivo atual do cálculo
-      const cultivosParaCalculo = cultivosExistentes.filter(c => c.id !== cultivo.id);
+      const cultivosParaCalculo = cultivosExistentes.filter((c) => c.id !== cultivo.id);
       const areaJaCultivada = cultivosParaCalculo.reduce((total, c) => total + c.areaPlantada, 0);
       const areaTotalComNovo = areaJaCultivada + areaCultivada;
 
       if (areaTotalComNovo > propriedadeParaValidacao.areaAgricultavel) {
         throw new BadRequestException(
-          `A área cultivada total (${areaTotalComNovo}ha) excederia a área agricultável da propriedade (${propriedadeParaValidacao.areaAgricultavel}ha)`
+          `A área cultivada total (${areaTotalComNovo}ha) excederia a área agricultável da propriedade (${propriedadeParaValidacao.areaAgricultavel}ha)`,
         );
       }
 

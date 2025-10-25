@@ -4,7 +4,7 @@ import { CreateCulturaDto } from './create-cultura.dto';
 
 describe('CreateCulturaDto', () => {
   const validDto = {
-    nome: 'Soja'
+    nome: 'Soja',
   };
 
   describe('nome validation', () => {
@@ -19,7 +19,7 @@ describe('CreateCulturaDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'nome');
+      const propertyError = errors.find((error) => error.property === 'nome');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isNotEmpty');
     });
@@ -37,7 +37,7 @@ describe('CreateCulturaDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'nome');
+      const propertyError = errors.find((error) => error.property === 'nome');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isString');
     });
@@ -47,7 +47,7 @@ describe('CreateCulturaDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'nome');
+      const propertyError = errors.find((error) => error.property === 'nome');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isString');
     });
@@ -57,7 +57,7 @@ describe('CreateCulturaDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'nome');
+      const propertyError = errors.find((error) => error.property === 'nome');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isNotEmpty');
     });
@@ -105,10 +105,10 @@ describe('CreateCulturaDto', () => {
       'Feijão',
       'Trigo',
       'Mandioca',
-      'Batata'
+      'Batata',
     ];
 
-    commonCultures.forEach(cultura => {
+    commonCultures.forEach((cultura) => {
       it(`should pass validation for culture: ${cultura}`, async () => {
         const dto = plainToClass(CreateCulturaDto, { nome: cultura });
         const errors = await validate(dto);
@@ -123,7 +123,7 @@ describe('CreateCulturaDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'nome');
+      const propertyError = errors.find((error) => error.property === 'nome');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isString');
     });
@@ -133,7 +133,7 @@ describe('CreateCulturaDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'nome');
+      const propertyError = errors.find((error) => error.property === 'nome');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isString');
     });
@@ -143,7 +143,7 @@ describe('CreateCulturaDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'nome');
+      const propertyError = errors.find((error) => error.property === 'nome');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isString');
     });
@@ -152,7 +152,7 @@ describe('CreateCulturaDto', () => {
   describe('valid complete object', () => {
     it('should pass validation with valid cultura name', async () => {
       const dto = plainToClass(CreateCulturaDto, {
-        nome: 'Milho Safrinha'
+        nome: 'Milho Safrinha',
       });
 
       const errors = await validate(dto);
@@ -161,7 +161,7 @@ describe('CreateCulturaDto', () => {
 
     it('should pass validation with minimal valid data', async () => {
       const dto = plainToClass(CreateCulturaDto, {
-        nome: 'X'
+        nome: 'X',
       });
 
       const errors = await validate(dto);

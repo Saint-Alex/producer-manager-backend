@@ -18,7 +18,6 @@ const resetAndSeed = async () => {
     console.log('\n================================================');
     console.log('🎯 RESET E SEED COMPLETO FINALIZADO!');
     console.log('================================================');
-
   } catch (error) {
     console.error('❌ Erro durante o reset e seed:', error);
     process.exit(1);

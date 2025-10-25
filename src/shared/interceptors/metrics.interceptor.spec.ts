@@ -69,11 +69,7 @@ describe('MetricsInterceptor', () => {
 
       const result = await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'GET',
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('GET', 200, expect.any(Number));
       expect(result).toEqual(responseData);
     });
 
@@ -84,11 +80,7 @@ describe('MetricsInterceptor', () => {
 
       const result = await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'POST',
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('POST', 200, expect.any(Number));
       expect(result).toEqual(responseData);
     });
 
@@ -99,11 +91,7 @@ describe('MetricsInterceptor', () => {
 
       await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'PUT',
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('PUT', 200, expect.any(Number));
     });
 
     it('should record metrics for DELETE requests', async () => {
@@ -113,11 +101,7 @@ describe('MetricsInterceptor', () => {
 
       await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'DELETE',
-        204,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('DELETE', 204, expect.any(Number));
     });
 
     it('should record metrics for PATCH requests', async () => {
@@ -127,11 +111,7 @@ describe('MetricsInterceptor', () => {
 
       await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'PATCH',
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('PATCH', 200, expect.any(Number));
     });
 
     it('should measure response time correctly', async () => {
@@ -141,7 +121,7 @@ describe('MetricsInterceptor', () => {
 
       const recordRequestCall = (metricsService.recordRequest as jest.Mock).mock.calls[0];
       const responseTime = recordRequestCall[2];
-      
+
       expect(responseTime).toBeGreaterThanOrEqual(0);
       expect(typeof responseTime).toBe('number');
     });
@@ -152,11 +132,7 @@ describe('MetricsInterceptor', () => {
 
       await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'GET',
-        201,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('GET', 201, expect.any(Number));
     });
 
     it('should handle 400 status codes', async () => {
@@ -165,11 +141,7 @@ describe('MetricsInterceptor', () => {
 
       await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'GET',
-        400,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('GET', 400, expect.any(Number));
     });
 
     it('should handle 404 status codes', async () => {
@@ -178,11 +150,7 @@ describe('MetricsInterceptor', () => {
 
       await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'GET',
-        404,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('GET', 404, expect.any(Number));
     });
 
     it('should handle 500 status codes', async () => {
@@ -191,11 +159,7 @@ describe('MetricsInterceptor', () => {
 
       await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'GET',
-        500,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('GET', 500, expect.any(Number));
     });
 
     it('should not interfere with request processing when metrics service throws error', async () => {
@@ -220,7 +184,9 @@ describe('MetricsInterceptor', () => {
       const error = new Error('Original request error');
       (callHandler.handle as jest.Mock).mockReturnValue(throwError(error));
 
-      await expect(interceptor.intercept(executionContext, callHandler).toPromise()).rejects.toThrow('Original request error');
+      await expect(
+        interceptor.intercept(executionContext, callHandler).toPromise(),
+      ).rejects.toThrow('Original request error');
 
       // Note: In this implementation, metrics are only recorded on success
       // If we want to record metrics on errors too, the interceptor would need a catchError operator
@@ -232,11 +198,7 @@ describe('MetricsInterceptor', () => {
 
       const result = await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'GET',
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('GET', 200, expect.any(Number));
       expect(result).toBeUndefined();
     });
 
@@ -245,11 +207,7 @@ describe('MetricsInterceptor', () => {
 
       const result = await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'GET',
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('GET', 200, expect.any(Number));
       expect(result).toBeNull();
     });
 
@@ -258,11 +216,7 @@ describe('MetricsInterceptor', () => {
 
       const result = await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'GET',
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('GET', 200, expect.any(Number));
       expect(result).toEqual({});
     });
 
@@ -272,11 +226,7 @@ describe('MetricsInterceptor', () => {
 
       const result = await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'GET',
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('GET', 200, expect.any(Number));
       expect(result).toEqual(responseData);
     });
 
@@ -286,11 +236,7 @@ describe('MetricsInterceptor', () => {
 
       const result = await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'GET',
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('GET', 200, expect.any(Number));
       expect(result).toEqual(responseData);
     });
 
@@ -300,11 +246,7 @@ describe('MetricsInterceptor', () => {
 
       const result = await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'GET',
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('GET', 200, expect.any(Number));
       expect(result).toEqual(responseData);
     });
 
@@ -314,11 +256,7 @@ describe('MetricsInterceptor', () => {
 
       const result = await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'GET',
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('GET', 200, expect.any(Number));
       expect(result).toEqual(responseData);
     });
   });
@@ -330,11 +268,7 @@ describe('MetricsInterceptor', () => {
 
       await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        undefined,
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith(undefined, 200, expect.any(Number));
     });
 
     it('should handle response with missing statusCode', async () => {
@@ -356,11 +290,7 @@ describe('MetricsInterceptor', () => {
 
       await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'OPTIONS',
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('OPTIONS', 200, expect.any(Number));
     });
 
     it('should handle HEAD requests', async () => {
@@ -370,11 +300,7 @@ describe('MetricsInterceptor', () => {
 
       await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(metricsService.recordRequest).toHaveBeenCalledWith(
-        'HEAD',
-        200,
-        expect.any(Number),
-      );
+      expect(metricsService.recordRequest).toHaveBeenCalledWith('HEAD', 200, expect.any(Number));
     });
   });
 
@@ -391,17 +317,25 @@ describe('MetricsInterceptor', () => {
       await interceptor.intercept(executionContext, callHandler).toPromise();
 
       expect(metricsService.recordRequest).toHaveBeenCalledTimes(2);
-      expect(metricsService.recordRequest).toHaveBeenNthCalledWith(1, 'GET', 200, expect.any(Number));
-      expect(metricsService.recordRequest).toHaveBeenNthCalledWith(2, 'POST', 201, expect.any(Number));
+      expect(metricsService.recordRequest).toHaveBeenNthCalledWith(
+        1,
+        'GET',
+        200,
+        expect.any(Number),
+      );
+      expect(metricsService.recordRequest).toHaveBeenNthCalledWith(
+        2,
+        'POST',
+        201,
+        expect.any(Number),
+      );
     });
 
     it('should handle concurrent requests', async () => {
       const request1 = of({ id: 1 });
       const request2 = of({ id: 2 });
-      
-      (callHandler.handle as jest.Mock)
-        .mockReturnValueOnce(request1)
-        .mockReturnValueOnce(request2);
+
+      (callHandler.handle as jest.Mock).mockReturnValueOnce(request1).mockReturnValueOnce(request2);
 
       const promise1 = interceptor.intercept(executionContext, callHandler).toPromise();
       const promise2 = interceptor.intercept(executionContext, callHandler).toPromise();

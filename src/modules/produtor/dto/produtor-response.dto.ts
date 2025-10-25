@@ -26,21 +26,21 @@ export class PropriedadeResponseDto {
 export class ProdutorResponseDto {
   @ApiProperty({
     description: 'ID único do produtor',
-    example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479'
+    example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
   })
   @Expose()
   id: string;
 
   @ApiProperty({
     description: 'CPF ou CNPJ do produtor',
-    example: '12345678901'
+    example: '12345678901',
   })
   @Expose()
   cpfCnpj: string;
 
   @ApiProperty({
     description: 'Nome do produtor',
-    example: 'João Silva Santos'
+    example: 'João Silva Santos',
   })
   @Expose()
   nome: string;
@@ -48,7 +48,7 @@ export class ProdutorResponseDto {
   @ApiProperty({
     description: 'Lista de propriedades rurais do produtor',
     type: [PropriedadeResponseDto],
-    required: false
+    required: false,
   })
   @Expose()
   @Type(() => PropriedadeResponseDto)

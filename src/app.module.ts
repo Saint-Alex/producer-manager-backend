@@ -42,10 +42,12 @@ import { CorrelationIdMiddleware } from './shared/middleware/correlation-id.midd
     }),
 
     // Rate limiting
-    ThrottlerModule.forRoot([{
-      ttl: 60000, // 1 minuto
-      limit: 100, // 100 requests por minuto
-    }]),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000, // 1 minuto
+        limit: 100, // 100 requests por minuto
+      },
+    ]),
 
     // Database
     TypeOrmModule.forRootAsync({
@@ -107,8 +109,6 @@ import { CorrelationIdMiddleware } from './shared/middleware/correlation-id.midd
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(CorrelationIdMiddleware)
-      .forRoutes('*');
+    consumer.apply(CorrelationIdMiddleware).forRoutes('*');
   }
 }

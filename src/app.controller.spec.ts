@@ -48,8 +48,12 @@ describe('AppController', () => {
       const result1 = appController.getInfo();
       const result2 = appController.getInfo();
 
-      expect(Object.keys(result1).sort()).toEqual(['name', 'version', 'description', 'environment', 'timestamp'].sort());
-      expect(Object.keys(result2).sort()).toEqual(['name', 'version', 'description', 'environment', 'timestamp'].sort());
+      expect(Object.keys(result1).sort()).toEqual(
+        ['name', 'version', 'description', 'environment', 'timestamp'].sort(),
+      );
+      expect(Object.keys(result2).sort()).toEqual(
+        ['name', 'version', 'description', 'environment', 'timestamp'].sort(),
+      );
       expect(result1.name).toBe(result2.name);
       expect(result1.version).toBe(result2.version);
     });

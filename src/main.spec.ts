@@ -80,7 +80,7 @@ describe('Main Bootstrap', () => {
     await import('./main');
 
     // Give time for async bootstrap to complete
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     const { NestFactory } = require('@nestjs/core');
     const { SwaggerModule } = require('@nestjs/swagger');
@@ -92,14 +92,12 @@ describe('Main Bootstrap', () => {
     expect(mockApp.get).toHaveBeenCalled();
     expect(mockApp.useLogger).toHaveBeenCalled();
     expect(mockApp.use).toHaveBeenCalled(); // helmet
-    expect(mockApp.useGlobalPipes).toHaveBeenCalledWith(
-      expect.any(ValidationPipe)
-    );
+    expect(mockApp.useGlobalPipes).toHaveBeenCalledWith(expect.any(ValidationPipe));
     expect(mockApp.enableCors).toHaveBeenCalledWith(
       expect.objectContaining({
         origin: ['http://localhost:3000', 'http://localhost:3001'],
         credentials: true,
-      })
+      }),
     );
     expect(mockApp.setGlobalPrefix).toHaveBeenCalledWith('api');
 

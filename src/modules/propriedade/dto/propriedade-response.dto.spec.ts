@@ -16,10 +16,10 @@ describe('PropriedadeResponseDto', () => {
         areaVegetacao: 400.5,
         produtores: [
           { id: '550e8400-e29b-41d4-a716-446655440001', nome: 'João', cpfCnpj: '12345678901' },
-          { id: '550e8400-e29b-41d4-a716-446655440002', nome: 'Maria', cpfCnpj: '98765432100' }
+          { id: '550e8400-e29b-41d4-a716-446655440002', nome: 'Maria', cpfCnpj: '98765432100' },
         ],
         createdAt: mockDate,
-        updatedAt: mockDate
+        updatedAt: mockDate,
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);
@@ -38,7 +38,7 @@ describe('PropriedadeResponseDto', () => {
       const data = {
         id: '550e8400-e29b-41d4-a716-446655440000',
         nomeFazenda: 'Fazenda Parcial',
-        areaTotal: 500
+        areaTotal: 500,
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);
@@ -56,7 +56,7 @@ describe('PropriedadeResponseDto', () => {
         nomeFazenda: 'Fazenda Numérica',
         areaTotal: 1234.56,
         areaAgricultavel: 800.25,
-        areaVegetacao: 434.31
+        areaVegetacao: 434.31,
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);
@@ -77,8 +77,8 @@ describe('PropriedadeResponseDto', () => {
         nomeFazenda: 'Fazenda com Múltiplos Produtores',
         produtores: [
           { id: '550e8400-e29b-41d4-a716-446655440001', nome: 'João', cpfCnpj: '12345678901' },
-          { id: '550e8400-e29b-41d4-a716-446655440002', nome: 'Maria', cpfCnpj: '98765432100' }
-        ]
+          { id: '550e8400-e29b-41d4-a716-446655440002', nome: 'Maria', cpfCnpj: '98765432100' },
+        ],
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);
@@ -92,7 +92,7 @@ describe('PropriedadeResponseDto', () => {
       const data = {
         id: '550e8400-e29b-41d4-a716-446655440000',
         nomeFazenda: 'Fazenda Sem Produtores',
-        produtores: []
+        produtores: [],
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);
@@ -108,7 +108,7 @@ describe('PropriedadeResponseDto', () => {
         id: '550e8400-e29b-41d4-a716-446655440000',
         nomeFazenda: 'Fazenda com Datas',
         createdAt: mockDate,
-        updatedAt: mockDate
+        updatedAt: mockDate,
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);
@@ -122,7 +122,7 @@ describe('PropriedadeResponseDto', () => {
         id: '550e8400-e29b-41d4-a716-446655440000',
         nomeFazenda: 'Fazenda com String Dates',
         createdAt: '2023-01-01T00:00:00.000Z',
-        updatedAt: '2023-01-02T00:00:00.000Z'
+        updatedAt: '2023-01-02T00:00:00.000Z',
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);
@@ -147,7 +147,7 @@ describe('PropriedadeResponseDto', () => {
         id: null,
         nomeFazenda: null,
         areaTotal: null,
-        produtores: null
+        produtores: null,
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);
@@ -164,7 +164,7 @@ describe('PropriedadeResponseDto', () => {
         nomeFazenda: 'Fazenda Zero',
         areaTotal: 0,
         areaAgricultavel: 0,
-        areaVegetacao: 0
+        areaVegetacao: 0,
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);
@@ -181,7 +181,7 @@ describe('PropriedadeResponseDto', () => {
         id: '550e8400-e29b-41d4-a716-446655440000',
         nomeFazenda: 'Fazenda Brasil',
         cidade: 'São Paulo',
-        estado: 'SP'
+        estado: 'SP',
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);
@@ -195,7 +195,7 @@ describe('PropriedadeResponseDto', () => {
         id: '550e8400-e29b-41d4-a716-446655440000',
         nomeFazenda: 'Fazenda São José do Rio Preto',
         cidade: 'Brasília',
-        estado: 'DF'
+        estado: 'DF',
       };
 
       const dto = plainToClass(PropriedadeResponseDto, data);

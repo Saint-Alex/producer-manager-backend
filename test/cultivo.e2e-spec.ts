@@ -62,24 +62,20 @@ describe('CultivoController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }));
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
 
-    cultivoRepository = moduleFixture.get<Repository<Cultivo>>(
-      getRepositoryToken(Cultivo)
-    );
+    cultivoRepository = moduleFixture.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
     propriedadeRepository = moduleFixture.get<Repository<PropriedadeRural>>(
-      getRepositoryToken(PropriedadeRural)
+      getRepositoryToken(PropriedadeRural),
     );
-    culturaRepository = moduleFixture.get<Repository<Cultura>>(
-      getRepositoryToken(Cultura)
-    );
-    safraRepository = moduleFixture.get<Repository<Safra>>(
-      getRepositoryToken(Safra)
-    );
+    culturaRepository = moduleFixture.get<Repository<Cultura>>(getRepositoryToken(Cultura));
+    safraRepository = moduleFixture.get<Repository<Safra>>(getRepositoryToken(Safra));
 
     await app.init();
   });
@@ -145,13 +141,13 @@ describe('CultivoController (e2e)', () => {
         areaPlantada: 50.5,
       });
       expect(mockPropriedadeRepository.findOne).toHaveBeenCalledWith({
-        where: { id: '550e8400-e29b-41d4-a716-446655440000' }
+        where: { id: '550e8400-e29b-41d4-a716-446655440000' },
       });
       expect(mockCulturaRepository.findOne).toHaveBeenCalledWith({
-        where: { id: '550e8400-e29b-41d4-a716-446655440001' }
+        where: { id: '550e8400-e29b-41d4-a716-446655440001' },
       });
       expect(mockSafraRepository.findOne).toHaveBeenCalledWith({
-        where: { id: '550e8400-e29b-41d4-a716-446655440002' }
+        where: { id: '550e8400-e29b-41d4-a716-446655440002' },
       });
     });
 
@@ -163,10 +159,7 @@ describe('CultivoController (e2e)', () => {
         areaCultivada: 50.5,
       };
 
-      await request(app.getHttpServer())
-        .post('/cultivos')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/cultivos').send(invalidDto).expect(400);
 
       expect(mockCultivoRepository.create).not.toHaveBeenCalled();
     });
@@ -179,10 +172,7 @@ describe('CultivoController (e2e)', () => {
         areaCultivada: -10.5,
       };
 
-      await request(app.getHttpServer())
-        .post('/cultivos')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/cultivos').send(invalidDto).expect(400);
 
       expect(mockCultivoRepository.create).not.toHaveBeenCalled();
     });
@@ -193,10 +183,7 @@ describe('CultivoController (e2e)', () => {
         // Missing required fields
       };
 
-      await request(app.getHttpServer())
-        .post('/cultivos')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/cultivos').send(invalidDto).expect(400);
 
       expect(mockCultivoRepository.create).not.toHaveBeenCalled();
     });
@@ -210,15 +197,23 @@ describe('CultivoController (e2e)', () => {
       };
 
       mockPropriedadeRepository.findOne.mockResolvedValue(null);
-      mockCulturaRepository.findOne.mockResolvedValue({ id: '550e8400-e29b-41d4-a716-446655440001', nome: 'Soja' });
-      mockSafraRepository.findOne.mockResolvedValue({ id: '550e8400-e29b-41d4-a716-446655440002', ano: 2025 });
+      mockCulturaRepository.findOne.mockResolvedValue({
+        id: '550e8400-e29b-41d4-a716-446655440001',
+        nome: 'Soja',
+      });
+      mockSafraRepository.findOne.mockResolvedValue({
+        id: '550e8400-e29b-41d4-a716-446655440002',
+        ano: 2025,
+      });
 
       await request(app.getHttpServer())
         .post('/cultivos')
         .send(createCultivoDto)
         .expect(404)
         .expect((res) => {
-          expect(res.body.message).toContain('Propriedade com ID 550e8400-e29b-41d4-a716-446655440000 não encontrada');
+          expect(res.body.message).toContain(
+            'Propriedade com ID 550e8400-e29b-41d4-a716-446655440000 não encontrada',
+          );
         });
     });
 
@@ -242,8 +237,14 @@ describe('CultivoController (e2e)', () => {
       };
 
       mockPropriedadeRepository.findOne.mockResolvedValue(mockPropriedade);
-      mockCulturaRepository.findOne.mockResolvedValue({ id: '550e8400-e29b-41d4-a716-446655440001', nome: 'Soja' });
-      mockSafraRepository.findOne.mockResolvedValue({ id: '550e8400-e29b-41d4-a716-446655440002', ano: 2025 });
+      mockCulturaRepository.findOne.mockResolvedValue({
+        id: '550e8400-e29b-41d4-a716-446655440001',
+        nome: 'Soja',
+      });
+      mockSafraRepository.findOne.mockResolvedValue({
+        id: '550e8400-e29b-41d4-a716-446655440002',
+        ano: 2025,
+      });
       mockCultivoRepository.findOne.mockResolvedValue(null); // Não existe cultivo duplicado
       mockCultivoRepository.find.mockResolvedValue([mockExistingCultivo]); // Já tem 30ha cultivados
 
@@ -306,14 +307,20 @@ describe('CultivoController (e2e)', () => {
         {
           id: '550e8400-e29b-41d4-a716-446655440003',
           areaPlantada: 50.5,
-          propriedadeRural: { id: '550e8400-e29b-41d4-a716-446655440000', nomeFazenda: 'Fazenda Boa Vista' },
+          propriedadeRural: {
+            id: '550e8400-e29b-41d4-a716-446655440000',
+            nomeFazenda: 'Fazenda Boa Vista',
+          },
           cultura: { id: '550e8400-e29b-41d4-a716-446655440001', nome: 'Soja' },
           safra: { id: '550e8400-e29b-41d4-a716-446655440002', ano: 2025 },
         },
         {
           id: '550e8400-e29b-41d4-a716-446655440004',
           areaPlantada: 30.0,
-          propriedadeRural: { id: '550e8400-e29b-41d4-a716-446655440000', nomeFazenda: 'Fazenda Boa Vista' },
+          propriedadeRural: {
+            id: '550e8400-e29b-41d4-a716-446655440000',
+            nomeFazenda: 'Fazenda Boa Vista',
+          },
           cultura: { id: '550e8400-e29b-41d4-a716-446655440005', nome: 'Milho' },
           safra: { id: '550e8400-e29b-41d4-a716-446655440002', ano: 2025 },
         },
@@ -321,16 +328,14 @@ describe('CultivoController (e2e)', () => {
 
       mockCultivoRepository.find.mockResolvedValue(mockCultivos);
 
-      const response = await request(app.getHttpServer())
-        .get('/cultivos')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/cultivos').expect(200);
 
       expect(response.body).toHaveLength(2);
       expect(response.body[0]).toMatchObject({ areaPlantada: 50.5 });
       expect(response.body[1]).toMatchObject({ areaPlantada: 30.0 });
       expect(mockCultivoRepository.find).toHaveBeenCalledWith({
         relations: ['propriedadeRural', 'cultura', 'safra'],
-        order: { createdAt: 'DESC' }
+        order: { createdAt: 'DESC' },
       });
     });
 
@@ -355,7 +360,7 @@ describe('CultivoController (e2e)', () => {
       expect(mockCultivoRepository.find).toHaveBeenCalledWith({
         where: { propriedadeRural: { id: propriedadeId } },
         relations: ['propriedadeRural', 'cultura', 'safra'],
-        order: { createdAt: 'DESC' }
+        order: { createdAt: 'DESC' },
       });
     });
 
@@ -380,7 +385,7 @@ describe('CultivoController (e2e)', () => {
       expect(mockCultivoRepository.find).toHaveBeenCalledWith({
         where: { safra: { id: safraId } },
         relations: ['propriedadeRural', 'cultura', 'safra'],
-        order: { createdAt: 'DESC' }
+        order: { createdAt: 'DESC' },
       });
     });
 
@@ -405,16 +410,14 @@ describe('CultivoController (e2e)', () => {
       expect(mockCultivoRepository.find).toHaveBeenCalledWith({
         where: { cultura: { id: culturaId } },
         relations: ['propriedadeRural', 'cultura', 'safra'],
-        order: { createdAt: 'DESC' }
+        order: { createdAt: 'DESC' },
       });
     });
 
     it('should return empty array when no cultivos exist', async () => {
       mockCultivoRepository.find.mockResolvedValue([]);
 
-      const response = await request(app.getHttpServer())
-        .get('/cultivos')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/cultivos').expect(200);
 
       expect(response.body).toEqual([]);
     });
@@ -425,7 +428,10 @@ describe('CultivoController (e2e)', () => {
       const mockCultivo = {
         id: '550e8400-e29b-41d4-a716-446655440003',
         areaPlantada: 50.5,
-        propriedadeRural: { id: '550e8400-e29b-41d4-a716-446655440000', nomeFazenda: 'Fazenda Boa Vista' },
+        propriedadeRural: {
+          id: '550e8400-e29b-41d4-a716-446655440000',
+          nomeFazenda: 'Fazenda Boa Vista',
+        },
         cultura: { id: '550e8400-e29b-41d4-a716-446655440001', nome: 'Soja' },
         safra: { id: '550e8400-e29b-41d4-a716-446655440002', ano: 2025 },
       };
@@ -439,7 +445,7 @@ describe('CultivoController (e2e)', () => {
       expect(response.body).toMatchObject({ areaPlantada: 50.5 });
       expect(mockCultivoRepository.findOne).toHaveBeenCalledWith({
         where: { id: '550e8400-e29b-41d4-a716-446655440003' },
-        relations: ['propriedadeRural', 'cultura', 'safra']
+        relations: ['propriedadeRural', 'cultura', 'safra'],
       });
     });
 
@@ -452,9 +458,7 @@ describe('CultivoController (e2e)', () => {
     });
 
     it('should return 400 for invalid UUID', async () => {
-      await request(app.getHttpServer())
-        .get('/cultivos/invalid-uuid')
-        .expect(400);
+      await request(app.getHttpServer()).get('/cultivos/invalid-uuid').expect(400);
     });
   });
 
@@ -493,7 +497,9 @@ describe('CultivoController (e2e)', () => {
       };
 
       mockCultivoRepository.findOne.mockResolvedValue(existingCultivo);
-      mockCultivoRepository.find.mockResolvedValue([{ id: '550e8400-e29b-41d4-a716-446655440004', areaPlantada: 30.0 }]);
+      mockCultivoRepository.find.mockResolvedValue([
+        { id: '550e8400-e29b-41d4-a716-446655440004', areaPlantada: 30.0 },
+      ]);
 
       await request(app.getHttpServer())
         .patch('/cultivos/550e8400-e29b-41d4-a716-446655440003')
@@ -530,7 +536,10 @@ describe('CultivoController (e2e)', () => {
       const existingCultivo = {
         id: '550e8400-e29b-41d4-a716-446655440003',
         areaPlantada: 50.5,
-        propriedadeRural: { id: '550e8400-e29b-41d4-a716-446655440000', nomeFazenda: 'Fazenda Boa Vista' },
+        propriedadeRural: {
+          id: '550e8400-e29b-41d4-a716-446655440000',
+          nomeFazenda: 'Fazenda Boa Vista',
+        },
         cultura: { id: '550e8400-e29b-41d4-a716-446655440001', nome: 'Soja' },
         safra: { id: '550e8400-e29b-41d4-a716-446655440002', ano: 2025 },
       };
@@ -554,9 +563,7 @@ describe('CultivoController (e2e)', () => {
     });
 
     it('should return 400 for invalid UUID', async () => {
-      await request(app.getHttpServer())
-        .delete('/cultivos/invalid-uuid')
-        .expect(400);
+      await request(app.getHttpServer()).delete('/cultivos/invalid-uuid').expect(400);
     });
   });
 });

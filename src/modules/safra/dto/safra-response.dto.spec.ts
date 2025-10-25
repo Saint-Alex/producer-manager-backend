@@ -10,7 +10,7 @@ describe('SafraResponseDto', () => {
         id: '550e8400-e29b-41d4-a716-446655440000',
         ano: 2023,
         createdAt: mockDate,
-        updatedAt: mockDate
+        updatedAt: mockDate,
       };
 
       const dto = plainToClass(SafraResponseDto, data);
@@ -25,7 +25,7 @@ describe('SafraResponseDto', () => {
     it('should handle partial data', () => {
       const data = {
         id: '550e8400-e29b-41d4-a716-446655440000',
-        ano: 2024
+        ano: 2024,
       };
 
       const dto = plainToClass(SafraResponseDto, data);
@@ -39,11 +39,11 @@ describe('SafraResponseDto', () => {
     it('should handle different years correctly', () => {
       const years = [2020, 2021, 2022, 2023, 2024, 2025];
 
-      years.forEach(year => {
+      years.forEach((year) => {
         const data = {
           id: '550e8400-e29b-41d4-a716-446655440000',
           nome: `Safra ${year}`,
-          ano: year
+          ano: year,
         };
         const dto = plainToClass(SafraResponseDto, data);
 
@@ -55,10 +55,10 @@ describe('SafraResponseDto', () => {
     it('should handle safra variations by year', () => {
       const years = [2020, 2021, 2022, 2023, 2024, 2025];
 
-      years.forEach(ano => {
+      years.forEach((ano) => {
         const data = {
           id: '550e8400-e29b-41d4-a716-446655440000',
-          ano
+          ano,
         };
         const dto = plainToClass(SafraResponseDto, data);
 
@@ -81,7 +81,7 @@ describe('SafraResponseDto', () => {
         id: null,
         ano: null,
         createdAt: null,
-        updatedAt: null
+        updatedAt: null,
       };
       const dto = plainToClass(SafraResponseDto, data);
 
@@ -95,13 +95,13 @@ describe('SafraResponseDto', () => {
       const boundaryData = [
         { ano: 2000, expected: 2000 },
         { ano: 2050, expected: 2050 },
-        { ano: 2023.5, expected: 2023.5 } // decimal years
+        { ano: 2023.5, expected: 2023.5 }, // decimal years
       ];
 
       boundaryData.forEach(({ ano, expected }) => {
         const data = {
           id: '550e8400-e29b-41d4-a716-446655440000',
-          ano
+          ano,
         };
         const dto = plainToClass(SafraResponseDto, data);
 
@@ -116,7 +116,7 @@ describe('SafraResponseDto', () => {
         id: '550e8400-e29b-41d4-a716-446655440000',
         ano: 2023,
         createdAt: '2023-01-01T00:00:00.000Z',
-        updatedAt: '2023-01-02T00:00:00.000Z'
+        updatedAt: '2023-01-02T00:00:00.000Z',
       };
 
       const dto = plainToClass(SafraResponseDto, data);

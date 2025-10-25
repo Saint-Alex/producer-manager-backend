@@ -26,17 +26,18 @@ export class AppLoggerService implements NestLoggerService {
       ),
       transports: [
         new winston.transports.Console({
-          format: process.env.NODE_ENV === 'production'
-            ? winston.format.json()
-            : winston.format.combine(
-                winston.format.colorize(),
-                winston.format.simple(),
-                winston.format.printf((info) => {
-                  const correlationId = this.getCorrelationId();
-                  const correlationStr = correlationId ? `[${correlationId}]` : '';
-                  return `${info.timestamp} ${info.level} ${correlationStr}: ${info.message}`;
-                }),
-              ),
+          format:
+            process.env.NODE_ENV === 'production'
+              ? winston.format.json()
+              : winston.format.combine(
+                  winston.format.colorize(),
+                  winston.format.simple(),
+                  winston.format.printf((info) => {
+                    const correlationId = this.getCorrelationId();
+                    const correlationStr = correlationId ? `[${correlationId}]` : '';
+                    return `${info.timestamp} ${info.level} ${correlationStr}: ${info.message}`;
+                  }),
+                ),
         }),
       ],
     });

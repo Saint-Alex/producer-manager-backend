@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+dist/
+coverage/
+
+# Environment files
+.env
+.env.*
+
+# Git
+.git/
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+
+# Generated files
+*.d.ts
+
+# Build artifacts
+build/
+out/
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Documentation
+README.md
+*.md
+
+# Package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

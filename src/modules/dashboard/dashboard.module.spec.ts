@@ -48,7 +48,9 @@ describe('DashboardModule', () => {
     dashboardController = module.get<DashboardController>(DashboardController);
     dashboardService = module.get<DashboardService>(DashboardService);
     produtorRepository = module.get<Repository<Produtor>>(getRepositoryToken(Produtor));
-    propriedadeRepository = module.get<Repository<PropriedadeRural>>(getRepositoryToken(PropriedadeRural));
+    propriedadeRepository = module.get<Repository<PropriedadeRural>>(
+      getRepositoryToken(PropriedadeRural),
+    );
     cultivoRepository = module.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
   });
 
@@ -151,7 +153,9 @@ describe('DashboardModule', () => {
         getRawMany: jest.fn().mockResolvedValue([]),
       };
 
-      jest.spyOn(propriedadeRepository, 'createQueryBuilder').mockReturnValue(mockQueryBuilder as any);
+      jest
+        .spyOn(propriedadeRepository, 'createQueryBuilder')
+        .mockReturnValue(mockQueryBuilder as any);
 
       // Este teste verifica se a integração com a entidade PropriedadeRural funciona
       const qb = propriedadeRepository.createQueryBuilder('propriedade');
@@ -173,7 +177,7 @@ describe('DashboardModule', () => {
         orderBy: jest.fn().mockReturnThis(),
         getRawMany: jest.fn().mockResolvedValue([
           { cultura: 'Soja', area: '500.0' },
-          { cultura: 'Milho', area: '300.0' }
+          { cultura: 'Milho', area: '300.0' },
         ]),
       };
 

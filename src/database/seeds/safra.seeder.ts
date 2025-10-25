@@ -20,13 +20,13 @@ export class SafraSeeder {
     for (const ano of anos) {
       // Verificar se a safra já existe
       const existingSafra = await safraRepository.findOne({
-        where: { ano }
+        where: { ano },
       });
 
       if (!existingSafra) {
         const safra = safraRepository.create({
           nome: `Safra ${ano}`,
-          ano
+          ano,
         });
         await safraRepository.save(safra);
         console.log(`   ✅ Safra ${ano} criada`);

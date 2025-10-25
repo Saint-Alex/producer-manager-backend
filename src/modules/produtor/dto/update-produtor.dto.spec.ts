@@ -12,7 +12,7 @@ describe('UpdateProdutorDto', () => {
 
     it('should pass with only nome provided', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
-        nome: 'João Silva'
+        nome: 'João Silva',
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -20,7 +20,7 @@ describe('UpdateProdutorDto', () => {
 
     it('should pass with only cpfCnpj provided', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
-        cpfCnpj: '11144477735' // Valid CPF
+        cpfCnpj: '11144477735', // Valid CPF
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -29,7 +29,7 @@ describe('UpdateProdutorDto', () => {
     it('should pass with both fields provided', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
         nome: 'Maria Santos',
-        cpfCnpj: '11144477735' // Valid CPF
+        cpfCnpj: '11144477735', // Valid CPF
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -39,31 +39,31 @@ describe('UpdateProdutorDto', () => {
   describe('inherited validation when fields are provided', () => {
     it('should fail with invalid nome when provided', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
-        nome: ''
+        nome: '',
       });
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'nome');
+      const propertyError = errors.find((error) => error.property === 'nome');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isLength');
     });
 
     it('should fail with invalid cpfCnpj when provided', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
-        cpfCnpj: '123'
+        cpfCnpj: '123',
       });
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'cpfCnpj');
+      const propertyError = errors.find((error) => error.property === 'cpfCnpj');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isLength');
     });
 
     it('should apply transform to cpfCnpj when provided', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
-        cpfCnpj: '111.444.777-35'
+        cpfCnpj: '111.444.777-35',
       });
 
       // Transform should remove formatting
@@ -75,7 +75,7 @@ describe('UpdateProdutorDto', () => {
 
     it('should validate CPF format when provided', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
-        cpfCnpj: '11144477735' // Valid CPF
+        cpfCnpj: '11144477735', // Valid CPF
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -83,7 +83,7 @@ describe('UpdateProdutorDto', () => {
 
     it('should validate CNPJ format when provided', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
-        cpfCnpj: '11222333000181' // Valid CNPJ
+        cpfCnpj: '11222333000181', // Valid CNPJ
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -94,7 +94,7 @@ describe('UpdateProdutorDto', () => {
     it('should validate multiple fields correctly', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
         nome: 'José Carlos Silva',
-        cpfCnpj: '11144477735' // Valid CPF
+        cpfCnpj: '11144477735', // Valid CPF
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -103,13 +103,13 @@ describe('UpdateProdutorDto', () => {
     it('should return errors for multiple invalid fields', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
         nome: '',
-        cpfCnpj: '123'
+        cpfCnpj: '123',
       });
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(2);
 
-      const properties = errors.map(error => error.property);
+      const properties = errors.map((error) => error.property);
       expect(properties).toContain('nome');
       expect(properties).toContain('cpfCnpj');
     });
@@ -119,7 +119,7 @@ describe('UpdateProdutorDto', () => {
     it('should handle null values (treated as undefined)', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
         nome: null,
-        cpfCnpj: null
+        cpfCnpj: null,
       });
       const errors = await validate(dto);
       // Null values are typically ignored in partial updates
@@ -129,7 +129,7 @@ describe('UpdateProdutorDto', () => {
     it('should handle undefined values', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
         nome: undefined,
-        cpfCnpj: undefined
+        cpfCnpj: undefined,
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -139,7 +139,7 @@ describe('UpdateProdutorDto', () => {
   describe('real-world update scenarios', () => {
     it('should handle name-only update', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
-        nome: 'Nome Atualizado'
+        nome: 'Nome Atualizado',
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -147,7 +147,7 @@ describe('UpdateProdutorDto', () => {
 
     it('should handle cpfCnpj-only update', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
-        cpfCnpj: '11144477735' // Valid CPF
+        cpfCnpj: '11144477735', // Valid CPF
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -156,7 +156,7 @@ describe('UpdateProdutorDto', () => {
     it('should handle complete profile update', async () => {
       const dto = plainToClass(UpdateProdutorDto, {
         nome: 'Produtor Rural Atualizado',
-        cpfCnpj: '11222333000181' // Valid CNPJ
+        cpfCnpj: '11222333000181', // Valid CNPJ
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);

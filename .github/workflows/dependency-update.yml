@@ -1,0 +1,64 @@
+name: Dependency Update
+
+on:
+  schedule:
+    # Executa toda segunda-feira às 9h UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch: # Permite execução manual
+
+jobs:
+  update-dependencies:
+    name: Update Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          
+      - name: Check for updates
+        run: |
+          npm outdated --json > outdated.json || true
+          
+      - name: Update dependencies
+        run: |
+          npm update
+          
+      - name: Run tests after update
+        run: |
+          npm ci
+          npm run test
+          npm run lint:check
+          
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: update dependencies'
+          title: 'chore: atualização automática de dependências'
+          body: |
+            ## 🔄 Atualização Automática de Dependências
+            
+            Esta PR foi criada automaticamente para atualizar as dependências do projeto.
+            
+            ### ✅ Verificações realizadas:
+            - Testes unitários executados com sucesso
+            - Linting passou sem erros
+            - Build executado com sucesso
+            
+            ### 📝 Próximos passos:
+            - [ ] Revisar as mudanças
+            - [ ] Executar testes manuais se necessário
+            - [ ] Aprovar e fazer merge
+            
+            ---
+            *Gerado automaticamente pelo workflow de atualização de dependências*
+          branch: feature/auto-dependency-update
+          delete-branch: true

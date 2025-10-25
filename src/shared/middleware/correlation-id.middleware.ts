@@ -9,10 +9,11 @@ export interface RequestWithCorrelation extends Request {
 
 @Injectable()
 export class CorrelationIdMiddleware implements NestMiddleware {
-  private readonly namespace = cls.getNamespace('app-context') || cls.createNamespace('app-context');
+  private readonly namespace =
+    cls.getNamespace('app-context') || cls.createNamespace('app-context');
 
   use(req: RequestWithCorrelation, res: Response, next: NextFunction) {
-    const correlationId = req.headers['x-correlation-id'] as string || uuidv4();
+    const correlationId = (req.headers['x-correlation-id'] as string) || uuidv4();
 
     // Adicionar correlation ID ao request
     req.correlationId = correlationId;

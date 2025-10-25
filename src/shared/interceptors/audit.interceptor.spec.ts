@@ -110,7 +110,9 @@ describe('AuditInterceptor', () => {
     it('should audit PUT request (update operation)', async () => {
       mockRequest.method = 'PUT';
       (reflector.get as jest.Mock).mockReturnValue('Producer');
-      (callHandler.handle as jest.Mock).mockReturnValue(of({ id: 'test-id', name: 'Updated Producer' }));
+      (callHandler.handle as jest.Mock).mockReturnValue(
+        of({ id: 'test-id', name: 'Updated Producer' }),
+      );
 
       const result = await interceptor.intercept(executionContext, callHandler).toPromise();
 
@@ -132,7 +134,9 @@ describe('AuditInterceptor', () => {
     it('should audit PATCH request (update operation)', async () => {
       mockRequest.method = 'PATCH';
       (reflector.get as jest.Mock).mockReturnValue('Producer');
-      (callHandler.handle as jest.Mock).mockReturnValue(of({ id: 'test-id', name: 'Patched Producer' }));
+      (callHandler.handle as jest.Mock).mockReturnValue(
+        of({ id: 'test-id', name: 'Patched Producer' }),
+      );
 
       const result = await interceptor.intercept(executionContext, callHandler).toPromise();
 
@@ -156,18 +160,12 @@ describe('AuditInterceptor', () => {
 
       const result = await interceptor.intercept(executionContext, callHandler).toPromise();
 
-      expect(auditService.logDelete).toHaveBeenCalledWith(
-        'Producer',
-        'test-id',
-        {},
-        false,
-        {
-          userId: undefined,
-          userIp: '127.0.0.1',
-          userAgent: 'test-agent',
-          correlationId: 'correlation-123',
-        },
-      );
+      expect(auditService.logDelete).toHaveBeenCalledWith('Producer', 'test-id', {}, false, {
+        userId: undefined,
+        userIp: '127.0.0.1',
+        userAgent: 'test-agent',
+        correlationId: 'correlation-123',
+      });
       expect(result).toBeUndefined();
     });
 
@@ -303,11 +301,7 @@ describe('AuditInterceptor', () => {
 
       Auditable('Producer')(mockTarget, 'create', mockDescriptor);
 
-      expect(defineSpy).toHaveBeenCalledWith(
-        'audit_entity_type',
-        'Producer',
-        mockDescriptor.value,
-      );
+      expect(defineSpy).toHaveBeenCalledWith('audit_entity_type', 'Producer', mockDescriptor.value);
 
       defineSpy.mockRestore();
     });

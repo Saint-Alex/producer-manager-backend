@@ -1,9 +1,6 @@
 import { Controller, Get, Req, Res } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import {
-    HealthCheck,
-    HealthCheckResult,
-} from '@nestjs/terminus';
+import { HealthCheck, HealthCheckResult } from '@nestjs/terminus';
 import { Request, Response } from 'express';
 import { AppHealthService } from './health.service';
 
@@ -15,7 +12,7 @@ export class HealthController {
   @Get()
   @ApiOperation({
     summary: 'Health check simples',
-    description: 'Retorna status básico da aplicação para load balancers'
+    description: 'Retorna status básico da aplicação para load balancers',
   })
   @ApiResponse({
     status: 200,
@@ -34,11 +31,11 @@ export class HealthController {
           properties: {
             used: { type: 'number', example: 45 },
             total: { type: 'number', example: 128 },
-            rss: { type: 'number', example: 89 }
-          }
-        }
-      }
-    }
+            rss: { type: 'number', example: 89 },
+          },
+        },
+      },
+    },
   })
   getHealth(@Req() req: Request, @Res() res: Response) {
     const correlationId = req.headers['x-correlation-id'];
@@ -53,7 +50,8 @@ export class HealthController {
   @HealthCheck()
   @ApiOperation({
     summary: 'Readiness probe',
-    description: 'Verifica se a aplicação está pronta para receber tráfego (Kubernetes readiness probe)'
+    description:
+      'Verifica se a aplicação está pronta para receber tráfego (Kubernetes readiness probe)',
   })
   @ApiResponse({
     status: 200,
@@ -64,13 +62,13 @@ export class HealthController {
         status: { type: 'string', example: 'ok' },
         info: { type: 'object' },
         error: { type: 'object' },
-        details: { type: 'object' }
-      }
-    }
+        details: { type: 'object' },
+      },
+    },
   })
   @ApiResponse({
     status: 503,
-    description: 'Aplicação não está pronta'
+    description: 'Aplicação não está pronta',
   })
   checkReadiness(): Promise<HealthCheckResult> {
     return this.healthService.checkReadiness();
@@ -80,7 +78,7 @@ export class HealthController {
   @HealthCheck()
   @ApiOperation({
     summary: 'Liveness probe',
-    description: 'Verifica se a aplicação está funcionando (Kubernetes liveness probe)'
+    description: 'Verifica se a aplicação está funcionando (Kubernetes liveness probe)',
   })
   @ApiResponse({
     status: 200,
@@ -91,13 +89,13 @@ export class HealthController {
         status: { type: 'string', example: 'ok' },
         info: { type: 'object' },
         error: { type: 'object' },
-        details: { type: 'object' }
-      }
-    }
+        details: { type: 'object' },
+      },
+    },
   })
   @ApiResponse({
     status: 503,
-    description: 'Aplicação não está funcionando'
+    description: 'Aplicação não está funcionando',
   })
   checkLiveness(): Promise<HealthCheckResult> {
     return this.healthService.checkLiveness();

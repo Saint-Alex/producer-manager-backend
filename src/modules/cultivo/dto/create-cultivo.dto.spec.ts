@@ -7,7 +7,7 @@ describe('CreateCultivoDto', () => {
     propriedadeId: '550e8400-e29b-41d4-a716-446655440000',
     culturaId: '550e8400-e29b-41d4-a716-446655440001',
     safraId: '550e8400-e29b-41d4-a716-446655440002',
-    areaCultivada: 50.5
+    areaCultivada: 50.5,
   };
 
   describe('propriedadeId validation', () => {
@@ -22,7 +22,7 @@ describe('CreateCultivoDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'propriedadeId');
+      const propertyError = errors.find((error) => error.property === 'propriedadeId');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isNotEmpty');
     });
@@ -32,7 +32,7 @@ describe('CreateCultivoDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'propriedadeId');
+      const propertyError = errors.find((error) => error.property === 'propriedadeId');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isUuid');
     });
@@ -42,7 +42,7 @@ describe('CreateCultivoDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'propriedadeId');
+      const propertyError = errors.find((error) => error.property === 'propriedadeId');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isUuid');
     });
@@ -60,7 +60,7 @@ describe('CreateCultivoDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'culturaId');
+      const propertyError = errors.find((error) => error.property === 'culturaId');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isNotEmpty');
     });
@@ -70,7 +70,7 @@ describe('CreateCultivoDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'culturaId');
+      const propertyError = errors.find((error) => error.property === 'culturaId');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isUuid');
     });
@@ -80,7 +80,7 @@ describe('CreateCultivoDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'culturaId');
+      const propertyError = errors.find((error) => error.property === 'culturaId');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isUuid');
     });
@@ -98,7 +98,7 @@ describe('CreateCultivoDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'safraId');
+      const propertyError = errors.find((error) => error.property === 'safraId');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isNotEmpty');
     });
@@ -108,7 +108,7 @@ describe('CreateCultivoDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'safraId');
+      const propertyError = errors.find((error) => error.property === 'safraId');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isUuid');
     });
@@ -118,7 +118,7 @@ describe('CreateCultivoDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'safraId');
+      const propertyError = errors.find((error) => error.property === 'safraId');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isUuid');
     });
@@ -136,7 +136,7 @@ describe('CreateCultivoDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'areaCultivada');
+      const propertyError = errors.find((error) => error.property === 'areaCultivada');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isPositive');
     });
@@ -146,7 +146,7 @@ describe('CreateCultivoDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'areaCultivada');
+      const propertyError = errors.find((error) => error.property === 'areaCultivada');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isPositive');
     });
@@ -156,7 +156,7 @@ describe('CreateCultivoDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'areaCultivada');
+      const propertyError = errors.find((error) => error.property === 'areaCultivada');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isNumber');
     });
@@ -168,14 +168,14 @@ describe('CreateCultivoDto', () => {
         propriedadeId: 'invalid-uuid',
         culturaId: '',
         safraId: 123,
-        areaCultivada: -50
+        areaCultivada: -50,
       });
 
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(4);
 
-      const properties = errors.map(error => error.property);
+      const properties = errors.map((error) => error.property);
       expect(properties).toContain('propriedadeId');
       expect(properties).toContain('culturaId');
       expect(properties).toContain('safraId');
@@ -189,7 +189,7 @@ describe('CreateCultivoDto', () => {
         propriedadeId: '550e8400-e29b-41d4-a716-446655440000',
         culturaId: '550e8400-e29b-41d4-a716-446655440001',
         safraId: '550e8400-e29b-41d4-a716-446655440002',
-        areaCultivada: 75.25
+        areaCultivada: 75.25,
       });
 
       const errors = await validate(dto);

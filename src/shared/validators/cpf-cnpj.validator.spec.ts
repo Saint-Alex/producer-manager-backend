@@ -16,7 +16,7 @@ describe('IsCpfCnpjConstraint', () => {
         '123.456.789-09', // Valid CPF with formatting
       ];
 
-      validCpfs.forEach(cpf => {
+      validCpfs.forEach((cpf) => {
         expect(validator.validate(cpf, {} as any)).toBe(true);
       });
     });
@@ -31,7 +31,7 @@ describe('IsCpfCnpjConstraint', () => {
         '1234567890123', // Too long for CPF, too short for CNPJ
       ];
 
-      invalidCpfs.forEach(cpf => {
+      invalidCpfs.forEach((cpf) => {
         expect(validator.validate(cpf, {} as any)).toBe(false);
       });
     });
@@ -64,7 +64,7 @@ describe('IsCpfCnpjConstraint', () => {
         '11122233344', // CPF com padrão específico
       ];
 
-      testCases.forEach(cpf => {
+      testCases.forEach((cpf) => {
         // Estes CPFs devem falhar na validação
         expect(validator.validate(cpf, {} as any)).toBe(false);
       });
@@ -80,7 +80,7 @@ describe('IsCpfCnpjConstraint', () => {
         '12.345.678/0001-95', // Valid CNPJ with formatting
       ];
 
-      validCnpjs.forEach(cnpj => {
+      validCnpjs.forEach((cnpj) => {
         expect(validator.validate(cnpj, {} as any)).toBe(true);
       });
     });
@@ -95,7 +95,7 @@ describe('IsCpfCnpjConstraint', () => {
         '123456780001234', // Too long
       ];
 
-      invalidCnpjs.forEach(cnpj => {
+      invalidCnpjs.forEach((cnpj) => {
         expect(validator.validate(cnpj, {} as any)).toBe(false);
       });
     });
@@ -125,7 +125,7 @@ describe('IsCpfCnpjConstraint', () => {
         '00000000000000', // CNPJ com todos zeros
       ];
 
-      testCases.forEach(cnpj => {
+      testCases.forEach((cnpj) => {
         // Estes CNPJs devem falhar na validação
         expect(validator.validate(cnpj, {} as any)).toBe(false);
       });

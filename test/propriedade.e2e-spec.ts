@@ -44,18 +44,18 @@ describe('PropriedadeController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }));
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
 
     propriedadeRepository = moduleFixture.get<Repository<PropriedadeRural>>(
-      getRepositoryToken(PropriedadeRural)
+      getRepositoryToken(PropriedadeRural),
     );
-    produtorRepository = moduleFixture.get<Repository<Produtor>>(
-      getRepositoryToken(Produtor)
-    );
+    produtorRepository = moduleFixture.get<Repository<Produtor>>(getRepositoryToken(Produtor));
 
     await app.init();
   });
@@ -118,7 +118,7 @@ describe('PropriedadeController (e2e)', () => {
         areaVegetacao: 40.0,
       });
       expect(mockProdutorRepository.findBy).toHaveBeenCalledWith({
-        id: expect.anything() // In(['550e8400-e29b-41d4-a716-446655440000'])
+        id: expect.anything(), // In(['550e8400-e29b-41d4-a716-446655440000'])
       });
       expect(mockPropriedadeRepository.create).toHaveBeenCalled();
       expect(mockPropriedadeRepository.save).toHaveBeenCalled();
@@ -140,7 +140,9 @@ describe('PropriedadeController (e2e)', () => {
         .send(invalidDto)
         .expect(400)
         .expect((res) => {
-          expect(res.body.message).toContain('A soma da área agricultável e de vegetação não pode ser maior que a área total');
+          expect(res.body.message).toContain(
+            'A soma da área agricultável e de vegetação não pode ser maior que a área total',
+          );
         });
 
       expect(mockPropriedadeRepository.create).not.toHaveBeenCalled();
@@ -153,10 +155,7 @@ describe('PropriedadeController (e2e)', () => {
         // Missing required fields
       };
 
-      await request(app.getHttpServer())
-        .post('/propriedades')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/propriedades').send(invalidDto).expect(400);
 
       expect(mockPropriedadeRepository.create).not.toHaveBeenCalled();
       expect(mockPropriedadeRepository.save).not.toHaveBeenCalled();
@@ -173,10 +172,7 @@ describe('PropriedadeController (e2e)', () => {
         produtorIds: ['invalid-uuid'],
       };
 
-      await request(app.getHttpServer())
-        .post('/propriedades')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/propriedades').send(invalidDto).expect(400);
 
       expect(mockPropriedadeRepository.create).not.toHaveBeenCalled();
       expect(mockPropriedadeRepository.save).not.toHaveBeenCalled();
@@ -193,10 +189,7 @@ describe('PropriedadeController (e2e)', () => {
         produtorIds: ['550e8400-e29b-41d4-a716-446655440000'],
       };
 
-      await request(app.getHttpServer())
-        .post('/propriedades')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/propriedades').send(invalidDto).expect(400);
 
       expect(mockPropriedadeRepository.create).not.toHaveBeenCalled();
       expect(mockPropriedadeRepository.save).not.toHaveBeenCalled();
@@ -213,10 +206,7 @@ describe('PropriedadeController (e2e)', () => {
         produtorIds: [], // Empty array
       };
 
-      await request(app.getHttpServer())
-        .post('/propriedades')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/propriedades').send(invalidDto).expect(400);
 
       expect(mockPropriedadeRepository.create).not.toHaveBeenCalled();
       expect(mockPropriedadeRepository.save).not.toHaveBeenCalled();
@@ -248,9 +238,7 @@ describe('PropriedadeController (e2e)', () => {
 
       mockPropriedadeRepository.find.mockResolvedValue(mockPropriedades);
 
-      const response = await request(app.getHttpServer())
-        .get('/propriedades')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/propriedades').expect(200);
 
       expect(response.body).toHaveLength(2);
       expect(response.body[0]).toMatchObject({ nomeFazenda: 'Fazenda Boa Vista' });
@@ -283,9 +271,7 @@ describe('PropriedadeController (e2e)', () => {
     it('should return empty array when no propriedades exist', async () => {
       mockPropriedadeRepository.find.mockResolvedValue([]);
 
-      const response = await request(app.getHttpServer())
-        .get('/propriedades')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/propriedades').expect(200);
 
       expect(response.body).toEqual([]);
     });

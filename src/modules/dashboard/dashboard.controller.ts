@@ -10,7 +10,8 @@ export class DashboardController {
   @Get('stats')
   @ApiOperation({
     summary: 'Obter estatísticas do dashboard',
-    description: 'Retorna estatísticas completas para o dashboard incluindo total de fazendas, área por estado, uso do solo e distribuição de culturas'
+    description:
+      'Retorna estatísticas completas para o dashboard incluindo total de fazendas, área por estado, uso do solo e distribuição de culturas',
   })
   @ApiResponse({
     status: 200,
@@ -28,9 +29,9 @@ export class DashboardController {
             properties: {
               estado: { type: 'string', example: 'SP' },
               area: { type: 'number', example: 25000.0 },
-              fazendas: { type: 'number', example: 50 }
-            }
-          }
+              fazendas: { type: 'number', example: 50 },
+            },
+          },
         },
         areaPorCultura: {
           type: 'array',
@@ -39,9 +40,9 @@ export class DashboardController {
             properties: {
               cultura: { type: 'string', example: 'Soja' },
               area: { type: 'number', example: 15000.0 },
-              percentual: { type: 'number', example: 35.5 }
-            }
-          }
+              percentual: { type: 'number', example: 35.5 },
+            },
+          },
         },
         usoSolo: {
           type: 'object',
@@ -49,11 +50,11 @@ export class DashboardController {
             areaAgricultavel: { type: 'number', example: 45000.0 },
             areaVegetacao: { type: 'number', example: 30000.5 },
             percentualAgricultavel: { type: 'number', example: 60.0 },
-            percentualVegetacao: { type: 'number', example: 40.0 }
-          }
-        }
-      }
-    }
+            percentualVegetacao: { type: 'number', example: 40.0 },
+          },
+        },
+      },
+    },
   })
   async getStats(): Promise<DashboardStats> {
     return await this.dashboardService.getStats();

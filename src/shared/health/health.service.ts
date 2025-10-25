@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import {
-    DiskHealthIndicator,
-    HealthCheck,
-    HealthCheckService,
-    MemoryHealthIndicator,
-    TypeOrmHealthIndicator,
+  DiskHealthIndicator,
+  HealthCheck,
+  HealthCheckService,
+  MemoryHealthIndicator,
+  TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
 
 @Injectable()
@@ -37,10 +37,11 @@ export class AppHealthService {
       () => this.memory.checkRSS('memory_rss', 500 * 1024 * 1024),
 
       // Disk space check (at least 100MB free)
-      () => this.disk.checkStorage('storage', {
-        path: '/',
-        thresholdPercent: 0.9, // 90% usage threshold
-      }),
+      () =>
+        this.disk.checkStorage('storage', {
+          path: '/',
+          thresholdPercent: 0.9, // 90% usage threshold
+        }),
     ]);
   }
 

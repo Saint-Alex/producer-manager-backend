@@ -5,7 +5,7 @@ import { CreateSafraDto } from './create-safra.dto';
 describe('CreateSafraDto', () => {
   const validDto = {
     nome: 'Safra 2023',
-    ano: 2023
+    ano: 2023,
   };
 
   describe('nome validation', () => {
@@ -20,7 +20,7 @@ describe('CreateSafraDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'nome');
+      const propertyError = errors.find((error) => error.property === 'nome');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('minLength');
     });
@@ -31,7 +31,7 @@ describe('CreateSafraDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'nome');
+      const propertyError = errors.find((error) => error.property === 'nome');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('maxLength');
     });
@@ -41,7 +41,7 @@ describe('CreateSafraDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'nome');
+      const propertyError = errors.find((error) => error.property === 'nome');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isString');
     });
@@ -72,7 +72,7 @@ describe('CreateSafraDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'ano');
+      const propertyError = errors.find((error) => error.property === 'ano');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('min');
     });
@@ -82,7 +82,7 @@ describe('CreateSafraDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'ano');
+      const propertyError = errors.find((error) => error.property === 'ano');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('max');
     });
@@ -92,7 +92,7 @@ describe('CreateSafraDto', () => {
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(1);
-      const propertyError = errors.find(error => error.property === 'ano');
+      const propertyError = errors.find((error) => error.property === 'ano');
       expect(propertyError).toBeDefined();
       expect(propertyError.constraints).toHaveProperty('isNumber');
     });
@@ -120,14 +120,14 @@ describe('CreateSafraDto', () => {
     it('should return multiple errors when both fields are invalid', async () => {
       const dto = plainToClass(CreateSafraDto, {
         nome: '',
-        ano: 1999
+        ano: 1999,
       });
 
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(2);
 
-      const properties = errors.map(error => error.property);
+      const properties = errors.map((error) => error.property);
       expect(properties).toContain('nome');
       expect(properties).toContain('ano');
     });
@@ -135,18 +135,18 @@ describe('CreateSafraDto', () => {
     it('should return multiple errors for multiple invalid constraints', async () => {
       const dto = plainToClass(CreateSafraDto, {
         nome: 'a'.repeat(101), // too long
-        ano: 'not-a-number'     // not a number
+        ano: 'not-a-number', // not a number
       });
 
       const errors = await validate(dto);
 
       expect(errors.length).toBeGreaterThanOrEqual(2);
 
-      const nomeError = errors.find(error => error.property === 'nome');
+      const nomeError = errors.find((error) => error.property === 'nome');
       expect(nomeError).toBeDefined();
       expect(nomeError.constraints).toHaveProperty('maxLength');
 
-      const anoError = errors.find(error => error.property === 'ano');
+      const anoError = errors.find((error) => error.property === 'ano');
       expect(anoError).toBeDefined();
       expect(anoError.constraints).toHaveProperty('isNumber');
     });
@@ -156,7 +156,7 @@ describe('CreateSafraDto', () => {
     it('should pass validation with all valid fields', async () => {
       const dto = plainToClass(CreateSafraDto, {
         nome: 'Safra Verão 2024',
-        ano: 2024
+        ano: 2024,
       });
 
       const errors = await validate(dto);
@@ -166,7 +166,7 @@ describe('CreateSafraDto', () => {
     it('should pass validation with different valid values', async () => {
       const dto = plainToClass(CreateSafraDto, {
         nome: 'S',
-        ano: 2025
+        ano: 2025,
       });
 
       const errors = await validate(dto);
@@ -178,7 +178,7 @@ describe('CreateSafraDto', () => {
     it('should handle special characters in nome', async () => {
       const dto = plainToClass(CreateSafraDto, {
         ...validDto,
-        nome: 'Safra 2023/2024 - Inverno'
+        nome: 'Safra 2023/2024 - Inverno',
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
@@ -187,7 +187,7 @@ describe('CreateSafraDto', () => {
     it('should handle unicode characters in nome', async () => {
       const dto = plainToClass(CreateSafraDto, {
         ...validDto,
-        nome: 'Safra Verão 2023 ção'
+        nome: 'Safra Verão 2023 ção',
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);

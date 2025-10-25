@@ -62,7 +62,9 @@ describe('CultivoService', () => {
 
     service = module.get<CultivoService>(CultivoService);
     cultivoRepository = module.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
-    propriedadeRepository = module.get<Repository<PropriedadeRural>>(getRepositoryToken(PropriedadeRural));
+    propriedadeRepository = module.get<Repository<PropriedadeRural>>(
+      getRepositoryToken(PropriedadeRural),
+    );
     culturaRepository = module.get<Repository<Cultura>>(getRepositoryToken(Cultura));
     safraRepository = module.get<Repository<Safra>>(getRepositoryToken(Safra));
   });
@@ -120,13 +122,13 @@ describe('CultivoService', () => {
 
       expect(result).toEqual(mockCultivo);
       expect(mockPropriedadeRepository.findOne).toHaveBeenCalledWith({
-        where: { id: createCultivoDto.propriedadeId }
+        where: { id: createCultivoDto.propriedadeId },
       });
       expect(mockCulturaRepository.findOne).toHaveBeenCalledWith({
-        where: { id: createCultivoDto.culturaId }
+        where: { id: createCultivoDto.culturaId },
       });
       expect(mockSafraRepository.findOne).toHaveBeenCalledWith({
-        where: { id: createCultivoDto.safraId }
+        where: { id: createCultivoDto.safraId },
       });
       expect(mockCultivoRepository.create).toHaveBeenCalledWith({
         areaPlantada: createCultivoDto.areaCultivada,
@@ -141,9 +143,11 @@ describe('CultivoService', () => {
       mockCulturaRepository.findOne.mockResolvedValue(mockCultura);
       mockSafraRepository.findOne.mockResolvedValue(mockSafra);
 
-      await expect(service.create(createCultivoDto))
-        .rejects
-        .toThrow(new NotFoundException(`Propriedade com ID ${createCultivoDto.propriedadeId} não encontrada`));
+      await expect(service.create(createCultivoDto)).rejects.toThrow(
+        new NotFoundException(
+          `Propriedade com ID ${createCultivoDto.propriedadeId} não encontrada`,
+        ),
+      );
     });
 
     it('should throw NotFoundException when cultura not found', async () => {
@@ -151,9 +155,9 @@ describe('CultivoService', () => {
       mockCulturaRepository.findOne.mockResolvedValue(null);
       mockSafraRepository.findOne.mockResolvedValue(mockSafra);
 
-      await expect(service.create(createCultivoDto))
-        .rejects
-        .toThrow(new NotFoundException(`Cultura com ID ${createCultivoDto.culturaId} não encontrada`));
+      await expect(service.create(createCultivoDto)).rejects.toThrow(
+        new NotFoundException(`Cultura com ID ${createCultivoDto.culturaId} não encontrada`),
+      );
     });
 
     it('should throw NotFoundException when safra not found', async () => {
@@ -161,9 +165,9 @@ describe('CultivoService', () => {
       mockCulturaRepository.findOne.mockResolvedValue(mockCultura);
       mockSafraRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.create(createCultivoDto))
-        .rejects
-        .toThrow(new NotFoundException(`Safra com ID ${createCultivoDto.safraId} não encontrada`));
+      await expect(service.create(createCultivoDto)).rejects.toThrow(
+        new NotFoundException(`Safra com ID ${createCultivoDto.safraId} não encontrada`),
+      );
     });
 
     it('should throw ConflictException when cultivo already exists', async () => {
@@ -177,11 +181,11 @@ describe('CultivoService', () => {
       mockSafraRepository.findOne.mockResolvedValue(mockSafra);
       mockCultivoRepository.findOne.mockResolvedValue(existingCultivo);
 
-      await expect(service.create(createCultivoDto))
-        .rejects
-        .toThrow(new ConflictException(
-          `Já existe um cultivo de ${mockCultura.nome} na propriedade ${mockPropriedade.nomeFazenda} para a safra ${mockSafra.ano}`
-        ));
+      await expect(service.create(createCultivoDto)).rejects.toThrow(
+        new ConflictException(
+          `Já existe um cultivo de ${mockCultura.nome} na propriedade ${mockPropriedade.nomeFazenda} para a safra ${mockSafra.ano}`,
+        ),
+      );
     });
 
     it('should throw BadRequestException when area exceeds propriedade limit', async () => {
@@ -196,11 +200,11 @@ describe('CultivoService', () => {
       mockCultivoRepository.findOne.mockResolvedValue(null); // Não existe cultivo duplicado
       mockCultivoRepository.find.mockResolvedValue(existingCultivos); // Já tem 90ha cultivados
 
-      await expect(service.create(createCultivoDto))
-        .rejects
-        .toThrow(new BadRequestException(
-          'A área cultivada total (140.5ha) excederia a área agricultável da propriedade (100ha)'
-        ));
+      await expect(service.create(createCultivoDto)).rejects.toThrow(
+        new BadRequestException(
+          'A área cultivada total (140.5ha) excederia a área agricultável da propriedade (100ha)',
+        ),
+      );
     });
 
     it('should throw NotFoundException when updating with invalid propriedade', async () => {
@@ -216,7 +220,7 @@ describe('CultivoService', () => {
       jest.spyOn(mockPropriedadeRepository, 'findOne').mockResolvedValue(null);
 
       await expect(service.update('1', { propriedadeId: '999' })).rejects.toThrow(
-        'Propriedade com ID 999 não encontrada'
+        'Propriedade com ID 999 não encontrada',
       );
     });
 
@@ -233,7 +237,7 @@ describe('CultivoService', () => {
       jest.spyOn(mockCulturaRepository, 'findOne').mockResolvedValue(null);
 
       await expect(service.update('1', { culturaId: '999' })).rejects.toThrow(
-        'Cultura com ID 999 não encontrada'
+        'Cultura com ID 999 não encontrada',
       );
     });
 
@@ -250,7 +254,7 @@ describe('CultivoService', () => {
       jest.spyOn(mockSafraRepository, 'findOne').mockResolvedValue(null);
 
       await expect(service.update('1', { safraId: '999' })).rejects.toThrow(
-        'Safra com ID 999 não encontrada'
+        'Safra com ID 999 não encontrada',
       );
     });
 
@@ -347,7 +351,7 @@ describe('CultivoService', () => {
       expect(result).toEqual(mockCultivos);
       expect(mockCultivoRepository.find).toHaveBeenCalledWith({
         relations: ['propriedadeRural', 'cultura', 'safra'],
-        order: { createdAt: 'DESC' }
+        order: { createdAt: 'DESC' },
       });
     });
 
@@ -377,16 +381,16 @@ describe('CultivoService', () => {
       expect(result).toEqual(mockCultivo);
       expect(mockCultivoRepository.findOne).toHaveBeenCalledWith({
         where: { id: 'cultivo-uuid' },
-        relations: ['propriedadeRural', 'cultura', 'safra']
+        relations: ['propriedadeRural', 'cultura', 'safra'],
       });
     });
 
     it('should throw NotFoundException when cultivo not found', async () => {
       mockCultivoRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.findOne('non-existent-uuid'))
-        .rejects
-        .toThrow(new NotFoundException('Cultivo com ID non-existent-uuid não encontrado'));
+      await expect(service.findOne('non-existent-uuid')).rejects.toThrow(
+        new NotFoundException('Cultivo com ID non-existent-uuid não encontrado'),
+      );
     });
   });
 
@@ -408,7 +412,7 @@ describe('CultivoService', () => {
       expect(mockCultivoRepository.find).toHaveBeenCalledWith({
         where: { propriedadeRural: { id: 'prop-uuid' } },
         relations: ['propriedadeRural', 'cultura', 'safra'],
-        order: { createdAt: 'DESC' }
+        order: { createdAt: 'DESC' },
       });
     });
   });
@@ -431,7 +435,7 @@ describe('CultivoService', () => {
       expect(mockCultivoRepository.find).toHaveBeenCalledWith({
         where: { safra: { id: 'safra-uuid' } },
         relations: ['propriedadeRural', 'cultura', 'safra'],
-        order: { createdAt: 'DESC' }
+        order: { createdAt: 'DESC' },
       });
     });
   });
@@ -454,7 +458,7 @@ describe('CultivoService', () => {
       expect(mockCultivoRepository.find).toHaveBeenCalledWith({
         where: { cultura: { id: 'cultura-uuid' } },
         relations: ['propriedadeRural', 'cultura', 'safra'],
-        order: { createdAt: 'DESC' }
+        order: { createdAt: 'DESC' },
       });
     });
   });
@@ -490,9 +494,9 @@ describe('CultivoService', () => {
 
       mockCultivoRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.update('non-existent-uuid', updateDto))
-        .rejects
-        .toThrow(new NotFoundException('Cultivo com ID non-existent-uuid não encontrado'));
+      await expect(service.update('non-existent-uuid', updateDto)).rejects.toThrow(
+        new NotFoundException('Cultivo com ID non-existent-uuid não encontrado'),
+      );
     });
 
     it('should throw NotFoundException when new propriedade not found', async () => {
@@ -501,9 +505,9 @@ describe('CultivoService', () => {
       mockCultivoRepository.findOne.mockResolvedValue(mockExistingCultivo);
       mockPropriedadeRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.update('cultivo-uuid', updateDto))
-        .rejects
-        .toThrow(new NotFoundException('Propriedade com ID new-prop-uuid não encontrada'));
+      await expect(service.update('cultivo-uuid', updateDto)).rejects.toThrow(
+        new NotFoundException('Propriedade com ID new-prop-uuid não encontrada'),
+      );
     });
 
     it('should throw NotFoundException when new cultura not found', async () => {
@@ -512,9 +516,9 @@ describe('CultivoService', () => {
       mockCultivoRepository.findOne.mockResolvedValue(mockExistingCultivo);
       mockCulturaRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.update('cultivo-uuid', updateDto))
-        .rejects
-        .toThrow(new NotFoundException('Cultura com ID new-cultura-uuid não encontrada'));
+      await expect(service.update('cultivo-uuid', updateDto)).rejects.toThrow(
+        new NotFoundException('Cultura com ID new-cultura-uuid não encontrada'),
+      );
     });
 
     it('should throw NotFoundException when new safra not found', async () => {
@@ -523,9 +527,9 @@ describe('CultivoService', () => {
       mockCultivoRepository.findOne.mockResolvedValue(mockExistingCultivo);
       mockSafraRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.update('cultivo-uuid', updateDto))
-        .rejects
-        .toThrow(new NotFoundException('Safra com ID new-safra-uuid não encontrada'));
+      await expect(service.update('cultivo-uuid', updateDto)).rejects.toThrow(
+        new NotFoundException('Safra com ID new-safra-uuid não encontrada'),
+      );
     });
 
     it('should throw BadRequestException when updated area exceeds limit', async () => {
@@ -538,11 +542,11 @@ describe('CultivoService', () => {
       mockCultivoRepository.findOne.mockResolvedValue(mockExistingCultivo);
       mockCultivoRepository.find.mockResolvedValue(existingCultivos);
 
-      await expect(service.update('cultivo-uuid', updateDto))
-        .rejects
-        .toThrow(new BadRequestException(
-          'A área cultivada total (120ha) excederia a área agricultável da propriedade (100ha)'
-        ));
+      await expect(service.update('cultivo-uuid', updateDto)).rejects.toThrow(
+        new BadRequestException(
+          'A área cultivada total (120ha) excederia a área agricultável da propriedade (100ha)',
+        ),
+      );
     });
   });
 
@@ -564,9 +568,9 @@ describe('CultivoService', () => {
     it('should throw NotFoundException when cultivo not found', async () => {
       mockCultivoRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.remove('non-existent-uuid'))
-        .rejects
-        .toThrow(new NotFoundException('Cultivo com ID non-existent-uuid não encontrado'));
+      await expect(service.remove('non-existent-uuid')).rejects.toThrow(
+        new NotFoundException('Cultivo com ID non-existent-uuid não encontrado'),
+      );
     });
   });
 });

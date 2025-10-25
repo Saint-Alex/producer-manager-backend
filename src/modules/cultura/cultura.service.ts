@@ -15,7 +15,7 @@ export class CulturaService {
   async create(createCulturaDto: CreateCulturaDto): Promise<Cultura> {
     // Verificar se já existe uma cultura com o mesmo nome
     const existingCultura = await this.culturaRepository.findOne({
-      where: { nome: createCulturaDto.nome }
+      where: { nome: createCulturaDto.nome },
     });
 
     if (existingCultura) {
@@ -28,14 +28,14 @@ export class CulturaService {
 
   async findAll(): Promise<Cultura[]> {
     return this.culturaRepository.find({
-      relations: ['cultivos', 'cultivos.propriedadeRural']
+      relations: ['cultivos', 'cultivos.propriedadeRural'],
     });
   }
 
   async findOne(id: string): Promise<Cultura> {
     const cultura = await this.culturaRepository.findOne({
       where: { id },
-      relations: ['cultivos', 'cultivos.propriedadeRural']
+      relations: ['cultivos', 'cultivos.propriedadeRural'],
     });
 
     if (!cultura) {
@@ -51,7 +51,7 @@ export class CulturaService {
     // Se o nome está sendo atualizado, verificar se não há conflito
     if (updateCulturaDto.nome && updateCulturaDto.nome !== cultura.nome) {
       const existingCultura = await this.culturaRepository.findOne({
-        where: { nome: updateCulturaDto.nome }
+        where: { nome: updateCulturaDto.nome },
       });
 
       if (existingCultura) {

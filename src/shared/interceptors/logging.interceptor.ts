@@ -1,9 +1,4 @@
-import {
-    CallHandler,
-    ExecutionContext,
-    Injectable,
-    NestInterceptor,
-} from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AppLoggerService } from '../logging/logger.service';
@@ -26,16 +21,21 @@ export class LoggingInterceptor implements NestInterceptor {
     this.logger.log('Request started', 'HTTP');
 
     // Log estruturado detalhado
-    this.logger.logWithData('debug', 'Request details', {
-      type: 'http_request_start',
-      method,
-      url,
-      userAgent,
-      ip,
-      hasBody: !!body && Object.keys(body).length > 0,
-      queryParams: Object.keys(query || {}).length,
-      pathParams: Object.keys(params || {}).length,
-    }, 'HTTP');
+    this.logger.logWithData(
+      'debug',
+      'Request details',
+      {
+        type: 'http_request_start',
+        method,
+        url,
+        userAgent,
+        ip,
+        hasBody: !!body && Object.keys(body).length > 0,
+        queryParams: Object.keys(query || {}).length,
+        pathParams: Object.keys(params || {}).length,
+      },
+      'HTTP',
+    );
 
     return next.handle().pipe(
       tap((data) => {
@@ -75,12 +75,12 @@ export class LoggingInterceptor implements NestInterceptor {
 
   private extractEntityType(url: string): string {
     // Extrair tipo de entidade da URL: /api/produtores -> produtor
-    const pathParts = url.split('/').filter(part => part.length > 0);
-    
+    const pathParts = url.split('/').filter((part) => part.length > 0);
+
     if (pathParts.length === 0) {
       return '';
     }
-    
+
     const entityPath = pathParts[pathParts.length - 1];
 
     if (!entityPath) {

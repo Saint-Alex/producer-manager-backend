@@ -308,10 +308,10 @@ describe('PropriedadeService', () => {
       expect(propriedadeRepository.find).toHaveBeenCalledWith({
         where: {
           produtores: {
-            id: 'produtor1'
-          }
+            id: 'produtor1',
+          },
         },
-        relations: ['produtores', 'cultivos', 'cultivos.cultura', 'cultivos.safra']
+        relations: ['produtores', 'cultivos', 'cultivos.cultura', 'cultivos.safra'],
       });
     });
   });

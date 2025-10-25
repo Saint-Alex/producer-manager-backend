@@ -30,7 +30,10 @@ describe('CreateProdutorDto', () => {
 
       expect(errors).toHaveLength(1);
       expect(errors[0].property).toBe('nome');
-      expect(errors[0].constraints).toHaveProperty('isLength', 'Nome deve ter entre 2 e 255 caracteres');
+      expect(errors[0].constraints).toHaveProperty(
+        'isLength',
+        'Nome deve ter entre 2 e 255 caracteres',
+      );
     });
 
     it('should fail with nome too long', async () => {
@@ -39,7 +42,10 @@ describe('CreateProdutorDto', () => {
 
       expect(errors).toHaveLength(1);
       expect(errors[0].property).toBe('nome');
-      expect(errors[0].constraints).toHaveProperty('isLength', 'Nome deve ter entre 2 e 255 caracteres');
+      expect(errors[0].constraints).toHaveProperty(
+        'isLength',
+        'Nome deve ter entre 2 e 255 caracteres',
+      );
     });
 
     it('should fail with non-string nome', async () => {
@@ -94,7 +100,10 @@ describe('CreateProdutorDto', () => {
 
       expect(errors).toHaveLength(1);
       expect(errors[0].property).toBe('cpfCnpj');
-      expect(errors[0].constraints).toHaveProperty('isLength', 'CPF deve ter 11 dígitos ou CNPJ deve ter 14 dígitos');
+      expect(errors[0].constraints).toHaveProperty(
+        'isLength',
+        'CPF deve ter 11 dígitos ou CNPJ deve ter 14 dígitos',
+      );
     });
 
     it('should fail with cpfCnpj too long', async () => {
@@ -103,7 +112,10 @@ describe('CreateProdutorDto', () => {
 
       expect(errors).toHaveLength(1);
       expect(errors[0].property).toBe('cpfCnpj');
-      expect(errors[0].constraints).toHaveProperty('isLength', 'CPF deve ter 11 dígitos ou CNPJ deve ter 14 dígitos');
+      expect(errors[0].constraints).toHaveProperty(
+        'isLength',
+        'CPF deve ter 11 dígitos ou CNPJ deve ter 14 dígitos',
+      );
     });
 
     it('should fail with invalid CPF', async () => {
@@ -141,8 +153,8 @@ describe('CreateProdutorDto', () => {
 
       expect(errors).toHaveLength(2);
 
-      const nomeError = errors.find(error => error.property === 'nome');
-      const cpfCnpjError = errors.find(error => error.property === 'cpfCnpj');
+      const nomeError = errors.find((error) => error.property === 'nome');
+      const cpfCnpjError = errors.find((error) => error.property === 'cpfCnpj');
 
       expect(nomeError?.constraints).toHaveProperty('isNotEmpty', 'Nome é obrigatório');
       expect(cpfCnpjError?.constraints).toHaveProperty('isNotEmpty', 'CPF/CNPJ é obrigatório');
@@ -153,7 +165,7 @@ describe('CreateProdutorDto', () => {
     it('should remove non-digit characters from cpfCnpj', async () => {
       const dto = plainToClass(CreateProdutorDto, {
         ...validDto,
-        cpfCnpj: '111abc444def777ghi35'
+        cpfCnpj: '111abc444def777ghi35',
       });
 
       expect(dto.cpfCnpj).toBe('11144477735');
@@ -162,7 +174,7 @@ describe('CreateProdutorDto', () => {
     it('should handle non-string values in transform', async () => {
       const dto = plainToClass(CreateProdutorDto, {
         ...validDto,
-        cpfCnpj: null
+        cpfCnpj: null,
       });
 
       expect(dto.cpfCnpj).toBeNull();

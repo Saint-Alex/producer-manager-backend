@@ -73,11 +73,16 @@ export class AuditService {
       await this.auditRepository.save(auditLog);
 
       this.logger.logBusinessOperation('UPDATE', entityType, entityId, context?.userId);
-      this.logger.logWithData('info', 'Entity updated', {
-        entityType,
-        entityId,
-        changedFields,
-      }, 'AuditService');
+      this.logger.logWithData(
+        'info',
+        'Entity updated',
+        {
+          entityType,
+          entityId,
+          changedFields,
+        },
+        'AuditService',
+      );
     } catch (error) {
       this.logger.logError(error, 'AuditService.logUpdate', {
         entityType,
@@ -181,11 +186,7 @@ export class AuditService {
   async getAuditStatistics(startDate?: Date, endDate?: Date) {
     const query = this.auditRepository
       .createQueryBuilder('audit')
-      .select([
-        'audit.action',
-        'audit.entityType',
-        'COUNT(*) as count',
-      ])
+      .select(['audit.action', 'audit.entityType', 'COUNT(*) as count'])
       .groupBy('audit.action, audit.entityType');
 
     if (startDate) {

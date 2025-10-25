@@ -175,7 +175,9 @@ describe('IsValidAreaSumConstraint', () => {
   describe('defaultMessage', () => {
     it('should return correct error message', () => {
       const message = validator.defaultMessage({} as any);
-      expect(message).toBe('A soma da área agricultável e área de vegetação não pode ser maior que a área total');
+      expect(message).toBe(
+        'A soma da área agricultável e área de vegetação não pode ser maior que a área total',
+      );
     });
   });
 });

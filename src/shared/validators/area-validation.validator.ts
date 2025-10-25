@@ -1,9 +1,9 @@
 import {
-    registerDecorator,
-    ValidationArguments,
-    ValidationOptions,
-    ValidatorConstraint,
-    ValidatorConstraintInterface,
+  registerDecorator,
+  ValidationArguments,
+  ValidationOptions,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
 } from 'class-validator';
 
 @ValidatorConstraint({ name: 'isValidAreaSum', async: false })
@@ -20,7 +20,7 @@ export class IsValidAreaSumConstraint implements ValidatorConstraintInterface {
     const vegetacao = Number(object.areaVegetacao);
 
     // The sum of agricultural and vegetation areas cannot exceed total area
-    return (agricultavel + vegetacao) <= total;
+    return agricultavel + vegetacao <= total;
   }
 
   defaultMessage(args: ValidationArguments) {

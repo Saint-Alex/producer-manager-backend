@@ -78,14 +78,14 @@ describe('AuditService', () => {
           userId: 'user-123',
           userIp: '192.168.1.1',
           correlationId: 'corr-123',
-        })
+        }),
       );
 
       expect(logger.logBusinessOperation).toHaveBeenCalledWith(
         'CREATE',
         'Produtor',
         'prod-123',
-        'user-123'
+        'user-123',
       );
     });
 
@@ -98,7 +98,7 @@ describe('AuditService', () => {
       expect(logger.logError).toHaveBeenCalledWith(
         error,
         'AuditService.logCreate',
-        expect.any(Object)
+        expect.any(Object),
       );
     });
   });
@@ -120,7 +120,7 @@ describe('AuditService', () => {
           oldData,
           newData,
           changedFields: ['nome'],
-        })
+        }),
       );
     });
 
@@ -145,7 +145,7 @@ describe('AuditService', () => {
           entityType: 'Produtor',
           entityId: 'prod-123',
           oldData,
-        })
+        }),
       );
     });
 
@@ -160,7 +160,7 @@ describe('AuditService', () => {
           entityType: 'Produtor',
           entityId: 'prod-123',
           oldData,
-        })
+        }),
       );
     });
   });

@@ -26,16 +26,16 @@ describe('CultivoController', () => {
     updatedAt: new Date('2023-01-01'),
     propriedade: {
       id: '550e8400-e29b-41d4-a716-446655440001',
-      nomeFazenda: 'Fazenda Boa Vista'
+      nomeFazenda: 'Fazenda Boa Vista',
     },
     cultura: {
       id: '550e8400-e29b-41d4-a716-446655440002',
-      nome: 'Soja'
+      nome: 'Soja',
     },
     safra: {
       id: '550e8400-e29b-41d4-a716-446655440003',
-      nome: '2025'
-    }
+      nome: '2025',
+    },
   };
 
   const mockCultivos = [
@@ -47,17 +47,17 @@ describe('CultivoController', () => {
       updatedAt: new Date('2023-01-02'),
       propriedade: {
         id: '550e8400-e29b-41d4-a716-446655440001',
-        nomeFazenda: 'Fazenda Boa Vista'
+        nomeFazenda: 'Fazenda Boa Vista',
       },
       cultura: {
         id: '550e8400-e29b-41d4-a716-446655440005',
-        nome: 'Milho'
+        nome: 'Milho',
       },
       safra: {
         id: '550e8400-e29b-41d4-a716-446655440003',
-        nome: '2025'
-      }
-    }
+        nome: '2025',
+      },
+    },
   ];
 
   beforeEach(async () => {
@@ -89,7 +89,7 @@ describe('CultivoController', () => {
         propriedadeId: '550e8400-e29b-41d4-a716-446655440001',
         culturaId: '550e8400-e29b-41d4-a716-446655440002',
         safraId: '550e8400-e29b-41d4-a716-446655440003',
-        areaCultivada: 150.5
+        areaCultivada: 150.5,
       };
 
       mockCultivoService.create.mockResolvedValue(mockCultivo);
@@ -106,13 +106,15 @@ describe('CultivoController', () => {
         propriedadeId: '550e8400-e29b-41d4-a716-446655440001',
         culturaId: '550e8400-e29b-41d4-a716-446655440002',
         safraId: '550e8400-e29b-41d4-a716-446655440003',
-        areaCultivada: 5000.0 // Área maior que a propriedade
+        areaCultivada: 5000.0, // Área maior que a propriedade
       };
 
       const error = new Error('Área cultivada excede a área agricultável da propriedade');
       mockCultivoService.create.mockRejectedValue(error);
 
-      await expect(controller.create(createDto)).rejects.toThrow('Área cultivada excede a área agricultável da propriedade');
+      await expect(controller.create(createDto)).rejects.toThrow(
+        'Área cultivada excede a área agricultável da propriedade',
+      );
       expect(service.create).toHaveBeenCalledWith(createDto);
     });
 
@@ -121,13 +123,15 @@ describe('CultivoController', () => {
         propriedadeId: '550e8400-e29b-41d4-a716-446655440001',
         culturaId: '550e8400-e29b-41d4-a716-446655440002',
         safraId: '550e8400-e29b-41d4-a716-446655440003',
-        areaCultivada: 150.5
+        areaCultivada: 150.5,
       };
 
       const error = new Error('Cultivo já existe para essa combinação');
       mockCultivoService.create.mockRejectedValue(error);
 
-      await expect(controller.create(createDto)).rejects.toThrow('Cultivo já existe para essa combinação');
+      await expect(controller.create(createDto)).rejects.toThrow(
+        'Cultivo já existe para essa combinação',
+      );
       expect(service.create).toHaveBeenCalledWith(createDto);
     });
 
@@ -136,7 +140,7 @@ describe('CultivoController', () => {
         propriedadeId: 'invalid-uuid',
         culturaId: '550e8400-e29b-41d4-a716-446655440002',
         safraId: '550e8400-e29b-41d4-a716-446655440003',
-        areaCultivada: 150.5
+        areaCultivada: 150.5,
       };
 
       const error = new Error('Propriedade não encontrada');
@@ -285,8 +289,8 @@ describe('CultivoController', () => {
         propriedade: {
           ...mockCultivo.propriedade,
           cidade: 'Ribeirão Preto',
-          estado: 'SP'
-        }
+          estado: 'SP',
+        },
       };
       mockCultivoService.findOne.mockResolvedValue(detailedCultivo);
 
@@ -303,7 +307,7 @@ describe('CultivoController', () => {
 
     it('should update a cultivo successfully', async () => {
       const updateDto: UpdateCultivoDto = {
-        areaCultivada: 175.0
+        areaCultivada: 175.0,
       };
 
       const updatedCultivo = { ...mockCultivo, ...updateDto };
@@ -318,7 +322,7 @@ describe('CultivoController', () => {
 
     it('should update propriedade reference', async () => {
       const updateDto: UpdateCultivoDto = {
-        propriedadeId: '550e8400-e29b-41d4-a716-446655440009'
+        propriedadeId: '550e8400-e29b-41d4-a716-446655440009',
       };
 
       const updatedCultivo = { ...mockCultivo };
@@ -332,7 +336,7 @@ describe('CultivoController', () => {
 
     it('should update cultura reference', async () => {
       const updateDto: UpdateCultivoDto = {
-        culturaId: '550e8400-e29b-41d4-a716-446655440009'
+        culturaId: '550e8400-e29b-41d4-a716-446655440009',
       };
 
       const updatedCultivo = { ...mockCultivo };
@@ -346,7 +350,7 @@ describe('CultivoController', () => {
 
     it('should update safra reference', async () => {
       const updateDto: UpdateCultivoDto = {
-        safraId: '550e8400-e29b-41d4-a716-446655440009'
+        safraId: '550e8400-e29b-41d4-a716-446655440009',
       };
 
       const updatedCultivo = { ...mockCultivo };
@@ -361,7 +365,7 @@ describe('CultivoController', () => {
     it('should update multiple fields', async () => {
       const updateDto: UpdateCultivoDto = {
         areaCultivada: 180.0,
-        culturaId: '550e8400-e29b-41d4-a716-446655440009'
+        culturaId: '550e8400-e29b-41d4-a716-446655440009',
       };
 
       const updatedCultivo = { ...mockCultivo, ...updateDto };
@@ -375,7 +379,7 @@ describe('CultivoController', () => {
 
     it('should handle not found error during update', async () => {
       const updateDto: UpdateCultivoDto = {
-        areaCultivada: 175.0
+        areaCultivada: 175.0,
       };
 
       const error = new Error('Cultivo not found');
@@ -387,25 +391,29 @@ describe('CultivoController', () => {
 
     it('should handle area validation errors during update', async () => {
       const updateDto: UpdateCultivoDto = {
-        areaCultivada: 5000.0 // Área maior que a propriedade
+        areaCultivada: 5000.0, // Área maior que a propriedade
       };
 
       const error = new Error('Área cultivada excede a área agricultável da propriedade');
       mockCultivoService.update.mockRejectedValue(error);
 
-      await expect(controller.update(validId, updateDto)).rejects.toThrow('Área cultivada excede a área agricultável da propriedade');
+      await expect(controller.update(validId, updateDto)).rejects.toThrow(
+        'Área cultivada excede a área agricultável da propriedade',
+      );
       expect(service.update).toHaveBeenCalledWith(validId, updateDto);
     });
 
     it('should handle invalid reference errors during update', async () => {
       const updateDto: UpdateCultivoDto = {
-        propriedadeId: 'invalid-uuid'
+        propriedadeId: 'invalid-uuid',
       };
 
       const error = new Error('Propriedade não encontrada');
       mockCultivoService.update.mockRejectedValue(error);
 
-      await expect(controller.update(validId, updateDto)).rejects.toThrow('Propriedade não encontrada');
+      await expect(controller.update(validId, updateDto)).rejects.toThrow(
+        'Propriedade não encontrada',
+      );
       expect(service.update).toHaveBeenCalledWith(validId, updateDto);
     });
 
@@ -506,7 +514,7 @@ describe('CultivoController', () => {
         propriedadeId: '550e8400-e29b-41d4-a716-446655440001',
         culturaId: '550e8400-e29b-41d4-a716-446655440002',
         safraId: '550e8400-e29b-41d4-a716-446655440003',
-        areaCultivada: 150.5
+        areaCultivada: 150.5,
       };
       const updateDto: UpdateCultivoDto = { areaCultivada: 175.0 };
       const id = '550e8400-e29b-41d4-a716-446655440000';

@@ -1,21 +1,15 @@
 import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    HttpStatus,
-    Param,
-    ParseUUIDPipe,
-    Patch,
-    Post
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import {
-    ApiBody,
-    ApiOperation,
-    ApiParam,
-    ApiResponse,
-    ApiTags
-} from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Auditable } from '../../shared/interceptors/audit.interceptor';
 import { CulturaService } from './cultura.service';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
@@ -31,45 +25,45 @@ export class CulturaController {
   @Auditable('Cultura')
   @ApiOperation({
     summary: 'Criar nova cultura',
-    description: 'Cria uma nova cultura (ex: Soja, Milho, Algodão)'
+    description: 'Cria uma nova cultura (ex: Soja, Milho, Algodão)',
   })
   @ApiBody({
     type: CreateCulturaDto,
     examples: {
-      'soja': {
+      soja: {
         summary: 'Soja',
         description: 'Cultura de soja para grãos',
         value: {
           nome: 'Soja',
-          descricao: 'Cultura oleaginosa para produção de grãos e óleo'
-        }
+          descricao: 'Cultura oleaginosa para produção de grãos e óleo',
+        },
       },
-      'milho': {
+      milho: {
         summary: 'Milho',
         description: 'Cultura de milho',
         value: {
           nome: 'Milho',
-          descricao: 'Cereal para alimentação humana e animal'
-        }
+          descricao: 'Cereal para alimentação humana e animal',
+        },
       },
-      'cafe': {
+      cafe: {
         summary: 'Café',
         description: 'Cultura permanente de café',
         value: {
           nome: 'Café',
-          descricao: 'Cultura permanente para produção de café arábica'
-        }
-      }
-    }
+          descricao: 'Cultura permanente para produção de café arábica',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Cultura criada com sucesso',
-    type: CulturaResponseDto
+    type: CulturaResponseDto,
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'Cultura com este nome já existe'
+    description: 'Cultura com este nome já existe',
   })
   async create(@Body() createCulturaDto: CreateCulturaDto) {
     return this.culturaService.create(createCulturaDto);
@@ -78,12 +72,12 @@ export class CulturaController {
   @Get()
   @ApiOperation({
     summary: 'Listar todas as culturas',
-    description: 'Retorna todas as culturas cadastradas'
+    description: 'Retorna todas as culturas cadastradas',
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Lista de culturas retornada com sucesso',
-    type: [CulturaResponseDto]
+    type: [CulturaResponseDto],
   })
   async findAll() {
     return this.culturaService.findAll();
@@ -92,22 +86,22 @@ export class CulturaController {
   @Get(':id')
   @ApiOperation({
     summary: 'Buscar cultura por ID',
-    description: 'Retorna uma cultura específica com informações dos cultivos'
+    description: 'Retorna uma cultura específica com informações dos cultivos',
   })
   @ApiParam({
     name: 'id',
     description: 'ID único da cultura',
     type: 'string',
-    format: 'uuid'
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Cultura encontrada',
-    type: CulturaResponseDto
+    type: CulturaResponseDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Cultura não encontrada'
+    description: 'Cultura não encontrada',
   })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.culturaService.findOne(id);
@@ -117,31 +111,28 @@ export class CulturaController {
   @Auditable('Cultura')
   @ApiOperation({
     summary: 'Atualizar cultura',
-    description: 'Atualiza parcialmente uma cultura'
+    description: 'Atualiza parcialmente uma cultura',
   })
   @ApiParam({
     name: 'id',
     description: 'ID único da cultura',
     type: 'string',
-    format: 'uuid'
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Cultura atualizada com sucesso',
-    type: CulturaResponseDto
+    type: CulturaResponseDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Cultura não encontrada'
+    description: 'Cultura não encontrada',
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'Cultura com este nome já existe'
+    description: 'Cultura com este nome já existe',
   })
-  async update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateCulturaDto: UpdateCulturaDto
-  ) {
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateCulturaDto: UpdateCulturaDto) {
     return this.culturaService.update(id, updateCulturaDto);
   }
 
@@ -149,21 +140,21 @@ export class CulturaController {
   @Auditable('Cultura')
   @ApiOperation({
     summary: 'Remover cultura',
-    description: 'Remove uma cultura do sistema'
+    description: 'Remove uma cultura do sistema',
   })
   @ApiParam({
     name: 'id',
     description: 'ID único da cultura',
     type: 'string',
-    format: 'uuid'
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: 'Cultura removida com sucesso'
+    description: 'Cultura removida com sucesso',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Cultura não encontrada'
+    description: 'Cultura não encontrada',
   })
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.culturaService.remove(id);

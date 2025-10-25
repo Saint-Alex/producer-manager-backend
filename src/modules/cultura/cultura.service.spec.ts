@@ -65,7 +65,7 @@ describe('CulturaService', () => {
       const result = await service.create(createCulturaDto);
 
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { nome: 'Milho' }
+        where: { nome: 'Milho' },
       });
       expect(repository.create).toHaveBeenCalledWith(createCulturaDto);
       expect(repository.save).toHaveBeenCalledWith(newCultura);
@@ -82,7 +82,7 @@ describe('CulturaService', () => {
       await expect(service.create(createCulturaDto)).rejects.toThrow(ConflictException);
 
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { nome: 'Soja' }
+        where: { nome: 'Soja' },
       });
       expect(repository.create).not.toHaveBeenCalled();
       expect(repository.save).not.toHaveBeenCalled();
@@ -97,7 +97,7 @@ describe('CulturaService', () => {
       const result = await service.findAll();
 
       expect(repository.find).toHaveBeenCalledWith({
-        relations: ['cultivos', 'cultivos.propriedadeRural']
+        relations: ['cultivos', 'cultivos.propriedadeRural'],
       });
       expect(result).toEqual(culturas);
     });
@@ -119,7 +119,7 @@ describe('CulturaService', () => {
 
       expect(repository.findOne).toHaveBeenCalledWith({
         where: { id: '1' },
-        relations: ['cultivos', 'cultivos.propriedadeRural']
+        relations: ['cultivos', 'cultivos.propriedadeRural'],
       });
       expect(result).toEqual(mockCultura);
     });
@@ -144,7 +144,7 @@ describe('CulturaService', () => {
 
       expect(repository.findOne).toHaveBeenCalledWith({
         where: { id: '1' },
-        relations: ['cultivos', 'cultivos.propriedadeRural']
+        relations: ['cultivos', 'cultivos.propriedadeRural'],
       });
       expect(repository.save).toHaveBeenCalledWith(mockCultura);
       expect(result).toEqual(updatedCultura);
@@ -203,7 +203,7 @@ describe('CulturaService', () => {
       // Mock cultura atual com nome diferente
       const currentCultura = {
         ...mockCultura,
-        nome: 'Soja' // Nome diferente do que estamos tentando atualizar
+        nome: 'Soja', // Nome diferente do que estamos tentando atualizar
       };
 
       const existingCultura = {
@@ -211,7 +211,7 @@ describe('CulturaService', () => {
         nome: 'Milho',
         cultivos: [],
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       repository.findOne
@@ -219,7 +219,7 @@ describe('CulturaService', () => {
         .mockResolvedValueOnce(existingCultura as any); // Para verificação de conflito - existe
 
       await expect(service.update('1', updateCulturaDto)).rejects.toThrow(
-        "Cultura com nome 'Milho' já existe"
+        "Cultura com nome 'Milho' já existe",
       );
     });
   });
@@ -233,7 +233,7 @@ describe('CulturaService', () => {
 
       expect(repository.findOne).toHaveBeenCalledWith({
         where: { id: '1' },
-        relations: ['cultivos', 'cultivos.propriedadeRural']
+        relations: ['cultivos', 'cultivos.propriedadeRural'],
       });
       expect(repository.remove).toHaveBeenCalledWith(mockCultura);
     });

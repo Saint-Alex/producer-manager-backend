@@ -1,15 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-    IsNotEmpty,
-    IsNumber,
-    IsPositive,
-    IsUUID
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsPositive, IsUUID } from 'class-validator';
 
 export class CreateCultivoDto {
   @ApiProperty({
     description: 'ID da propriedade onde será realizado o cultivo',
-    example: '123e4567-e89b-12d3-a456-426614174000'
+    example: '123e4567-e89b-12d3-a456-426614174000',
   })
   @IsUUID(4)
   @IsNotEmpty()
@@ -17,7 +12,7 @@ export class CreateCultivoDto {
 
   @ApiProperty({
     description: 'ID da cultura a ser cultivada',
-    example: '123e4567-e89b-12d3-a456-426614174000'
+    example: '123e4567-e89b-12d3-a456-426614174000',
   })
   @IsUUID(4)
   @IsNotEmpty()
@@ -25,7 +20,7 @@ export class CreateCultivoDto {
 
   @ApiProperty({
     description: 'ID da safra correspondente',
-    example: '123e4567-e89b-12d3-a456-426614174000'
+    example: '123e4567-e89b-12d3-a456-426614174000',
   })
   @IsUUID(4)
   @IsNotEmpty()
@@ -34,7 +29,7 @@ export class CreateCultivoDto {
   @ApiProperty({
     description: 'Área cultivada em hectares',
     example: 50.5,
-    minimum: 0.01
+    minimum: 0.01,
   })
   @IsNumber()
   @IsPositive()

@@ -56,13 +56,13 @@ describe('Metrics (e2e)', () => {
         .expect((res) => {
           expect(res.body.totalRequests).toBe(3);
           expect(res.body.requestsByMethod).toEqual({
-            'GET': 2,
-            'POST': 1
+            GET: 2,
+            POST: 1,
           });
           expect(res.body.requestsByStatus).toEqual({
             '200': 1,
             '201': 1,
-            '404': 1
+            '404': 1,
           });
           expect(res.body.averageResponseTime).toBeCloseTo(150, 1);
           expect(res.body.errorRate).toBeCloseTo(33.33, 1);
@@ -112,9 +112,7 @@ describe('Metrics (e2e)', () => {
     it('should respond quickly to metrics requests', async () => {
       const startTime = Date.now();
 
-      await request(app.getHttpServer())
-        .get('/metrics')
-        .expect(200);
+      await request(app.getHttpServer()).get('/metrics').expect(200);
 
       const responseTime = Date.now() - startTime;
       expect(responseTime).toBeLessThan(500); // Less than 500ms
@@ -128,9 +126,7 @@ describe('Metrics (e2e)', () => {
         metricsService.recordRequest('GET', 200, 100 + i * 10);
       }
 
-      const response = await request(app.getHttpServer())
-        .get('/metrics')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/metrics').expect(200);
 
       expect(response.body.totalRequests).toBe(10);
       expect(response.body.requestsByMethod['GET']).toBe(10);

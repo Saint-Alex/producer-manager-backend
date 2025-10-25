@@ -12,7 +12,7 @@ export class CreateProdutorDto {
   })
   @IsNotEmpty({ message: 'CPF/CNPJ é obrigatório' })
   @IsString()
-  @Transform(({ value }) => typeof value === 'string' ? value.replace(/\D/g, '') : value)
+  @Transform(({ value }) => (typeof value === 'string' ? value.replace(/\D/g, '') : value))
   @Length(11, 14, { message: 'CPF deve ter 11 dígitos ou CNPJ deve ter 14 dígitos' })
   @IsCpfCnpj({ message: 'CPF ou CNPJ inválido' })
   cpfCnpj: string;

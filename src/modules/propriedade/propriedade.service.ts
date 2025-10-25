@@ -20,7 +20,7 @@ export class PropriedadeService {
 
     // Validar se todos os produtores existem
     const produtores = await this.produtorRepository.findBy({
-      id: In(produtorIds)
+      id: In(produtorIds),
     });
 
     if (produtores.length !== produtorIds.length) {
@@ -31,13 +31,13 @@ export class PropriedadeService {
     const { areaTotal, areaAgricultavel, areaVegetacao } = propriedadeData;
     if (areaAgricultavel + areaVegetacao > areaTotal) {
       throw new BadRequestException(
-        'A soma da área agricultável e área de vegetação não pode ser maior que a área total'
+        'A soma da área agricultável e área de vegetação não pode ser maior que a área total',
       );
     }
 
     const propriedade = this.propriedadeRepository.create({
       ...propriedadeData,
-      produtores
+      produtores,
     });
 
     return this.propriedadeRepository.save(propriedade);
@@ -45,14 +45,14 @@ export class PropriedadeService {
 
   async findAll(): Promise<PropriedadeRural[]> {
     return this.propriedadeRepository.find({
-      relations: ['produtores', 'cultivos', 'cultivos.cultura', 'cultivos.safra']
+      relations: ['produtores', 'cultivos', 'cultivos.cultura', 'cultivos.safra'],
     });
   }
 
   async findOne(id: string): Promise<PropriedadeRural> {
     const propriedade = await this.propriedadeRepository.findOne({
       where: { id },
-      relations: ['produtores', 'cultivos', 'cultivos.cultura', 'cultivos.safra']
+      relations: ['produtores', 'cultivos', 'cultivos.cultura', 'cultivos.safra'],
     });
 
     if (!propriedade) {
@@ -66,10 +66,10 @@ export class PropriedadeService {
     return this.propriedadeRepository.find({
       where: {
         produtores: {
-          id: produtorId
-        }
+          id: produtorId,
+        },
       },
-      relations: ['produtores', 'cultivos', 'cultivos.cultura', 'cultivos.safra']
+      relations: ['produtores', 'cultivos', 'cultivos.cultura', 'cultivos.safra'],
     });
   }
 
@@ -80,7 +80,7 @@ export class PropriedadeService {
     // Se produtorIds foi fornecido, validar e atualizar
     if (produtorIds) {
       const produtores = await this.produtorRepository.findBy({
-        id: In(produtorIds)
+        id: In(produtorIds),
       });
 
       if (produtores.length !== produtorIds.length) {
@@ -97,7 +97,7 @@ export class PropriedadeService {
 
     if (areaAgricultavel + areaVegetacao > areaTotal) {
       throw new BadRequestException(
-        'A soma da área agricultável e área de vegetação não pode ser maior que a área total'
+        'A soma da área agricultável e área de vegetação não pode ser maior que a área total',
       );
     }
 

@@ -23,12 +23,14 @@ describe('AppModule', () => {
       imports: [AppModule],
     })
       .overrideModule(TypeOrmModule)
-      .useModule(TypeOrmModule.forRoot({
-        type: 'sqlite',
-        database: ':memory:',
-        entities: [],
-        synchronize: true,
-      }))
+      .useModule(
+        TypeOrmModule.forRoot({
+          type: 'sqlite',
+          database: ':memory:',
+          entities: [],
+          synchronize: true,
+        }),
+      )
       .compile();
 
     appService = module.get<AppService>(AppService);

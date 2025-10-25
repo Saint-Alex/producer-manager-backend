@@ -32,15 +32,15 @@ describe('SafraController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }));
-
-    safraRepository = moduleFixture.get<Repository<Safra>>(
-      getRepositoryToken(Safra)
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
     );
+
+    safraRepository = moduleFixture.get<Repository<Safra>>(getRepositoryToken(Safra));
 
     await app.init();
   });
@@ -83,7 +83,7 @@ describe('SafraController (e2e)', () => {
         ano: 2025,
       });
       expect(mockSafraRepository.findOne).toHaveBeenCalledWith({
-        where: { ano: 2025 }
+        where: { ano: 2025 },
       });
       expect(mockSafraRepository.create).toHaveBeenCalledWith(createSafraDto);
       expect(mockSafraRepository.save).toHaveBeenCalled();
@@ -95,10 +95,7 @@ describe('SafraController (e2e)', () => {
         ano: 1999, // Below minimum
       };
 
-      await request(app.getHttpServer())
-        .post('/safras')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/safras').send(invalidDto).expect(400);
 
       expect(mockSafraRepository.create).not.toHaveBeenCalled();
     });
@@ -109,10 +106,7 @@ describe('SafraController (e2e)', () => {
         ano: 2051, // Above maximum
       };
 
-      await request(app.getHttpServer())
-        .post('/safras')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/safras').send(invalidDto).expect(400);
 
       expect(mockSafraRepository.create).not.toHaveBeenCalled();
     });
@@ -123,10 +117,7 @@ describe('SafraController (e2e)', () => {
         ano: 2025,
       };
 
-      await request(app.getHttpServer())
-        .post('/safras')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/safras').send(invalidDto).expect(400);
 
       expect(mockSafraRepository.create).not.toHaveBeenCalled();
     });
@@ -137,10 +128,7 @@ describe('SafraController (e2e)', () => {
         ano: 2025,
       };
 
-      await request(app.getHttpServer())
-        .post('/safras')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/safras').send(invalidDto).expect(400);
 
       expect(mockSafraRepository.create).not.toHaveBeenCalled();
     });
@@ -151,10 +139,7 @@ describe('SafraController (e2e)', () => {
         // Missing ano field
       };
 
-      await request(app.getHttpServer())
-        .post('/safras')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/safras').send(invalidDto).expect(400);
 
       expect(mockSafraRepository.create).not.toHaveBeenCalled();
     });
@@ -165,10 +150,7 @@ describe('SafraController (e2e)', () => {
         ano: 'not-a-number',
       };
 
-      await request(app.getHttpServer())
-        .post('/safras')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/safras').send(invalidDto).expect(400);
 
       expect(mockSafraRepository.create).not.toHaveBeenCalled();
     });
@@ -219,25 +201,21 @@ describe('SafraController (e2e)', () => {
 
       mockSafraRepository.find.mockResolvedValue(mockSafras);
 
-      const response = await request(app.getHttpServer())
-        .get('/safras')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/safras').expect(200);
 
       expect(response.body).toHaveLength(2);
       expect(response.body[0]).toMatchObject({ nome: 'Safra 2025', ano: 2025 });
       expect(response.body[1]).toMatchObject({ nome: 'Safra 2024', ano: 2024 });
       expect(mockSafraRepository.find).toHaveBeenCalledWith({
         relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
-        order: { ano: 'DESC' }
+        order: { ano: 'DESC' },
       });
     });
 
     it('should return empty array when no safras exist', async () => {
       mockSafraRepository.find.mockResolvedValue([]);
 
-      const response = await request(app.getHttpServer())
-        .get('/safras')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/safras').expect(200);
 
       expect(response.body).toEqual([]);
     });
@@ -261,7 +239,7 @@ describe('SafraController (e2e)', () => {
       expect(response.body).toMatchObject({ nome: 'Safra 2025', ano: 2025 });
       expect(mockSafraRepository.findOne).toHaveBeenCalledWith({
         where: { id: '550e8400-e29b-41d4-a716-446655440000' },
-        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural']
+        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
       });
     });
 
@@ -274,9 +252,7 @@ describe('SafraController (e2e)', () => {
     });
 
     it('should return 400 for invalid UUID', async () => {
-      await request(app.getHttpServer())
-        .get('/safras/invalid-uuid')
-        .expect(400);
+      await request(app.getHttpServer()).get('/safras/invalid-uuid').expect(400);
     });
   });
 
@@ -291,14 +267,12 @@ describe('SafraController (e2e)', () => {
 
       mockSafraRepository.findOne.mockResolvedValue(mockSafra);
 
-      const response = await request(app.getHttpServer())
-        .get('/safras/year/2025')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/safras/year/2025').expect(200);
 
       expect(response.body).toMatchObject({ nome: 'Safra 2025', ano: 2025 });
       expect(mockSafraRepository.findOne).toHaveBeenCalledWith({
         where: { ano: 2025 },
-        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural']
+        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
       });
     });
 
@@ -314,9 +288,7 @@ describe('SafraController (e2e)', () => {
     });
 
     it('should return 400 for invalid year format', async () => {
-      await request(app.getHttpServer())
-        .get('/safras/year/invalid-year')
-        .expect(400);
+      await request(app.getHttpServer()).get('/safras/year/invalid-year').expect(400);
     });
   });
 
@@ -355,9 +327,7 @@ describe('SafraController (e2e)', () => {
 
       // Primeira chamada para findOne busca a safra existente
       // Segunda chamada verifica se existe safra para o novo ano (retorna null = não existe)
-      mockSafraRepository.findOne
-        .mockResolvedValueOnce(existingSafra)
-        .mockResolvedValueOnce(null);
+      mockSafraRepository.findOne.mockResolvedValueOnce(existingSafra).mockResolvedValueOnce(null);
       mockSafraRepository.save.mockResolvedValue(updatedSafra);
 
       const response = await request(app.getHttpServer())
@@ -424,10 +394,7 @@ describe('SafraController (e2e)', () => {
     it('should return 400 for invalid UUID', async () => {
       const updateDto = { nome: 'Updated Name' };
 
-      await request(app.getHttpServer())
-        .patch('/safras/invalid-uuid')
-        .send(updateDto)
-        .expect(400);
+      await request(app.getHttpServer()).patch('/safras/invalid-uuid').send(updateDto).expect(400);
     });
   });
 
@@ -459,9 +426,7 @@ describe('SafraController (e2e)', () => {
     });
 
     it('should return 400 for invalid UUID', async () => {
-      await request(app.getHttpServer())
-        .delete('/safras/invalid-uuid')
-        .expect(400);
+      await request(app.getHttpServer()).delete('/safras/invalid-uuid').expect(400);
     });
   });
 });

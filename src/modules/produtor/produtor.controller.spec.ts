@@ -21,7 +21,7 @@ describe('ProdutorController', () => {
     cpfCnpj: '11144477735',
     createdAt: new Date('2023-01-01'),
     updatedAt: new Date('2023-01-01'),
-    propriedades: []
+    propriedades: [],
   };
 
   const mockProdutores = [
@@ -32,8 +32,8 @@ describe('ProdutorController', () => {
       cpfCnpj: '11222333000181',
       createdAt: new Date('2023-01-02'),
       updatedAt: new Date('2023-01-02'),
-      propriedades: []
-    }
+      propriedades: [],
+    },
   ];
 
   beforeEach(async () => {
@@ -63,7 +63,7 @@ describe('ProdutorController', () => {
     it('should create a produtor successfully', async () => {
       const createDto: CreateProdutorDto = {
         nome: 'João Silva',
-        cpfCnpj: '11144477735'
+        cpfCnpj: '11144477735',
       };
 
       mockProdutorService.create.mockResolvedValue(mockProdutor);
@@ -78,7 +78,7 @@ describe('ProdutorController', () => {
     it('should handle service errors during creation', async () => {
       const createDto: CreateProdutorDto = {
         nome: 'João Silva',
-        cpfCnpj: '11144477735'
+        cpfCnpj: '11144477735',
       };
 
       const error = new Error('CPF já cadastrado');
@@ -91,7 +91,7 @@ describe('ProdutorController', () => {
     it('should create produtor with CNPJ', async () => {
       const createDto: CreateProdutorDto = {
         nome: 'Fazenda São José LTDA',
-        cpfCnpj: '11222333000181'
+        cpfCnpj: '11222333000181',
       };
 
       const mockProdutorCnpj = { ...mockProdutor, ...createDto };
@@ -171,7 +171,7 @@ describe('ProdutorController', () => {
 
     it('should update a produtor successfully', async () => {
       const updateDto: UpdateProdutorDto = {
-        nome: 'João Silva Atualizado'
+        nome: 'João Silva Atualizado',
       };
 
       const updatedProdutor = { ...mockProdutor, ...updateDto };
@@ -186,7 +186,7 @@ describe('ProdutorController', () => {
 
     it('should update only cpfCnpj', async () => {
       const updateDto: UpdateProdutorDto = {
-        cpfCnpj: '11222333000181'
+        cpfCnpj: '11222333000181',
       };
 
       const updatedProdutor = { ...mockProdutor, ...updateDto };
@@ -201,7 +201,7 @@ describe('ProdutorController', () => {
     it('should update both fields', async () => {
       const updateDto: UpdateProdutorDto = {
         nome: 'Nome Completo Atualizado',
-        cpfCnpj: '11222333000181'
+        cpfCnpj: '11222333000181',
       };
 
       const updatedProdutor = { ...mockProdutor, ...updateDto };
@@ -216,7 +216,7 @@ describe('ProdutorController', () => {
 
     it('should handle not found error during update', async () => {
       const updateDto: UpdateProdutorDto = {
-        nome: 'João Silva Atualizado'
+        nome: 'João Silva Atualizado',
       };
 
       const error = new Error('Produtor not found');
@@ -228,7 +228,7 @@ describe('ProdutorController', () => {
 
     it('should handle validation errors during update', async () => {
       const updateDto: UpdateProdutorDto = {
-        cpfCnpj: '11222333000181'
+        cpfCnpj: '11222333000181',
       };
 
       const error = new Error('CPF/CNPJ já cadastrado');
@@ -275,7 +275,9 @@ describe('ProdutorController', () => {
       const error = new Error('Cannot delete produtor with associated properties');
       mockProdutorService.remove.mockRejectedValue(error);
 
-      await expect(controller.remove(validId)).rejects.toThrow('Cannot delete produtor with associated properties');
+      await expect(controller.remove(validId)).rejects.toThrow(
+        'Cannot delete produtor with associated properties',
+      );
       expect(service.remove).toHaveBeenCalledWith(validId);
     });
 

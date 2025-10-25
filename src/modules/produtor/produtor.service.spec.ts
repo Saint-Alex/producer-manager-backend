@@ -167,14 +167,17 @@ describe('ProdutorService', () => {
       const result = await service.update(produtorId, updateProdutorDto);
 
       expect(service.findOne).toHaveBeenCalledWith(produtorId);
-      expect(mockRepository.save).toHaveBeenCalledWith({ ...existingProdutor, ...updateProdutorDto });
+      expect(mockRepository.save).toHaveBeenCalledWith({
+        ...existingProdutor,
+        ...updateProdutorDto,
+      });
       expect(result).toEqual(updatedProdutor);
     });
 
     it('should throw NotFoundException when trying to update non-existent producer', async () => {
-      jest.spyOn(service, 'findOne').mockRejectedValue(
-        new NotFoundException(`Produtor com ID ${produtorId} não encontrado`),
-      );
+      jest
+        .spyOn(service, 'findOne')
+        .mockRejectedValue(new NotFoundException(`Produtor com ID ${produtorId} não encontrado`));
 
       await expect(service.update(produtorId, updateProdutorDto)).rejects.toThrow(
         new NotFoundException(`Produtor com ID ${produtorId} não encontrado`),
@@ -191,7 +194,7 @@ describe('ProdutorService', () => {
         cpfCnpj: '12345678901',
       };
       const updateDto = {
-        cpfCnpj: '98765432100' // Different CPF/CNPJ
+        cpfCnpj: '98765432100', // Different CPF/CNPJ
       };
       const conflictingProdutor = {
         id: '2',
@@ -208,7 +211,7 @@ describe('ProdutorService', () => {
 
       expect(service.findOne).toHaveBeenCalledWith(produtorId);
       expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { cpfCnpj: updateDto.cpfCnpj }
+        where: { cpfCnpj: updateDto.cpfCnpj },
       });
       expect(mockRepository.save).not.toHaveBeenCalled();
     });
@@ -221,7 +224,7 @@ describe('ProdutorService', () => {
       };
       const updateDto = {
         nome: 'João Silva Updated',
-        cpfCnpj: '12345678901' // Same CPF/CNPJ
+        cpfCnpj: '12345678901', // Same CPF/CNPJ
       };
       const updatedProdutor = { ...existingProdutor, ...updateDto };
 
@@ -312,14 +315,14 @@ describe('ProdutorService', () => {
             nomeFazenda: 'Fazenda A',
             cultivos: [
               { id: 'cultivo1', areaPlantada: 50 },
-              { id: 'cultivo2', areaPlantada: 30 }
-            ]
+              { id: 'cultivo2', areaPlantada: 30 },
+            ],
           },
           {
             id: 'prop2',
             nomeFazenda: 'Fazenda B',
-            cultivos: []
-          }
+            cultivos: [],
+          },
         ],
       };
 
@@ -354,10 +357,14 @@ describe('ProdutorService', () => {
       await service.remove(produtorId);
 
       expect(mockQueryRunner.manager.delete).toHaveBeenCalledWith('Cultivo', {
-        propriedadeRural: { id: 'prop1' }
+        propriedadeRural: { id: 'prop1' },
       });
-      expect(mockQueryRunner.manager.delete).toHaveBeenCalledWith('PropriedadeRural', { id: 'prop1' });
-      expect(mockQueryRunner.manager.delete).toHaveBeenCalledWith('PropriedadeRural', { id: 'prop2' });
+      expect(mockQueryRunner.manager.delete).toHaveBeenCalledWith('PropriedadeRural', {
+        id: 'prop1',
+      });
+      expect(mockQueryRunner.manager.delete).toHaveBeenCalledWith('PropriedadeRural', {
+        id: 'prop2',
+      });
       expect(mockQueryRunner.manager.delete).toHaveBeenCalledWith('Produtor', { id: produtorId });
     });
 

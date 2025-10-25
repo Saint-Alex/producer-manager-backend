@@ -38,11 +38,13 @@ describe('ProdutorController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }));
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
 
     produtorRepository = moduleFixture.get<Repository<Produtor>>(getRepositoryToken(Produtor));
 
@@ -154,10 +156,7 @@ describe('ProdutorController (e2e)', () => {
         cpfCnpj: '11144477735',
       };
 
-      await request(app.getHttpServer())
-        .post('/produtores')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/produtores').send(invalidDto).expect(400);
 
       expect(mockRepository.create).not.toHaveBeenCalled();
       expect(mockRepository.save).not.toHaveBeenCalled();
@@ -168,10 +167,7 @@ describe('ProdutorController (e2e)', () => {
         nome: 'João Silva',
       };
 
-      await request(app.getHttpServer())
-        .post('/produtores')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/produtores').send(invalidDto).expect(400);
 
       expect(mockRepository.create).not.toHaveBeenCalled();
       expect(mockRepository.save).not.toHaveBeenCalled();
@@ -183,10 +179,7 @@ describe('ProdutorController (e2e)', () => {
         cpfCnpj: '123', // Too short
       };
 
-      await request(app.getHttpServer())
-        .post('/produtores')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/produtores').send(invalidDto).expect(400);
 
       expect(mockRepository.create).not.toHaveBeenCalled();
       expect(mockRepository.save).not.toHaveBeenCalled();
@@ -198,10 +191,7 @@ describe('ProdutorController (e2e)', () => {
         cpfCnpj: '11144477735',
       };
 
-      await request(app.getHttpServer())
-        .post('/produtores')
-        .send(invalidDto)
-        .expect(400);
+      await request(app.getHttpServer()).post('/produtores').send(invalidDto).expect(400);
 
       expect(mockRepository.create).not.toHaveBeenCalled();
       expect(mockRepository.save).not.toHaveBeenCalled();
@@ -216,22 +206,20 @@ describe('ProdutorController (e2e)', () => {
           nome: 'João Silva',
           cpfCnpj: '11144477735',
           createdAt: new Date(),
-          propriedades: []
+          propriedades: [],
         },
         {
           id: '550e8400-e29b-41d4-a716-446655440001',
           nome: 'Maria Santos',
           cpfCnpj: '98765432100',
           createdAt: new Date(),
-          propriedades: []
+          propriedades: [],
         },
       ];
 
       mockRepository.find.mockResolvedValue(mockProdutores);
 
-      const response = await request(app.getHttpServer())
-        .get('/produtores')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/produtores').expect(200);
 
       expect(response.body).toHaveLength(2);
       expect(response.body[0]).toMatchObject({ nome: 'João Silva' });
@@ -245,9 +233,7 @@ describe('ProdutorController (e2e)', () => {
     it('should return empty array when no produtores exist', async () => {
       mockRepository.find.mockResolvedValue([]);
 
-      const response = await request(app.getHttpServer())
-        .get('/produtores')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/produtores').expect(200);
 
       expect(response.body).toEqual([]);
     });

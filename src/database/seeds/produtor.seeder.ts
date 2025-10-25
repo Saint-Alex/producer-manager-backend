@@ -37,7 +37,7 @@ export class ProdutorSeeder {
       {
         cpfCnpj: '32165498765',
         nome: 'Pedro Almeida',
-      }
+      },
     ];
 
     console.log('👨‍🌾 Iniciando seed de produtores...');
@@ -45,7 +45,7 @@ export class ProdutorSeeder {
     for (const produtorData of produtores) {
       // Verificar se o produtor já existe
       const existingProdutor = await produtorRepository.findOne({
-        where: { cpfCnpj: produtorData.cpfCnpj }
+        where: { cpfCnpj: produtorData.cpfCnpj },
       });
 
       if (!existingProdutor) {

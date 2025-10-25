@@ -38,13 +38,13 @@ export class CultivoSeeder {
         propriedadeNome: 'Fazenda Boa Esperança',
         culturaNome: 'Cana-de-açúcar',
         safraAno: 2024,
-        areaPlantada: 600.0
+        areaPlantada: 600.0,
       },
       {
         propriedadeNome: 'Fazenda Boa Esperança',
         culturaNome: 'Milho',
         safraAno: 2024,
-        areaPlantada: 200.3
+        areaPlantada: 200.3,
       },
 
       // Sítio da Cachoeira - Uberlândia/MG (pequena propriedade diversificada)
@@ -52,13 +52,13 @@ export class CultivoSeeder {
         propriedadeNome: 'Sítio da Cachoeira',
         culturaNome: 'Café',
         safraAno: 2024,
-        areaPlantada: 180.5
+        areaPlantada: 180.5,
       },
       {
         propriedadeNome: 'Sítio da Cachoeira',
         culturaNome: 'Feijão',
         safraAno: 2024,
-        areaPlantada: 120.0
+        areaPlantada: 120.0,
       },
 
       // Fazenda Santa Maria - Campo Grande/MS (soja e milho)
@@ -66,13 +66,13 @@ export class CultivoSeeder {
         propriedadeNome: 'Fazenda Santa Maria',
         culturaNome: 'Soja',
         safraAno: 2024,
-        areaPlantada: 1200.0
+        areaPlantada: 1200.0,
       },
       {
         propriedadeNome: 'Fazenda Santa Maria',
         culturaNome: 'Milho',
         safraAno: 2024,
-        areaPlantada: 600.0
+        areaPlantada: 600.0,
       },
 
       // Estância Água Limpa - Cuiabá/MT (grande propriedade com soja, milho e algodão)
@@ -80,19 +80,19 @@ export class CultivoSeeder {
         propriedadeNome: 'Estância Água Limpa',
         culturaNome: 'Soja',
         safraAno: 2024,
-        areaPlantada: 2000.0
+        areaPlantada: 2000.0,
       },
       {
         propriedadeNome: 'Estância Água Limpa',
         culturaNome: 'Milho',
         safraAno: 2024,
-        areaPlantada: 1000.0
+        areaPlantada: 1000.0,
       },
       {
         propriedadeNome: 'Estância Água Limpa',
         culturaNome: 'Algodão',
         safraAno: 2024,
-        areaPlantada: 500.75
+        areaPlantada: 500.75,
       },
 
       // Fazenda Rio Verde - Rio Verde/GO (soja e milho - região típica do cerrado)
@@ -100,13 +100,13 @@ export class CultivoSeeder {
         propriedadeNome: 'Fazenda Rio Verde',
         culturaNome: 'Soja',
         safraAno: 2024,
-        areaPlantada: 1500.0
+        areaPlantada: 1500.0,
       },
       {
         propriedadeNome: 'Fazenda Rio Verde',
         culturaNome: 'Milho',
         safraAno: 2024,
-        areaPlantada: 900.6
+        areaPlantada: 900.6,
       },
 
       // Chácara Três Palmeiras - Barretos/SP (pequena propriedade com café e frutas)
@@ -114,13 +114,13 @@ export class CultivoSeeder {
         propriedadeNome: 'Chácara Três Palmeiras',
         culturaNome: 'Café',
         safraAno: 2024,
-        areaPlantada: 80.0
+        areaPlantada: 80.0,
       },
       {
         propriedadeNome: 'Chácara Três Palmeiras',
         culturaNome: 'Laranja',
         safraAno: 2024,
-        areaPlantada: 40.2
+        areaPlantada: 40.2,
       },
 
       // Fazenda Cerrado Azul - Brasília/DF (milho e soja)
@@ -128,13 +128,13 @@ export class CultivoSeeder {
         propriedadeNome: 'Fazenda Cerrado Azul',
         culturaNome: 'Soja',
         safraAno: 2024,
-        areaPlantada: 800.0
+        areaPlantada: 800.0,
       },
       {
         propriedadeNome: 'Fazenda Cerrado Azul',
         culturaNome: 'Milho',
         safraAno: 2024,
-        areaPlantada: 500.0
+        areaPlantada: 500.0,
       },
 
       // Sítio do Ipê - Londrina/PR (soja, milho e trigo)
@@ -142,13 +142,13 @@ export class CultivoSeeder {
         propriedadeNome: 'Sítio do Ipê',
         culturaNome: 'Soja',
         safraAno: 2024,
-        areaPlantada: 300.0
+        areaPlantada: 300.0,
       },
       {
         propriedadeNome: 'Sítio do Ipê',
         culturaNome: 'Milho',
         safraAno: 2024,
-        areaPlantada: 180.3
+        areaPlantada: 180.3,
       },
 
       // Fazenda Vale do Sol - Passo Fundo/RS (soja, milho e trigo)
@@ -156,13 +156,13 @@ export class CultivoSeeder {
         propriedadeNome: 'Fazenda Vale do Sol',
         culturaNome: 'Soja',
         safraAno: 2024,
-        areaPlantada: 1000.0
+        areaPlantada: 1000.0,
       },
       {
         propriedadeNome: 'Fazenda Vale do Sol',
         culturaNome: 'Milho',
         safraAno: 2024,
-        areaPlantada: 650.7
+        areaPlantada: 650.7,
       },
 
       // Estância Beira Rio - São Luís/MA (arroz e soja)
@@ -170,13 +170,13 @@ export class CultivoSeeder {
         propriedadeNome: 'Estância Beira Rio',
         culturaNome: 'Arroz',
         safraAno: 2024,
-        areaPlantada: 1500.0
+        areaPlantada: 1500.0,
       },
       {
         propriedadeNome: 'Estância Beira Rio',
         culturaNome: 'Soja',
         safraAno: 2024,
-        areaPlantada: 1350.45
+        areaPlantada: 1350.45,
       },
 
       // Chácara Monte Alto - Campinas/SP (café e cana)
@@ -184,13 +184,13 @@ export class CultivoSeeder {
         propriedadeNome: 'Chácara Monte Alto',
         culturaNome: 'Café',
         safraAno: 2024,
-        areaPlantada: 150.0
+        areaPlantada: 150.0,
       },
       {
         propriedadeNome: 'Chácara Monte Alto',
         culturaNome: 'Cana-de-açúcar',
         safraAno: 2024,
-        areaPlantada: 90.6
+        areaPlantada: 90.6,
       },
 
       // Fazenda Nova Era - Dourados/MS (soja, milho e algodão)
@@ -198,19 +198,19 @@ export class CultivoSeeder {
         propriedadeNome: 'Fazenda Nova Era',
         culturaNome: 'Soja',
         safraAno: 2024,
-        areaPlantada: 2000.0
+        areaPlantada: 2000.0,
       },
       {
         propriedadeNome: 'Fazenda Nova Era',
         culturaNome: 'Milho',
         safraAno: 2024,
-        areaPlantada: 1000.0
+        areaPlantada: 1000.0,
       },
       {
         propriedadeNome: 'Fazenda Nova Era',
         culturaNome: 'Algodão',
         safraAno: 2024,
-        areaPlantada: 375.23
+        areaPlantada: 375.23,
       },
 
       // Alguns cultivos de safras anteriores para histórico
@@ -218,20 +218,20 @@ export class CultivoSeeder {
         propriedadeNome: 'Fazenda Santa Maria',
         culturaNome: 'Soja',
         safraAno: 2023,
-        areaPlantada: 1100.0
+        areaPlantada: 1100.0,
       },
       {
         propriedadeNome: 'Estância Água Limpa',
         culturaNome: 'Soja',
         safraAno: 2023,
-        areaPlantada: 1800.0
+        areaPlantada: 1800.0,
       },
       {
         propriedadeNome: 'Fazenda Rio Verde',
         culturaNome: 'Milho',
         safraAno: 2023,
-        areaPlantada: 800.0
-      }
+        areaPlantada: 800.0,
+      },
     ];
 
     console.log('🌱 Iniciando seed de cultivos...');
@@ -239,7 +239,7 @@ export class CultivoSeeder {
     for (const cultivoData of cultivosData) {
       // Buscar a propriedade
       const propriedade = await propriedadeRepository.findOne({
-        where: { nomeFazenda: cultivoData.propriedadeNome }
+        where: { nomeFazenda: cultivoData.propriedadeNome },
       });
 
       if (!propriedade) {
@@ -249,7 +249,7 @@ export class CultivoSeeder {
 
       // Buscar a cultura
       const cultura = await culturaRepository.findOne({
-        where: { nome: cultivoData.culturaNome }
+        where: { nome: cultivoData.culturaNome },
       });
 
       if (!cultura) {
@@ -259,7 +259,7 @@ export class CultivoSeeder {
 
       // Buscar a safra
       const safra = await safraRepository.findOne({
-        where: { ano: cultivoData.safraAno }
+        where: { ano: cultivoData.safraAno },
       });
 
       if (!safra) {
@@ -272,8 +272,8 @@ export class CultivoSeeder {
         where: {
           propriedadeRural: { id: propriedade.id },
           cultura: { id: cultura.id },
-          safra: { id: safra.id }
-        }
+          safra: { id: safra.id },
+        },
       });
 
       if (!existingCultivo) {
@@ -281,13 +281,17 @@ export class CultivoSeeder {
           areaPlantada: cultivoData.areaPlantada,
           propriedadeRural: propriedade,
           cultura: cultura,
-          safra: safra
+          safra: safra,
         });
 
         await cultivoRepository.save(cultivo);
-        console.log(`   ✅ Cultivo de ${cultura.nome} na ${propriedade.nomeFazenda} (${safra.ano}) criado - ${cultivoData.areaPlantada}ha`);
+        console.log(
+          `   ✅ Cultivo de ${cultura.nome} na ${propriedade.nomeFazenda} (${safra.ano}) criado - ${cultivoData.areaPlantada}ha`,
+        );
       } else {
-        console.log(`   ⚠️  Cultivo de ${cultura.nome} na ${propriedade.nomeFazenda} (${safra.ano}) já existe`);
+        console.log(
+          `   ⚠️  Cultivo de ${cultura.nome} na ${propriedade.nomeFazenda} (${safra.ano}) já existe`,
+        );
       }
     }
 

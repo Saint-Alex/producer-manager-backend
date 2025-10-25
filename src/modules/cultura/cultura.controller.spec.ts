@@ -22,7 +22,7 @@ describe('CulturaController', () => {
     descricao: 'Cultura oleaginosa para produção de grãos e óleo',
     createdAt: new Date('2023-01-01'),
     updatedAt: new Date('2023-01-01'),
-    cultivos: []
+    cultivos: [],
   };
 
   const mockCulturas = [
@@ -33,7 +33,7 @@ describe('CulturaController', () => {
       descricao: 'Cereal para alimentação humana e animal',
       createdAt: new Date('2023-01-02'),
       updatedAt: new Date('2023-01-02'),
-      cultivos: []
+      cultivos: [],
     },
     {
       id: '550e8400-e29b-41d4-a716-446655440002',
@@ -41,8 +41,8 @@ describe('CulturaController', () => {
       descricao: 'Cultura permanente para produção de café arábica',
       createdAt: new Date('2023-01-03'),
       updatedAt: new Date('2023-01-03'),
-      cultivos: []
-    }
+      cultivos: [],
+    },
   ];
 
   beforeEach(async () => {
@@ -71,7 +71,7 @@ describe('CulturaController', () => {
   describe('create', () => {
     it('should create a cultura successfully', async () => {
       const createDto: CreateCulturaDto = {
-        nome: 'Soja'
+        nome: 'Soja',
       };
 
       mockCulturaService.create.mockResolvedValue(mockCultura);
@@ -85,14 +85,14 @@ describe('CulturaController', () => {
 
     it('should create cultura with different data', async () => {
       const createDto: CreateCulturaDto = {
-        nome: 'Algodão'
+        nome: 'Algodão',
       };
 
       const mockAlgodao = {
         ...mockCultura,
         id: '550e8400-e29b-41d4-a716-446655440009',
         nome: 'Algodão',
-        descricao: 'Fibra natural para produção têxtil'
+        descricao: 'Fibra natural para produção têxtil',
       };
       mockCulturaService.create.mockResolvedValue(mockAlgodao);
 
@@ -105,14 +105,14 @@ describe('CulturaController', () => {
 
     it('should create cultura without description', async () => {
       const createDto: CreateCulturaDto = {
-        nome: 'Feijão'
+        nome: 'Feijão',
       };
 
       const mockFeijao = {
         ...mockCultura,
         id: '550e8400-e29b-41d4-a716-446655440010',
         nome: 'Feijão',
-        descricao: undefined
+        descricao: undefined,
       };
       mockCulturaService.create.mockResolvedValue(mockFeijao);
 
@@ -124,7 +124,7 @@ describe('CulturaController', () => {
 
     it('should handle duplicate name errors', async () => {
       const createDto: CreateCulturaDto = {
-        nome: 'Soja'
+        nome: 'Soja',
       };
 
       const error = new Error('Cultura com este nome já existe');
@@ -136,7 +136,7 @@ describe('CulturaController', () => {
 
     it('should handle validation errors', async () => {
       const createDto: CreateCulturaDto = {
-        nome: '' // Nome vazio
+        nome: '', // Nome vazio
       };
 
       const error = new Error('Nome é obrigatório');
@@ -148,13 +148,15 @@ describe('CulturaController', () => {
 
     it('should handle long name validation', async () => {
       const createDto: CreateCulturaDto = {
-        nome: 'A'.repeat(101) // Nome muito longo
+        nome: 'A'.repeat(101), // Nome muito longo
       };
 
       const error = new Error('Nome deve ter no máximo 100 caracteres');
       mockCulturaService.create.mockRejectedValue(error);
 
-      await expect(controller.create(createDto)).rejects.toThrow('Nome deve ter no máximo 100 caracteres');
+      await expect(controller.create(createDto)).rejects.toThrow(
+        'Nome deve ter no máximo 100 caracteres',
+      );
       expect(service.create).toHaveBeenCalledWith(createDto);
     });
   });
@@ -183,7 +185,7 @@ describe('CulturaController', () => {
       const orderedCulturas = [
         mockCulturas[2], // Café
         mockCulturas[1], // Milho
-        mockCulturas[0]  // Soja
+        mockCulturas[0], // Soja
       ];
       mockCulturaService.findAll.mockResolvedValue(orderedCulturas);
 
@@ -233,15 +235,15 @@ describe('CulturaController', () => {
             id: '123',
             areaCultivada: 100,
             propriedade: { nomeFazenda: 'Fazenda A' },
-            safra: { nome: '2025' }
+            safra: { nome: '2025' },
           },
           {
             id: '456',
             areaCultivada: 200,
             propriedade: { nomeFazenda: 'Fazenda B' },
-            safra: { nome: '2025' }
-          }
-        ]
+            safra: { nome: '2025' },
+          },
+        ],
       };
       mockCulturaService.findOne.mockResolvedValue(detailedCultura);
 
@@ -271,7 +273,7 @@ describe('CulturaController', () => {
 
     it('should update a cultura successfully', async () => {
       const updateDto: UpdateCulturaDto = {
-        nome: 'Soja Transgênica'
+        nome: 'Soja Transgênica',
       };
 
       const updatedCultura = { ...mockCultura, ...updateDto };
@@ -286,7 +288,7 @@ describe('CulturaController', () => {
 
     it('should update only nome', async () => {
       const updateDto: UpdateCulturaDto = {
-        nome: 'Soja Atualizada'
+        nome: 'Soja Atualizada',
       };
 
       const updatedCultura = { ...mockCultura, ...updateDto };
@@ -300,7 +302,7 @@ describe('CulturaController', () => {
 
     it('should update nome with different value', async () => {
       const updateDto: UpdateCulturaDto = {
-        nome: 'Soja Orgânica'
+        nome: 'Soja Orgânica',
       };
 
       const updatedCultura = { ...mockCultura, ...updateDto };
@@ -314,7 +316,7 @@ describe('CulturaController', () => {
 
     it('should update nome to different culture type', async () => {
       const updateDto: UpdateCulturaDto = {
-        nome: 'Milho'
+        nome: 'Milho',
       };
 
       const updatedCultura = { ...mockCultura, nome: 'Milho' };
@@ -328,7 +330,7 @@ describe('CulturaController', () => {
 
     it('should handle not found error during update', async () => {
       const updateDto: UpdateCulturaDto = {
-        nome: 'Cultura Atualizada'
+        nome: 'Cultura Atualizada',
       };
 
       const error = new Error('Cultura not found');
@@ -340,25 +342,29 @@ describe('CulturaController', () => {
 
     it('should handle duplicate name errors during update', async () => {
       const updateDto: UpdateCulturaDto = {
-        nome: 'Milho' // Nome já existente
+        nome: 'Milho', // Nome já existente
       };
 
       const error = new Error('Cultura com este nome já existe');
       mockCulturaService.update.mockRejectedValue(error);
 
-      await expect(controller.update(validId, updateDto)).rejects.toThrow('Cultura com este nome já existe');
+      await expect(controller.update(validId, updateDto)).rejects.toThrow(
+        'Cultura com este nome já existe',
+      );
       expect(service.update).toHaveBeenCalledWith(validId, updateDto);
     });
 
     it('should handle validation errors during update', async () => {
       const updateDto: UpdateCulturaDto = {
-        nome: 'A'.repeat(101) // Nome muito longo
+        nome: 'A'.repeat(101), // Nome muito longo
       };
 
       const error = new Error('Nome deve ter no máximo 100 caracteres');
       mockCulturaService.update.mockRejectedValue(error);
 
-      await expect(controller.update(validId, updateDto)).rejects.toThrow('Nome deve ter no máximo 100 caracteres');
+      await expect(controller.update(validId, updateDto)).rejects.toThrow(
+        'Nome deve ter no máximo 100 caracteres',
+      );
       expect(service.update).toHaveBeenCalledWith(validId, updateDto);
     });
 
@@ -399,7 +405,9 @@ describe('CulturaController', () => {
       const error = new Error('Cannot delete cultura with associated cultivos');
       mockCulturaService.remove.mockRejectedValue(error);
 
-      await expect(controller.remove(validId)).rejects.toThrow('Cannot delete cultura with associated cultivos');
+      await expect(controller.remove(validId)).rejects.toThrow(
+        'Cannot delete cultura with associated cultivos',
+      );
       expect(service.remove).toHaveBeenCalledWith(validId);
     });
 
@@ -415,7 +423,9 @@ describe('CulturaController', () => {
       const error = new Error('Cannot delete cultura that is being used in active cultivos');
       mockCulturaService.remove.mockRejectedValue(error);
 
-      await expect(controller.remove(validId)).rejects.toThrow('Cannot delete cultura that is being used in active cultivos');
+      await expect(controller.remove(validId)).rejects.toThrow(
+        'Cannot delete cultura that is being used in active cultivos',
+      );
       expect(service.remove).toHaveBeenCalledWith(validId);
     });
   });
@@ -446,7 +456,7 @@ describe('CulturaController', () => {
         { nome: 'Milho', descricao: 'Cereal' },
         { nome: 'Café', descricao: 'Cultura permanente' },
         { nome: 'Algodão', descricao: 'Fibra' },
-        { nome: 'Cana-de-açúcar', descricao: 'Sacarose' }
+        { nome: 'Cana-de-açúcar', descricao: 'Sacarose' },
       ];
 
       for (const culture of cultures) {
@@ -462,7 +472,7 @@ describe('CulturaController', () => {
 
     it('should handle case sensitivity in names', async () => {
       const createDto: CreateCulturaDto = {
-        nome: 'SOJA'
+        nome: 'SOJA',
       };
 
       const mockSojaMaiuscula = { ...mockCultura, nome: 'SOJA' };

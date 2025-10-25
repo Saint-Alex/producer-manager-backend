@@ -220,7 +220,11 @@ describe('GlobalExceptionFilter', () => {
   describe('createErrorResponse', () => {
     it('should create basic error response', () => {
       const exception = new Error('Test error');
-      const result = filter['createErrorResponse'](exception, mockRequest as RequestWithCorrelation, 500);
+      const result = filter['createErrorResponse'](
+        exception,
+        mockRequest as RequestWithCorrelation,
+        500,
+      );
 
       expect(result).toMatchObject({
         statusCode: 500,
@@ -235,7 +239,11 @@ describe('GlobalExceptionFilter', () => {
 
     it('should handle HttpException with string response', () => {
       const exception = new HttpException('Custom message', HttpStatus.BAD_REQUEST);
-      const result = filter['createErrorResponse'](exception, mockRequest as RequestWithCorrelation, 400);
+      const result = filter['createErrorResponse'](
+        exception,
+        mockRequest as RequestWithCorrelation,
+        400,
+      );
 
       expect(result.message).toBe('Custom message');
       expect(result.error).toBe('HttpException');
@@ -246,7 +254,11 @@ describe('GlobalExceptionFilter', () => {
         { message: 'Validation failed', error: 'ValidationError' },
         HttpStatus.BAD_REQUEST,
       );
-      const result = filter['createErrorResponse'](exception, mockRequest as RequestWithCorrelation, 400);
+      const result = filter['createErrorResponse'](
+        exception,
+        mockRequest as RequestWithCorrelation,
+        400,
+      );
 
       expect(result.message).toBe('Validation failed');
       expect(result.error).toBe('ValidationError');
@@ -255,7 +267,11 @@ describe('GlobalExceptionFilter', () => {
     it('should include stack trace in development for Error', () => {
       process.env.NODE_ENV = 'development';
       const exception = new Error('Test error');
-      const result = filter['createErrorResponse'](exception, mockRequest as RequestWithCorrelation, 500);
+      const result = filter['createErrorResponse'](
+        exception,
+        mockRequest as RequestWithCorrelation,
+        500,
+      );
 
       expect(result.stack).toBeDefined();
     });
@@ -263,7 +279,11 @@ describe('GlobalExceptionFilter', () => {
     it('should not include stack trace in production for Error', () => {
       process.env.NODE_ENV = 'production';
       const exception = new Error('Test error');
-      const result = filter['createErrorResponse'](exception, mockRequest as RequestWithCorrelation, 500);
+      const result = filter['createErrorResponse'](
+        exception,
+        mockRequest as RequestWithCorrelation,
+        500,
+      );
 
       expect(result.stack).toBeUndefined();
     });
@@ -468,7 +488,7 @@ describe('GlobalExceptionFilter', () => {
       mockRequest.body = {
         username: 'user',
         password: 'secret123',
-        data: 'normal'
+        data: 'normal',
       };
 
       const exception = new Error('Test error');

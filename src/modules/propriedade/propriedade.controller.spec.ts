@@ -28,7 +28,7 @@ describe('PropriedadeController', () => {
     createdAt: new Date('2023-01-01'),
     updatedAt: new Date('2023-01-01'),
     produtores: [],
-    cultivos: []
+    cultivos: [],
   };
 
   const mockPropriedades = [
@@ -44,8 +44,8 @@ describe('PropriedadeController', () => {
       createdAt: new Date('2023-01-02'),
       updatedAt: new Date('2023-01-02'),
       produtores: [],
-      cultivos: []
-    }
+      cultivos: [],
+    },
   ];
 
   beforeEach(async () => {
@@ -80,7 +80,7 @@ describe('PropriedadeController', () => {
         areaTotal: 100.5,
         areaAgricultavel: 80.0,
         areaVegetacao: 20.5,
-        produtorIds: ['550e8400-e29b-41d4-a716-446655440000']
+        produtorIds: ['550e8400-e29b-41d4-a716-446655440000'],
       };
 
       mockPropriedadeService.create.mockResolvedValue(mockPropriedade);
@@ -102,8 +102,8 @@ describe('PropriedadeController', () => {
         areaVegetacao: 1000.0,
         produtorIds: [
           '550e8400-e29b-41d4-a716-446655440000',
-          '550e8400-e29b-41d4-a716-446655440001'
-        ]
+          '550e8400-e29b-41d4-a716-446655440001',
+        ],
       };
 
       const mockPropriedadeMultiple = { ...mockPropriedade, ...createDto };
@@ -123,13 +123,15 @@ describe('PropriedadeController', () => {
         areaTotal: 100.0,
         areaAgricultavel: 80.0,
         areaVegetacao: 30.0, // Soma maior que areaTotal
-        produtorIds: ['550e8400-e29b-41d4-a716-446655440000']
+        produtorIds: ['550e8400-e29b-41d4-a716-446655440000'],
       };
 
       const error = new Error('A soma das áreas não pode exceder a área total');
       mockPropriedadeService.create.mockRejectedValue(error);
 
-      await expect(controller.create(createDto)).rejects.toThrow('A soma das áreas não pode exceder a área total');
+      await expect(controller.create(createDto)).rejects.toThrow(
+        'A soma das áreas não pode exceder a área total',
+      );
       expect(service.create).toHaveBeenCalledWith(createDto);
     });
 
@@ -141,7 +143,7 @@ describe('PropriedadeController', () => {
         areaTotal: 100.0,
         areaAgricultavel: 80.0,
         areaVegetacao: 20.0,
-        produtorIds: ['invalid-uuid']
+        produtorIds: ['invalid-uuid'],
       };
 
       const error = new Error('Produtor não encontrado');
@@ -241,7 +243,7 @@ describe('PropriedadeController', () => {
       const detailedPropriedade = {
         ...mockPropriedade,
         produtores: [{ id: '123', nome: 'João' }],
-        cultivos: [{ id: '456', nome: 'Soja' }]
+        cultivos: [{ id: '456', nome: 'Soja' }],
       };
       mockPropriedadeService.findOne.mockResolvedValue(detailedPropriedade);
 
@@ -257,7 +259,7 @@ describe('PropriedadeController', () => {
 
     it('should update a propriedade successfully', async () => {
       const updateDto: UpdatePropriedadeDto = {
-        nomeFazenda: 'Fazenda Boa Vista Atualizada'
+        nomeFazenda: 'Fazenda Boa Vista Atualizada',
       };
 
       const updatedPropriedade = { ...mockPropriedade, ...updateDto };
@@ -275,7 +277,7 @@ describe('PropriedadeController', () => {
         nomeFazenda: 'Fazenda Nova',
         cidade: 'São Paulo',
         estado: 'SP',
-        areaTotal: 200.0
+        areaTotal: 200.0,
       };
 
       const updatedPropriedade = { ...mockPropriedade, ...updateDto };
@@ -293,7 +295,7 @@ describe('PropriedadeController', () => {
       const updateDto: UpdatePropriedadeDto = {
         areaTotal: 150.0,
         areaAgricultavel: 120.0,
-        areaVegetacao: 30.0
+        areaVegetacao: 30.0,
       };
 
       const updatedPropriedade = { ...mockPropriedade, ...updateDto };
@@ -311,8 +313,8 @@ describe('PropriedadeController', () => {
       const updateDto: UpdatePropriedadeDto = {
         produtorIds: [
           '550e8400-e29b-41d4-a716-446655440000',
-          '550e8400-e29b-41d4-a716-446655440001'
-        ]
+          '550e8400-e29b-41d4-a716-446655440001',
+        ],
       };
 
       const updatedPropriedade = { ...mockPropriedade };
@@ -326,7 +328,7 @@ describe('PropriedadeController', () => {
 
     it('should handle not found error during update', async () => {
       const updateDto: UpdatePropriedadeDto = {
-        nomeFazenda: 'Fazenda Atualizada'
+        nomeFazenda: 'Fazenda Atualizada',
       };
 
       const error = new Error('Propriedade not found');
@@ -340,13 +342,15 @@ describe('PropriedadeController', () => {
       const updateDto: UpdatePropriedadeDto = {
         areaTotal: 100.0,
         areaAgricultavel: 80.0,
-        areaVegetacao: 30.0 // Soma maior que areaTotal
+        areaVegetacao: 30.0, // Soma maior que areaTotal
       };
 
       const error = new Error('A soma das áreas não pode exceder a área total');
       mockPropriedadeService.update.mockRejectedValue(error);
 
-      await expect(controller.update(validId, updateDto)).rejects.toThrow('A soma das áreas não pode exceder a área total');
+      await expect(controller.update(validId, updateDto)).rejects.toThrow(
+        'A soma das áreas não pode exceder a área total',
+      );
       expect(service.update).toHaveBeenCalledWith(validId, updateDto);
     });
 
@@ -387,7 +391,9 @@ describe('PropriedadeController', () => {
       const error = new Error('Cannot delete propriedade with associated cultivos');
       mockPropriedadeService.remove.mockRejectedValue(error);
 
-      await expect(controller.remove(validId)).rejects.toThrow('Cannot delete propriedade with associated cultivos');
+      await expect(controller.remove(validId)).rejects.toThrow(
+        'Cannot delete propriedade with associated cultivos',
+      );
       expect(service.remove).toHaveBeenCalledWith(validId);
     });
 
@@ -454,7 +460,7 @@ describe('PropriedadeController', () => {
         areaTotal: 100,
         areaAgricultavel: 80,
         areaVegetacao: 20,
-        produtorIds: []
+        produtorIds: [],
       };
       const updateDto: UpdatePropriedadeDto = { nomeFazenda: 'Test' };
       const id = '550e8400-e29b-41d4-a716-446655440000';

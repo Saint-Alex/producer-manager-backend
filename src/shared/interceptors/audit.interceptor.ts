@@ -1,9 +1,4 @@
-import {
-    CallHandler,
-    ExecutionContext,
-    Injectable,
-    NestInterceptor,
-} from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -54,12 +49,7 @@ export class AuditInterceptor implements NestInterceptor {
           switch (method) {
             case 'POST':
               if (response && response.id) {
-                await this.auditService.logCreate(
-                  entityType,
-                  response.id,
-                  response,
-                  auditContext,
-                );
+                await this.auditService.logCreate(entityType, response.id, response, auditContext);
               }
               break;
 

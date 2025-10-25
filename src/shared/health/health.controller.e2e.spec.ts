@@ -96,9 +96,7 @@ describe('Health (e2e)', () => {
     it('should respond within reasonable time', async () => {
       const startTime = Date.now();
 
-      await request(app.getHttpServer())
-        .get('/health')
-        .expect(200);
+      await request(app.getHttpServer()).get('/health').expect(200);
 
       const responseTime = Date.now() - startTime;
       expect(responseTime).toBeLessThan(1000); // Less than 1 second

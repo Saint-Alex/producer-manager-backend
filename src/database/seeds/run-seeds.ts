@@ -48,7 +48,6 @@ const runSeeds = async () => {
     console.log('   - Propriedades: 12 fazendas em diferentes estados');
     console.log('   - Cultivos: 25+ cultivos distribuídos pelas propriedades');
     console.log('=================================');
-
   } catch (error) {
     console.error('❌ Erro ao executar seeds:', error);
     process.exit(1);

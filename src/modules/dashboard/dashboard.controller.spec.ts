@@ -18,47 +18,47 @@ describe('DashboardController', () => {
       {
         estado: 'SP',
         area: 25000.0,
-        fazendas: 50
+        fazendas: 50,
       },
       {
         estado: 'MT',
         area: 30000.0,
-        fazendas: 60
+        fazendas: 60,
       },
       {
         estado: 'GO',
         area: 20000.5,
-        fazendas: 40
-      }
+        fazendas: 40,
+      },
     ],
     areaPorCultura: [
       {
         cultura: 'Soja',
         area: 15000.0,
-        percentual: 35.5
+        percentual: 35.5,
       },
       {
         cultura: 'Milho',
         area: 12000.0,
-        percentual: 28.4
+        percentual: 28.4,
       },
       {
         cultura: 'Café',
         area: 8000.0,
-        percentual: 18.9
+        percentual: 18.9,
       },
       {
         cultura: 'Algodão',
         area: 7000.5,
-        percentual: 16.6
-      }
+        percentual: 16.6,
+      },
     ],
     usoSolo: {
       areaAgricultavel: 45000.0,
       areaVegetacao: 30000.5,
       percentualAgricultavel: 60.0,
-      percentualVegetacao: 40.0
-    }
+      percentualVegetacao: 40.0,
+    },
   };
 
   beforeEach(async () => {
@@ -113,17 +113,17 @@ describe('DashboardController', () => {
       expect(result.areaPorEstado[0]).toEqual({
         estado: 'SP',
         area: 25000.0,
-        fazendas: 50
+        fazendas: 50,
       });
       expect(result.areaPorEstado[1]).toEqual({
         estado: 'MT',
         area: 30000.0,
-        fazendas: 60
+        fazendas: 60,
       });
       expect(result.areaPorEstado[2]).toEqual({
         estado: 'GO',
         area: 20000.5,
-        fazendas: 40
+        fazendas: 40,
       });
     });
 
@@ -136,12 +136,12 @@ describe('DashboardController', () => {
       expect(result.areaPorCultura[0]).toEqual({
         cultura: 'Soja',
         area: 15000.0,
-        percentual: 35.5
+        percentual: 35.5,
       });
       expect(result.areaPorCultura[1]).toEqual({
         cultura: 'Milho',
         area: 12000.0,
-        percentual: 28.4
+        percentual: 28.4,
       });
 
       // Verifica se todos os percentuais somam próximo a 100%
@@ -158,11 +158,12 @@ describe('DashboardController', () => {
         areaAgricultavel: 45000.0,
         areaVegetacao: 30000.5,
         percentualAgricultavel: 60.0,
-        percentualVegetacao: 40.0
+        percentualVegetacao: 40.0,
       });
 
       // Verifica se os percentuais de uso do solo somam 100%
-      const totalPercentualUso = result.usoSolo.percentualAgricultavel + result.usoSolo.percentualVegetacao;
+      const totalPercentualUso =
+        result.usoSolo.percentualAgricultavel + result.usoSolo.percentualVegetacao;
       expect(totalPercentualUso).toBe(100.0);
     });
 
@@ -177,8 +178,8 @@ describe('DashboardController', () => {
           areaAgricultavel: 0,
           areaVegetacao: 0,
           percentualAgricultavel: 0,
-          percentualVegetacao: 0
-        }
+          percentualVegetacao: 0,
+        },
       };
 
       mockDashboardService.getStats.mockResolvedValue(emptyStats);
@@ -201,9 +202,9 @@ describe('DashboardController', () => {
           {
             estado: 'SP',
             area: 75000.5,
-            fazendas: 150
-          }
-        ]
+            fazendas: 150,
+          },
+        ],
       };
 
       mockDashboardService.getStats.mockResolvedValue(singleStateStats);
@@ -223,9 +224,9 @@ describe('DashboardController', () => {
           {
             cultura: 'Soja',
             area: 42300.0,
-            percentual: 100.0
-          }
-        ]
+            percentual: 100.0,
+          },
+        ],
       };
 
       mockDashboardService.getStats.mockResolvedValue(singleCultureStats);
@@ -303,22 +304,22 @@ describe('DashboardController', () => {
           {
             estado: 'MT',
             area: 500000.0,
-            fazendas: 5000
-          }
+            fazendas: 5000,
+          },
         ],
         areaPorCultura: [
           {
             cultura: 'Soja',
             area: 800000.0,
-            percentual: 80.0
-          }
+            percentual: 80.0,
+          },
         ],
         usoSolo: {
           areaAgricultavel: 800000.0,
           areaVegetacao: 199999.99,
           percentualAgricultavel: 80.0,
-          percentualVegetacao: 20.0
-        }
+          percentualVegetacao: 20.0,
+        },
       };
 
       mockDashboardService.getStats.mockResolvedValue(largeNumberStats);
@@ -337,19 +338,19 @@ describe('DashboardController', () => {
           {
             cultura: 'Soja',
             area: 15000.123,
-            percentual: 33.333
+            percentual: 33.333,
           },
           {
             cultura: 'Milho',
             area: 15000.456,
-            percentual: 33.334
+            percentual: 33.334,
           },
           {
             cultura: 'Café',
             area: 15000.789,
-            percentual: 33.333
-          }
-        ]
+            percentual: 33.333,
+          },
+        ],
       };
 
       mockDashboardService.getStats.mockResolvedValue(precisionStats);

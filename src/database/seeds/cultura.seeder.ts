@@ -29,7 +29,7 @@ export class CulturaSeeder {
       'Coco',
       'Cacau',
       'Eucalipto',
-      'Pinus'
+      'Pinus',
     ];
 
     console.log('🌱 Iniciando seed de culturas...');
@@ -37,7 +37,7 @@ export class CulturaSeeder {
     for (const nome of culturas) {
       // Verificar se a cultura já existe
       const existingCultura = await culturaRepository.findOne({
-        where: { nome }
+        where: { nome },
       });
 
       if (!existingCultura) {

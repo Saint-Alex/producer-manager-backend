@@ -32,7 +32,7 @@ const clearDatabase = async () => {
       'propriedades_rurais',
       'produtores',
       'safras',
-      'culturas'
+      'culturas',
     ];
 
     console.log('🧹 Limpando tabelas...');
@@ -49,7 +49,6 @@ const clearDatabase = async () => {
     await dataSource.query('SET session_replication_role = DEFAULT;');
 
     console.log('\n🎉 Banco de dados limpo com sucesso!');
-
   } catch (error) {
     console.error('❌ Erro ao limpar banco de dados:', error);
     process.exit(1);

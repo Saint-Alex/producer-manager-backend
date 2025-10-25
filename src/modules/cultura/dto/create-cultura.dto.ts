@@ -4,7 +4,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateCulturaDto {
   @ApiProperty({
     description: 'Nome da cultura',
-    example: 'Soja'
+    example: 'Soja',
   })
   @IsString()
   @IsNotEmpty()

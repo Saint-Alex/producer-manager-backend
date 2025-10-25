@@ -34,7 +34,8 @@ export class MetricsService {
     // Incrementar contadores
     this.metrics.totalRequests++;
     this.metrics.requestsByMethod[method] = (this.metrics.requestsByMethod[method] || 0) + 1;
-    this.metrics.requestsByStatus[statusCode] = (this.metrics.requestsByStatus[statusCode] || 0) + 1;
+    this.metrics.requestsByStatus[statusCode] =
+      (this.metrics.requestsByStatus[statusCode] || 0) + 1;
 
     // Atualizar tempo de resposta médio
     this.responseTimeData.sum += responseTime;
@@ -43,7 +44,7 @@ export class MetricsService {
 
     // Calcular taxa de erro (4xx e 5xx)
     const errorRequests = Object.keys(this.metrics.requestsByStatus)
-      .filter(status => parseInt(status) >= 400)
+      .filter((status) => parseInt(status) >= 400)
       .reduce((sum, status) => sum + this.metrics.requestsByStatus[status], 0);
 
     this.metrics.errorRate = (errorRequests / this.metrics.totalRequests) * 100;
