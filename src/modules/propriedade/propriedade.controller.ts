@@ -18,6 +18,7 @@ import {
     ApiResponse,
     ApiTags
 } from '@nestjs/swagger';
+import { Auditable } from '../../shared/interceptors/audit.interceptor';
 import { CreatePropriedadeDto } from './dto/create-propriedade.dto';
 import { PropriedadeResponseDto } from './dto/propriedade-response.dto';
 import { UpdatePropriedadeDto } from './dto/update-propriedade.dto';
@@ -29,6 +30,7 @@ export class PropriedadeController {
   constructor(private readonly propriedadeService: PropriedadeService) {}
 
   @Post()
+  @Auditable('Propriedade')
   @ApiOperation({
     summary: 'Criar nova propriedade rural',
     description: 'Cria uma nova propriedade rural com validação de áreas e produtores'
@@ -124,6 +126,7 @@ export class PropriedadeController {
   }
 
   @Patch(':id')
+  @Auditable('Propriedade')
   @ApiOperation({
     summary: 'Atualizar propriedade',
     description: 'Atualiza parcialmente uma propriedade rural'
@@ -155,6 +158,7 @@ export class PropriedadeController {
   }
 
   @Delete(':id')
+  @Auditable('Propriedade')
   @ApiOperation({
     summary: 'Remover propriedade',
     description: 'Remove uma propriedade rural do sistema'

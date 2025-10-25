@@ -18,6 +18,7 @@ import {
     ApiResponse,
     ApiTags
 } from '@nestjs/swagger';
+import { Auditable } from '../../shared/interceptors/audit.interceptor';
 import { CultivoService } from './cultivo.service';
 import { CreateCultivoDto } from './dto/create-cultivo.dto';
 import { CultivoResponseDto } from './dto/cultivo-response.dto';
@@ -29,6 +30,7 @@ export class CultivoController {
   constructor(private readonly cultivoService: CultivoService) {}
 
   @Post()
+  @Auditable('Cultivo')
   @ApiOperation({
     summary: 'Criar novo cultivo',
     description: 'Cria um novo cultivo relacionando propriedade, cultura e safra'
@@ -142,6 +144,7 @@ export class CultivoController {
   }
 
   @Patch(':id')
+  @Auditable('Cultivo')
   @ApiOperation({
     summary: 'Atualizar cultivo',
     description: 'Atualiza parcialmente um cultivo'
@@ -173,6 +176,7 @@ export class CultivoController {
   }
 
   @Delete(':id')
+  @Auditable('Cultivo')
   @ApiOperation({
     summary: 'Remover cultivo',
     description: 'Remove um cultivo do sistema'

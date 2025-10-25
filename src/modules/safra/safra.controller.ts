@@ -17,6 +17,7 @@ import {
     ApiResponse,
     ApiTags
 } from '@nestjs/swagger';
+import { Auditable } from '../../shared/interceptors/audit.interceptor';
 import { CreateSafraDto } from './dto/create-safra.dto';
 import { SafraResponseDto } from './dto/safra-response.dto';
 import { UpdateSafraDto } from './dto/update-safra.dto';
@@ -28,6 +29,7 @@ export class SafraController {
   constructor(private readonly safraService: SafraService) {}
 
   @Post()
+  @Auditable('Safra')
   @ApiOperation({
     summary: 'Criar nova safra',
     description: 'Cria uma nova safra para um ano específico'
@@ -133,6 +135,7 @@ export class SafraController {
   }
 
   @Patch(':id')
+  @Auditable('Safra')
   @ApiOperation({
     summary: 'Atualizar safra',
     description: 'Atualiza parcialmente uma safra'
@@ -164,6 +167,7 @@ export class SafraController {
   }
 
   @Delete(':id')
+  @Auditable('Safra')
   @ApiOperation({
     summary: 'Remover safra',
     description: 'Remove uma safra do sistema'

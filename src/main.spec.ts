@@ -3,10 +3,13 @@ import { ValidationPipe } from '@nestjs/common';
 // Mock NestFactory
 const mockApp = {
   get: jest.fn(),
+  useLogger: jest.fn(),
+  use: jest.fn(),
   useGlobalPipes: jest.fn(),
   enableCors: jest.fn(),
   setGlobalPrefix: jest.fn(),
   listen: jest.fn().mockResolvedValue(undefined),
+  close: jest.fn().mockResolvedValue(undefined),
 };
 
 jest.mock('@nestjs/core', () => ({
@@ -53,7 +56,19 @@ describe('Main Bootstrap', () => {
       }),
     };
 
-    mockApp.get.mockReturnValue(mockConfigService);
+    // Mock AppLoggerService
+    const mockLogger = {
+      log: jest.fn(),
+      error: jest.fn(),
+      warn: jest.fn(),
+      debug: jest.fn(),
+    };
+
+    mockApp.get.mockImplementation((service: any) => {
+      if (service.name === 'ConfigService') return mockConfigService;
+      if (service.name === 'AppLoggerService') return mockLogger;
+      return mockConfigService; // fallback
+    });
   });
 
   afterEach(() => {
@@ -74,14 +89,18 @@ describe('Main Bootstrap', () => {
     expect(NestFactory.create).toHaveBeenCalled();
 
     // Verify app configuration
-    expect(mockApp.get).toHaveBeenCalledWith(expect.any(Function));
+    expect(mockApp.get).toHaveBeenCalled();
+    expect(mockApp.useLogger).toHaveBeenCalled();
+    expect(mockApp.use).toHaveBeenCalled(); // helmet
     expect(mockApp.useGlobalPipes).toHaveBeenCalledWith(
       expect.any(ValidationPipe)
     );
-    expect(mockApp.enableCors).toHaveBeenCalledWith({
-      origin: ['http://localhost:3000'],
-      credentials: true,
-    });
+    expect(mockApp.enableCors).toHaveBeenCalledWith(
+      expect.objectContaining({
+        origin: ['http://localhost:3000', 'http://localhost:3001'],
+        credentials: true,
+      })
+    );
     expect(mockApp.setGlobalPrefix).toHaveBeenCalledWith('api');
 
     // Verify Swagger setup

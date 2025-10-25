@@ -16,6 +16,7 @@ import {
     ApiResponse,
     ApiTags
 } from '@nestjs/swagger';
+import { Auditable } from '../../shared/interceptors/audit.interceptor';
 import { CulturaService } from './cultura.service';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { CulturaResponseDto } from './dto/cultura-response.dto';
@@ -27,6 +28,7 @@ export class CulturaController {
   constructor(private readonly culturaService: CulturaService) {}
 
   @Post()
+  @Auditable('Cultura')
   @ApiOperation({
     summary: 'Criar nova cultura',
     description: 'Cria uma nova cultura (ex: Soja, Milho, Algodão)'
@@ -112,6 +114,7 @@ export class CulturaController {
   }
 
   @Patch(':id')
+  @Auditable('Cultura')
   @ApiOperation({
     summary: 'Atualizar cultura',
     description: 'Atualiza parcialmente uma cultura'
@@ -143,6 +146,7 @@ export class CulturaController {
   }
 
   @Delete(':id')
+  @Auditable('Cultura')
   @ApiOperation({
     summary: 'Remover cultura',
     description: 'Remove uma cultura do sistema'

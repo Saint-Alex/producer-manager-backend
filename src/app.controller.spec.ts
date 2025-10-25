@@ -21,19 +21,19 @@ describe('AppController', () => {
       expect(appController).toBeDefined();
     });
 
-    it('should return health check data', () => {
-      const result = appController.getHealth();
+    it('should return app info data', () => {
+      const result = appController.getInfo();
 
       expect(result).toBeDefined();
-      expect(result.message).toBe('Producer Manager API is running successfully!');
+      expect(result.name).toBe('Producer Manager API');
       expect(result.timestamp).toBeDefined();
       expect(result.version).toBe('1.0.0');
       expect(typeof result.timestamp).toBe('string');
     });
 
-    it('should call appService.getHealth', () => {
-      const spy = jest.spyOn(appService, 'getHealth');
-      appController.getHealth();
+    it('should call appService.getInfo', () => {
+      const spy = jest.spyOn(appService, 'getInfo');
+      appController.getInfo();
       expect(spy).toHaveBeenCalled();
     });
 
@@ -43,19 +43,19 @@ describe('AppController', () => {
     });
   });
 
-  describe('health check endpoint', () => {
+  describe('app info endpoint', () => {
     it('should return consistent structure', () => {
-      const result1 = appController.getHealth();
-      const result2 = appController.getHealth();
+      const result1 = appController.getInfo();
+      const result2 = appController.getInfo();
 
-      expect(Object.keys(result1)).toEqual(['message', 'timestamp', 'version']);
-      expect(Object.keys(result2)).toEqual(['message', 'timestamp', 'version']);
-      expect(result1.message).toBe(result2.message);
+      expect(Object.keys(result1).sort()).toEqual(['name', 'version', 'description', 'environment', 'timestamp'].sort());
+      expect(Object.keys(result2).sort()).toEqual(['name', 'version', 'description', 'environment', 'timestamp'].sort());
+      expect(result1.name).toBe(result2.name);
       expect(result1.version).toBe(result2.version);
     });
 
     it('should return valid timestamp format', () => {
-      const result = appController.getHealth();
+      const result = appController.getInfo();
       const timestamp = new Date(result.timestamp);
 
       expect(timestamp).toBeInstanceOf(Date);

@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Cultivo } from '../database/entities/cultivo.entity';
-import { Produtor } from '../database/entities/produtor.entity';
-import { PropriedadeRural } from '../database/entities/propriedade-rural.entity';
+import { Cultivo } from '../../database/entities/cultivo.entity';
+import { Produtor } from '../../database/entities/produtor.entity';
+import { PropriedadeRural } from '../../database/entities/propriedade-rural.entity';
 import { DashboardService } from './dashboard.service';
 
 describe('DashboardService', () => {

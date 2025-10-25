@@ -1,16 +1,32 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 // Import modules
-import { DashboardModule } from './dashboard/dashboard.module';
 import { CultivoModule } from './modules/cultivo/cultivo.module';
 import { CulturaModule } from './modules/cultura/cultura.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ProdutorModule } from './modules/produtor/produtor.module';
 import { PropriedadeModule } from './modules/propriedade/propriedade.module';
 import { SafraModule } from './modules/safra/safra.module';
+
+// Import observability components
+import { AuditLog } from './database/entities/audit-log.entity';
+import { AuditService } from './shared/audit/audit.service';
+import { configValidationSchema } from './shared/config/validation.schema';
+import { GlobalExceptionFilter } from './shared/filters/global-exception.filter';
+import { HealthModule } from './shared/health/health.module';
+import { AuditInterceptor } from './shared/interceptors/audit.interceptor';
+import { LoggingInterceptor } from './shared/interceptors/logging.interceptor';
+import { MetricsInterceptor } from './shared/interceptors/metrics.interceptor';
+import { AppLoggerService } from './shared/logging/logger.service';
+import { MetricsController } from './shared/metrics/metrics.controller';
+import { MetricsService } from './shared/metrics/metrics.service';
+import { CorrelationIdMiddleware } from './shared/middleware/correlation-id.middleware';
 
 @Module({
   imports: [
@@ -18,7 +34,18 @@ import { SafraModule } from './modules/safra/safra.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
+      validationSchema: configValidationSchema,
+      validationOptions: {
+        allowUnknown: true,
+        abortEarly: false,
+      },
     }),
+
+    // Rate limiting
+    ThrottlerModule.forRoot([{
+      ttl: 60000, // 1 minuto
+      limit: 100, // 100 requests por minuto
+    }]),
 
     // Database
     TypeOrmModule.forRootAsync({
@@ -38,6 +65,9 @@ import { SafraModule } from './modules/safra/safra.module';
       inject: [ConfigService],
     }),
 
+    // Audit module
+    TypeOrmModule.forFeature([AuditLog]),
+
     // Feature modules
     ProdutorModule,
     PropriedadeModule,
@@ -45,8 +75,40 @@ import { SafraModule } from './modules/safra/safra.module';
     CulturaModule,
     CultivoModule,
     DashboardModule,
+    HealthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, MetricsController],
+  providers: [
+    AppService,
+    AppLoggerService,
+    AuditService,
+    MetricsService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: GlobalExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AuditInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: MetricsInterceptor,
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CorrelationIdMiddleware)
+      .forRoutes('*');
+  }
+}

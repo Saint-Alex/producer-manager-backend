@@ -16,6 +16,7 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
+import { Auditable } from '../../shared/interceptors/audit.interceptor';
 import { CreateProdutorDto, ProdutorResponseDto, UpdateProdutorDto } from './dto';
 import { ProdutorService } from './produtor.service';
 
@@ -25,6 +26,7 @@ export class ProdutorController {
   constructor(private readonly produtorService: ProdutorService) {}
 
   @Post()
+  @Auditable('Produtor')
   @ApiOperation({
     summary: 'Criar novo produtor rural',
     description: 'Cadastra um novo produtor rural com CPF/CNPJ validado'
@@ -101,6 +103,7 @@ export class ProdutorController {
   }
 
   @Patch(':id')
+  @Auditable('Produtor')
   @ApiOperation({
     summary: 'Atualizar produtor',
     description: 'Atualiza dados de um produtor existente'
@@ -132,6 +135,7 @@ export class ProdutorController {
   }
 
   @Delete(':id')
+  @Auditable('Produtor')
   @ApiOperation({
     summary: 'Excluir produtor',
     description: 'Remove um produtor do sistema'

@@ -3,11 +3,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import * as request from 'supertest';
 import { Repository } from 'typeorm';
-import { DashboardController } from '../src/dashboard/dashboard.controller';
-import { DashboardService } from '../src/dashboard/dashboard.service';
 import { Cultivo } from '../src/database/entities/cultivo.entity';
 import { Produtor } from '../src/database/entities/produtor.entity';
 import { PropriedadeRural } from '../src/database/entities/propriedade-rural.entity';
+import { DashboardController } from '../src/modules/dashboard/dashboard.controller';
+import { DashboardService } from '../src/modules/dashboard/dashboard.service';
 
 describe('DashboardController (e2e)', () => {
   let app: INestApplication;
