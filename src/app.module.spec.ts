@@ -11,6 +11,18 @@ describe('AppModule', () => {
   let appController: AppController;
 
   beforeEach(async () => {
+    // Set up required environment variables for testing
+    process.env.NODE_ENV = 'test';
+    process.env.PORT = '3001';
+    process.env.DATABASE_HOST = 'localhost';
+    process.env.DATABASE_PORT = '5432';
+    process.env.DATABASE_USERNAME = 'test';
+    process.env.DATABASE_PASSWORD = 'test';
+    process.env.DATABASE_NAME = 'test';
+    process.env.JWT_SECRET = 'test-jwt-secret-key-for-testing-32-chars-minimum';
+    process.env.LOG_LEVEL = 'error';
+    process.env.CORS_ORIGINS = 'http://localhost:3000';
+
     // Mock database connection for testing
     const _mockDataSource = {
       initialize: jest.fn().mockResolvedValue(true),
@@ -41,6 +53,18 @@ describe('AppModule', () => {
     if (module) {
       await module.close();
     }
+
+    // Clean up environment variables
+    delete process.env.NODE_ENV;
+    delete process.env.PORT;
+    delete process.env.DATABASE_HOST;
+    delete process.env.DATABASE_PORT;
+    delete process.env.DATABASE_USERNAME;
+    delete process.env.DATABASE_PASSWORD;
+    delete process.env.DATABASE_NAME;
+    delete process.env.JWT_SECRET;
+    delete process.env.LOG_LEVEL;
+    delete process.env.CORS_ORIGINS;
   });
 
   it('should be defined', () => {
