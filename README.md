@@ -1,82 +1,85 @@
-# 🌾 Producer Manager Backend
+# Producer Manager Backend
 
-Sistema robusto de gestão de produtores rurais com observabilidade completa para produção.
+API RESTful em NestJS para gestão de produtores rurais com observabilidade completa.
 
-## 🎯 Visão Geral
-
-API RESTful desenvolvida em NestJS para gerenciar produtores rurais, propriedades, culturas e safras, com sistema completo de observabilidade, auditoria e monitoramento.
-
-### **Funcionalidades Principais**
+## Funcionalidades
 
 - 👨‍🌾 **Gestão de Produtores**: CRUD completo com validações CPF/CNPJ
 - 🏠 **Propriedades Rurais**: Controle de áreas e localizações
-- 🌱 **Culturas**: Gestão de tipos de plantio
-- 📊 **Safras**: Controle de produção por período
-- 🔍 **Sistema de Observabilidade**: Logging, métricas, audit trail
-- 🛡️ **Segurança**: Rate limiting, CORS, validation
-- 🏥 **Health Checks**: Kubernetes-ready monitoring
+- 🌱 **Culturas e Safras**: Gestão de tipos de plantio e períodos
+- 📊 **Dashboard**: Estatísticas e métricas do sistema
+- 🔍 **Observabilidade**: Logging, métricas e audit trail
+- 🏥 **Health Checks**: Monitoramento pronto para produção
 
----
+## Tecnologias
 
-## 🚀 Quick Start
+- **NestJS 10** + **TypeScript** - Framework robusto
+- **PostgreSQL** + **TypeORM** - Banco de dados e ORM
+- **Winston** - Logging estruturado
+- **Prometheus** - Métricas para monitoramento
+- **Swagger** - Documentação automática da API
 
-### **Pré-requisitos**
+## Como Executar
+
+### Pré-requisitos
 - Node.js 18+
-- Docker e Docker Compose (recomendado)
-- npm ou yarn
+- Docker e Docker Compose
 
-### **Setup Completo (Primeira vez)**
-
+### Instalação e Execução
 ```bash
-# 1. Clone e prepare o projeto
-git clone <repository-url>
-cd producer-manager-backend
+# 1. Instalar dependências
 npm install
 
-# 2. Configure environment
+# 2. Configurar environment
 cp .env.example .env
-# Edite as variáveis necessárias no .env
 
-# 3. Inicie infraestrutura
+# 3. Iniciar infraestrutura
 docker-compose up -d
 
-# 4. Configure banco de dados
+# 4. Configurar banco de dados
 npm run typeorm:migration:run
 npm run seed
 
-# 5. Execute testes para validar
-npm test
-
-# 6. Inicie em desenvolvimento
+# 5. Iniciar em desenvolvimento
 npm run start:dev
+
+# 6. Acessar a API
+http://localhost:3000 (API)
+http://localhost:3000/api (Swagger)
 ```
 
-> **🎯 Resultado**: API rodando em http://localhost:3000 com dados de exemplo prontos para uso!
+## API Endpoints
 
+| Recurso | Endpoint | Descrição |
+|---------|----------|-----------|
+| Produtores | `/produtores` | CRUD de produtores rurais |
+| Propriedades | `/propriedades` | Gestão de propriedades |
+| Culturas | `/culturas` | Tipos de cultivo |
+| Safras | `/safras` | Períodos de produção |
+| Dashboard | `/dashboard` | Estatísticas do sistema |
+| Health | `/health` | Status da aplicação |
+| Metrics | `/metrics` | Métricas de monitoramento |
 
-## 🏗️ Stack Tecnológico
+## Scripts Principais
 
-### **Core**
-- **Framework**: NestJS 10 (Node.js + TypeScript)
-- **Database**: PostgreSQL + TypeORM
-- **Validation**: class-validator + class-transformer
-- **Documentation**: Swagger/OpenAPI
+```bash
+npm run start:dev       # Desenvolvimento com hot reload
+npm run build          # Build de produção
+npm test              # Executar testes
+npm run seed          # Dados iniciais
+npm run lint          # Verificar código
+```
 
-### **Observabilidade**
+## Observabilidade
+
 - **Logging**: Winston com correlation IDs
-- **Metrics**: Prometheus format
-- **Health Checks**: Terminus (Kubernetes-ready)
-- **Audit Trail**: Sistema customizado de auditoria
-
-### **Segurança**
-- **Headers**: Helmet.js
-- **Rate Limiting**: @nestjs/throttler
-- **CORS**: Configuração customizada
-- **Validation**: DTOs com class-validator
+- **Métricas**: Formato Prometheus (`/metrics`)
+- **Health Checks**: Ready/Live probes (`/health`)
+- **Audit Trail**: Rastreamento automático de mudanças
 
 ---
 
-## 📡 API Endpoints
+## API Endpoints
 
 | Recurso | Endpoints | Descrição |
 |---------|-----------|-----------|
@@ -93,7 +96,7 @@ npm run start:dev
 
 ---
 
-## � Arquitetura e Padrões
+## Arquitetura e Padrões
 
 ### **Estrutura do Projeto**
 
@@ -107,8 +110,7 @@ src/
 │   ├── cultura/         # Tipos de culturas
 │   ├── safra/           # Períodos de produção
 │   ├── cultivo/         # Relação cultura x propriedade
-│   └── dashboard/       # Dashboard (módulo vazio + testes)
-├── dashboard/           # Dashboard funcional (controller + service + testes)
+│   └── dashboard/       # Dashboard funcional
 ├── database/
 │   ├── entities/        # Entidades TypeORM
 │   ├── migrations/      # Database migrations
@@ -125,8 +127,6 @@ src/
     ├── middleware/      # Custom middleware
     └── validators/      # Validadores customizados
 ```
-
-> **⚠️ Nota**: O dashboard funcional está em `/dashboard` (24 testes), enquanto `/modules/dashboard` contém apenas um módulo vazio com 5 testes de estrutura.
 
 ### **Padrões Implementados**
 
@@ -149,7 +149,7 @@ src/
 
 ---
 
-## � Scripts Úteis
+## Scripts Úteis
 
 ```bash
 # Desenvolvimento
@@ -173,56 +173,7 @@ npm run format             # Prettier
 
 ---
 
-## 📊 Observabilidade
-
-### **Monitoramento Completo (Score: 9.8/10)**
-
-O sistema implementa observabilidade de nível empresarial:
-
-- **Structured Logging**: Logs em JSON com correlation IDs
-- **Custom Metrics**: Compatíveis com Prometheus/Grafana
-- **Health Checks**: Prontos para Kubernetes (readiness/liveness)
-- **Audit Trail**: Rastreamento automático de mudanças
-- **Error Handling**: Global exception filter
-- **Performance**: Métricas de response time e error rate
-
-### **Endpoints de Monitoramento**
-
-```bash
-GET /health              # Status básico
-GET /health/ready        # Readiness probe (K8s)
-GET /health/live         # Liveness probe (K8s)
-GET /metrics             # Métricas JSON
-GET /metrics/prometheus  # Formato Prometheus
-```
-
-> **📚 Documentação Detalhada**: [OBSERVABILITY.md](./OBSERVABILITY.md)
-
----
-
-## 🧪 Testes
-
-### **Cobertura Completa (43/43 testes)**
-
-```bash
-# Preparação do ambiente
-docker-compose up -d postgres
-npm run typeorm:migration:run
-npm run seed
-
-# Executar testes
-npm test
-```
-
-**Tipos de Teste**:
-- Unit Tests (serviços individuais)
-- Integration Tests (comunicação entre componentes)
-- E2E Tests (endpoints completos)
-- Observability Tests (logging, métricas, health)
-
----
-
-## 🐳 Docker & Produção
+## Docker & Produção
 
 ### **Configuração Docker**
 
@@ -258,7 +209,7 @@ livenessProbe:
 
 ---
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 | Problema | Solução |
 |----------|---------|
@@ -269,7 +220,7 @@ livenessProbe:
 
 ---
 
-## 🤝 Contribuição
+## Contribuição
 
 1. Fork o projeto
 2. Crie uma branch (`git checkout -b feature/nova-funcionalidade`)
@@ -279,8 +230,4 @@ livenessProbe:
 
 **Padrões**: ESLint + Prettier + Conventional Commits + Testes obrigatórios
 
----
 
-**🎯 API Production-Ready com Observabilidade Completa!**
-
-*Versão: 1.0.0 | Stack: NestJS + PostgreSQL + TypeORM*
