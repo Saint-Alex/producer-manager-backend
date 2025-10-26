@@ -26,6 +26,7 @@ __tests__
 .env.production.local
 .env.development
 .env.test
+.env
 
 # Arquivos do Git
 .git
