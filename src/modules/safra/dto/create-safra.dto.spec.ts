@@ -6,6 +6,7 @@ describe('CreateSafraDto', () => {
   const validDto = {
     nome: 'Safra 2023',
     ano: 2023,
+    propriedadeRuralId: '550e8400-e29b-41d4-a716-446655440000',
   };
 
   describe('nome validation', () => {
@@ -121,26 +122,29 @@ describe('CreateSafraDto', () => {
       const dto = plainToClass(CreateSafraDto, {
         nome: '',
         ano: 1999,
+        propriedadeRuralId: 'invalid-uuid',
       });
 
       const errors = await validate(dto);
 
-      expect(errors.length).toBeGreaterThanOrEqual(2);
+      expect(errors.length).toBeGreaterThanOrEqual(3);
 
       const properties = errors.map((error) => error.property);
       expect(properties).toContain('nome');
       expect(properties).toContain('ano');
+      expect(properties).toContain('propriedadeRuralId');
     });
 
     it('should return multiple errors for multiple invalid constraints', async () => {
       const dto = plainToClass(CreateSafraDto, {
         nome: 'a'.repeat(101), // too long
         ano: 'not-a-number', // not a number
+        propriedadeRuralId: '', // empty
       });
 
       const errors = await validate(dto);
 
-      expect(errors.length).toBeGreaterThanOrEqual(2);
+      expect(errors.length).toBeGreaterThanOrEqual(3);
 
       const nomeError = errors.find((error) => error.property === 'nome');
       expect(nomeError).toBeDefined();
@@ -149,6 +153,10 @@ describe('CreateSafraDto', () => {
       const anoError = errors.find((error) => error.property === 'ano');
       expect(anoError).toBeDefined();
       expect(anoError.constraints).toHaveProperty('isNumber');
+
+      const propError = errors.find((error) => error.property === 'propriedadeRuralId');
+      expect(propError).toBeDefined();
+      expect(propError.constraints).toHaveProperty('isNotEmpty');
     });
   });
 
@@ -157,6 +165,7 @@ describe('CreateSafraDto', () => {
       const dto = plainToClass(CreateSafraDto, {
         nome: 'Safra Verão 2024',
         ano: 2024,
+        propriedadeRuralId: '550e8400-e29b-41d4-a716-446655440000',
       });
 
       const errors = await validate(dto);
@@ -167,6 +176,7 @@ describe('CreateSafraDto', () => {
       const dto = plainToClass(CreateSafraDto, {
         nome: 'S',
         ano: 2025,
+        propriedadeRuralId: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
       });
 
       const errors = await validate(dto);
@@ -191,6 +201,72 @@ describe('CreateSafraDto', () => {
       });
       const errors = await validate(dto);
       expect(errors).toHaveLength(0);
+    });
+  });
+
+  describe('propriedadeRuralId validation', () => {
+    it('should pass with valid propriedadeRuralId', async () => {
+      const dto = plainToClass(CreateSafraDto, validDto);
+      const errors = await validate(dto);
+      expect(errors).toHaveLength(0);
+    });
+
+    it('should fail with empty propriedadeRuralId', async () => {
+      const dto = plainToClass(CreateSafraDto, { ...validDto, propriedadeRuralId: '' });
+      const errors = await validate(dto);
+
+      expect(errors.length).toBeGreaterThanOrEqual(1);
+      const propertyError = errors.find((error) => error.property === 'propriedadeRuralId');
+      expect(propertyError).toBeDefined();
+      expect(propertyError.constraints).toHaveProperty('isNotEmpty');
+    });
+
+    it('should fail with invalid UUID format', async () => {
+      const dto = plainToClass(CreateSafraDto, { ...validDto, propriedadeRuralId: 'invalid-uuid' });
+      const errors = await validate(dto);
+
+      expect(errors.length).toBeGreaterThanOrEqual(1);
+      const propertyError = errors.find((error) => error.property === 'propriedadeRuralId');
+      expect(propertyError).toBeDefined();
+      expect(propertyError.constraints).toHaveProperty('isUuid');
+    });
+
+    it('should fail with missing propriedadeRuralId', async () => {
+      const { propriedadeRuralId: _propriedadeRuralId, ...dtoWithoutPropId } = validDto;
+      const dto = plainToClass(CreateSafraDto, dtoWithoutPropId);
+      const errors = await validate(dto);
+
+      expect(errors.length).toBeGreaterThanOrEqual(1);
+      const propertyError = errors.find((error) => error.property === 'propriedadeRuralId');
+      expect(propertyError).toBeDefined();
+      expect(propertyError.constraints).toHaveProperty('isNotEmpty');
+    });
+
+    it('should pass with different valid UUID formats', async () => {
+      const validUUIDs = [
+        '550e8400-e29b-41d4-a716-446655440000',
+        'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+        '6ba7b811-9dad-41d1-80b4-00c04fd430c8',
+      ];
+
+      for (const uuid of validUUIDs) {
+        const dto = plainToClass(CreateSafraDto, { ...validDto, propriedadeRuralId: uuid });
+        const errors = await validate(dto);
+        expect(errors).toHaveLength(0);
+      }
+    });
+
+    it('should fail with non-v4 UUID', async () => {
+      const dto = plainToClass(CreateSafraDto, {
+        ...validDto,
+        propriedadeRuralId: '550e8400-e29b-41d4-a716-44665544000', // Missing one character
+      });
+      const errors = await validate(dto);
+
+      expect(errors.length).toBeGreaterThanOrEqual(1);
+      const propertyError = errors.find((error) => error.property === 'propriedadeRuralId');
+      expect(propertyError).toBeDefined();
+      expect(propertyError.constraints).toHaveProperty('isUuid');
     });
   });
 });

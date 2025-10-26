@@ -31,24 +31,22 @@ export class SafraController {
   @ApiBody({
     type: CreateSafraDto,
     examples: {
-      'safra-atual': {
-        summary: 'Safra 2025',
-        description: 'Safra atual',
+      'safra-soja': {
+        summary: 'Safra Soja 2024/25',
+        description: 'Safra de soja para uma propriedade específica',
         value: {
-          nome: 'Safra 2025',
-          ano: 2025,
-          dataInicio: '2025-01-01',
-          dataFim: '2025-12-31',
+          nome: 'Safra Soja 2024/25',
+          ano: 2024,
+          propriedadeRuralId: '123e4567-e89b-12d3-a456-426614174000',
         },
       },
-      'safra-passada': {
-        summary: 'Safra 2024',
-        description: 'Safra do ano anterior',
+      'safra-milho': {
+        summary: 'Safra Milho 2024',
+        description: 'Safra de milho safrinha',
         value: {
-          nome: 'Safra 2024',
+          nome: 'Safra Milho Safrinha 2024',
           ano: 2024,
-          dataInicio: '2024-01-01',
-          dataFim: '2024-12-31',
+          propriedadeRuralId: '987e6543-e21c-43d2-b456-123456789abc',
         },
       },
     },
@@ -106,26 +104,45 @@ export class SafraController {
 
   @Get('year/:year')
   @ApiOperation({
-    summary: 'Buscar safra por ano',
-    description: 'Retorna a safra de um ano específico',
+    summary: 'Buscar safras por ano',
+    description:
+      'Retorna todas as safras de um ano específico (pode haver múltiplas por diferentes propriedades)',
   })
   @ApiParam({
     name: 'year',
     description: 'Ano da safra',
     type: 'number',
-    example: 2023,
+    example: 2024,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Safra encontrada',
-    type: SafraResponseDto,
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Safra não encontrada para este ano',
+    description: 'Safras encontradas',
+    type: [SafraResponseDto],
   })
   async findByYear(@Param('year', ParseIntPipe) year: number) {
     return this.safraService.findByYear(year);
+  }
+
+  @Get('propriedade/:propriedadeId')
+  @ApiOperation({
+    summary: 'Buscar safras por propriedade',
+    description:
+      'Retorna todas as safras de uma propriedade específica (pode ter múltiplas safras de anos diferentes)',
+  })
+  @ApiParam({
+    name: 'propriedadeId',
+    description: 'ID da propriedade rural',
+    type: 'string',
+    format: 'uuid',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Safras encontradas',
+    type: [SafraResponseDto],
+  })
+  async findByPropriedade(@Param('propriedadeId', ParseUUIDPipe) propriedadeId: string) {
+    const safras = await this.safraService.findByPropriedade(propriedadeId);
+    return safras;
   }
 
   @Patch(':id')

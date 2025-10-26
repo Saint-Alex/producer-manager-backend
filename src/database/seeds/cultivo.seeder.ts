@@ -14,7 +14,7 @@ export class CultivoSeeder {
     // Buscar todas as entidades necessárias
     const propriedades = await propriedadeRepository.find();
     const culturas = await culturaRepository.find();
-    const safras = await safraRepository.find();
+    const safras = await safraRepository.find({ relations: ['propriedadeRural'] });
 
     if (propriedades.length === 0) {
       console.log('❌ Nenhuma propriedade encontrada. Execute o seed de propriedades primeiro.');
@@ -37,13 +37,11 @@ export class CultivoSeeder {
       {
         propriedadeNome: 'Fazenda Boa Esperança',
         culturaNome: 'Cana-de-açúcar',
-        safraAno: 2024,
         areaPlantada: 600.0,
       },
       {
         propriedadeNome: 'Fazenda Boa Esperança',
         culturaNome: 'Milho',
-        safraAno: 2024,
         areaPlantada: 200.3,
       },
 
@@ -51,13 +49,11 @@ export class CultivoSeeder {
       {
         propriedadeNome: 'Sítio da Cachoeira',
         culturaNome: 'Café',
-        safraAno: 2024,
         areaPlantada: 180.5,
       },
       {
         propriedadeNome: 'Sítio da Cachoeira',
         culturaNome: 'Feijão',
-        safraAno: 2024,
         areaPlantada: 120.0,
       },
 
@@ -65,13 +61,11 @@ export class CultivoSeeder {
       {
         propriedadeNome: 'Fazenda Santa Maria',
         culturaNome: 'Soja',
-        safraAno: 2024,
         areaPlantada: 1200.0,
       },
       {
         propriedadeNome: 'Fazenda Santa Maria',
         culturaNome: 'Milho',
-        safraAno: 2024,
         areaPlantada: 600.0,
       },
 
@@ -79,19 +73,17 @@ export class CultivoSeeder {
       {
         propriedadeNome: 'Estância Água Limpa',
         culturaNome: 'Soja',
-        safraAno: 2024,
         areaPlantada: 2000.0,
       },
       {
         propriedadeNome: 'Estância Água Limpa',
         culturaNome: 'Milho',
-        safraAno: 2024,
         areaPlantada: 1000.0,
       },
       {
         propriedadeNome: 'Estância Água Limpa',
         culturaNome: 'Algodão',
-        safraAno: 2024,
+
         areaPlantada: 500.75,
       },
 
@@ -99,13 +91,13 @@ export class CultivoSeeder {
       {
         propriedadeNome: 'Fazenda Rio Verde',
         culturaNome: 'Soja',
-        safraAno: 2024,
+
         areaPlantada: 1500.0,
       },
       {
         propriedadeNome: 'Fazenda Rio Verde',
         culturaNome: 'Milho',
-        safraAno: 2024,
+
         areaPlantada: 900.6,
       },
 
@@ -113,13 +105,13 @@ export class CultivoSeeder {
       {
         propriedadeNome: 'Chácara Três Palmeiras',
         culturaNome: 'Café',
-        safraAno: 2024,
+
         areaPlantada: 80.0,
       },
       {
         propriedadeNome: 'Chácara Três Palmeiras',
         culturaNome: 'Laranja',
-        safraAno: 2024,
+
         areaPlantada: 40.2,
       },
 
@@ -127,13 +119,13 @@ export class CultivoSeeder {
       {
         propriedadeNome: 'Fazenda Cerrado Azul',
         culturaNome: 'Soja',
-        safraAno: 2024,
+
         areaPlantada: 800.0,
       },
       {
         propriedadeNome: 'Fazenda Cerrado Azul',
         culturaNome: 'Milho',
-        safraAno: 2024,
+
         areaPlantada: 500.0,
       },
 
@@ -141,13 +133,13 @@ export class CultivoSeeder {
       {
         propriedadeNome: 'Sítio do Ipê',
         culturaNome: 'Soja',
-        safraAno: 2024,
+
         areaPlantada: 300.0,
       },
       {
         propriedadeNome: 'Sítio do Ipê',
         culturaNome: 'Milho',
-        safraAno: 2024,
+
         areaPlantada: 180.3,
       },
 
@@ -155,13 +147,13 @@ export class CultivoSeeder {
       {
         propriedadeNome: 'Fazenda Vale do Sol',
         culturaNome: 'Soja',
-        safraAno: 2024,
+
         areaPlantada: 1000.0,
       },
       {
         propriedadeNome: 'Fazenda Vale do Sol',
         culturaNome: 'Milho',
-        safraAno: 2024,
+
         areaPlantada: 650.7,
       },
 
@@ -169,13 +161,13 @@ export class CultivoSeeder {
       {
         propriedadeNome: 'Estância Beira Rio',
         culturaNome: 'Arroz',
-        safraAno: 2024,
+
         areaPlantada: 1500.0,
       },
       {
         propriedadeNome: 'Estância Beira Rio',
         culturaNome: 'Soja',
-        safraAno: 2024,
+
         areaPlantada: 1350.45,
       },
 
@@ -183,13 +175,13 @@ export class CultivoSeeder {
       {
         propriedadeNome: 'Chácara Monte Alto',
         culturaNome: 'Café',
-        safraAno: 2024,
+
         areaPlantada: 150.0,
       },
       {
         propriedadeNome: 'Chácara Monte Alto',
         culturaNome: 'Cana-de-açúcar',
-        safraAno: 2024,
+
         areaPlantada: 90.6,
       },
 
@@ -197,19 +189,19 @@ export class CultivoSeeder {
       {
         propriedadeNome: 'Fazenda Nova Era',
         culturaNome: 'Soja',
-        safraAno: 2024,
+
         areaPlantada: 2000.0,
       },
       {
         propriedadeNome: 'Fazenda Nova Era',
         culturaNome: 'Milho',
-        safraAno: 2024,
+
         areaPlantada: 1000.0,
       },
       {
         propriedadeNome: 'Fazenda Nova Era',
         culturaNome: 'Algodão',
-        safraAno: 2024,
+
         areaPlantada: 375.23,
       },
 
@@ -217,19 +209,19 @@ export class CultivoSeeder {
       {
         propriedadeNome: 'Fazenda Santa Maria',
         culturaNome: 'Soja',
-        safraAno: 2023,
+
         areaPlantada: 1100.0,
       },
       {
         propriedadeNome: 'Estância Água Limpa',
         culturaNome: 'Soja',
-        safraAno: 2023,
+
         areaPlantada: 1800.0,
       },
       {
         propriedadeNome: 'Fazenda Rio Verde',
         culturaNome: 'Milho',
-        safraAno: 2023,
+
         areaPlantada: 800.0,
       },
     ];
@@ -257,13 +249,13 @@ export class CultivoSeeder {
         continue;
       }
 
-      // Buscar a safra
-      const safra = await safraRepository.findOne({
-        where: { ano: cultivoData.safraAno },
-      });
+      // Buscar a safra específica da propriedade
+      const safra = safras.find(
+        (s) => s.propriedadeRural && s.propriedadeRural.id === propriedade.id,
+      );
 
       if (!safra) {
-        console.log(`   ❌ Safra ${cultivoData.safraAno} não encontrada`);
+        console.log(`   ❌ Safra não encontrada para a propriedade "${propriedade.nomeFazenda}"`);
         continue;
       }
 

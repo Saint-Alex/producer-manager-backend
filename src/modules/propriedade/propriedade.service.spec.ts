@@ -32,6 +32,7 @@ describe('PropriedadeService', () => {
     areaVegetacao: 400,
     produtores: [mockProdutor],
     cultivos: [],
+    safras: [], // Propriedade pode ter múltiplas safras
     createdAt: new Date(),
     updatedAt: new Date(),
   };

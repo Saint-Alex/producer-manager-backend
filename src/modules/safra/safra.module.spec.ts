@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Cultivo } from '../../database/entities/cultivo.entity';
+import { PropriedadeRural } from '../../database/entities/propriedade-rural.entity';
 import { Safra } from '../../database/entities/safra.entity';
 import { SafraController } from './safra.controller';
 import { SafraModule } from './safra.module';
@@ -11,9 +13,11 @@ describe('SafraModule', () => {
   let safraService: SafraService;
   let safraController: SafraController;
   let safraRepository: Repository<Safra>;
+  let propriedadeRuralRepository: Repository<PropriedadeRural>;
+  let cultivoRepository: Repository<Cultivo>;
 
   beforeEach(async () => {
-    const mockRepository = {
+    const mockSafraRepository = {
       find: jest.fn(),
       findOne: jest.fn(),
       save: jest.fn(),
@@ -28,16 +32,55 @@ describe('SafraModule', () => {
       })),
     };
 
+    const mockPropriedadeRuralRepository = {
+      find: jest.fn(),
+      findOne: jest.fn(),
+      save: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+      create: jest.fn(),
+      createQueryBuilder: jest.fn(() => ({
+        where: jest.fn().mockReturnThis(),
+        orderBy: jest.fn().mockReturnThis(),
+        getOne: jest.fn(),
+        getMany: jest.fn(),
+      })),
+    };
+
+    const mockCultivoRepository = {
+      find: jest.fn(),
+      findOne: jest.fn(),
+      save: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+      remove: jest.fn(),
+      create: jest.fn(),
+      createQueryBuilder: jest.fn(() => ({
+        where: jest.fn().mockReturnThis(),
+        orderBy: jest.fn().mockReturnThis(),
+        getOne: jest.fn(),
+        getMany: jest.fn(),
+      })),
+    };
+
     module = await Test.createTestingModule({
       imports: [SafraModule],
     })
       .overrideProvider(getRepositoryToken(Safra))
-      .useValue(mockRepository)
+      .useValue(mockSafraRepository)
+      .overrideProvider(getRepositoryToken(PropriedadeRural))
+      .useValue(mockPropriedadeRuralRepository)
+      .overrideProvider(getRepositoryToken(Cultivo))
+      .useValue(mockCultivoRepository)
       .compile();
 
     safraService = module.get<SafraService>(SafraService);
     safraController = module.get<SafraController>(SafraController);
     safraRepository = module.get<Repository<Safra>>(getRepositoryToken(Safra));
+    propriedadeRuralRepository = module.get<Repository<PropriedadeRural>>(
+      getRepositoryToken(PropriedadeRural),
+    );
+    cultivoRepository = module.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
   });
 
   afterEach(async () => {
@@ -59,6 +102,8 @@ describe('SafraModule', () => {
       expect(safraService).toBeInstanceOf(SafraService);
       expect(safraController).toBeInstanceOf(SafraController);
       expect(safraRepository).toBeDefined();
+      expect(propriedadeRuralRepository).toBeDefined();
+      expect(cultivoRepository).toBeDefined();
     });
   });
 
@@ -70,6 +115,14 @@ describe('SafraModule', () => {
 
     it('should provide Safra repository', () => {
       expect(safraRepository).toBeDefined();
+    });
+
+    it('should provide PropriedadeRural repository', () => {
+      expect(propriedadeRuralRepository).toBeDefined();
+    });
+
+    it('should provide Cultivo repository', () => {
+      expect(cultivoRepository).toBeDefined();
     });
   });
 
@@ -89,6 +142,8 @@ describe('SafraModule', () => {
   describe('imports', () => {
     it('should import TypeOrmModule with Safra entity', () => {
       expect(safraRepository).toBeDefined();
+      expect(propriedadeRuralRepository).toBeDefined();
+      expect(cultivoRepository).toBeDefined();
     });
   });
 
@@ -96,6 +151,8 @@ describe('SafraModule', () => {
     it('should inject repository into service', () => {
       expect(safraService).toBeDefined();
       expect(safraRepository).toBeDefined();
+      expect(propriedadeRuralRepository).toBeDefined();
+      expect(cultivoRepository).toBeDefined();
     });
 
     it('should inject service into controller', () => {

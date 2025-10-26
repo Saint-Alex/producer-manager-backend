@@ -2,6 +2,8 @@ import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Cultivo } from '../../database/entities/cultivo.entity';
+import { PropriedadeRural } from '../../database/entities/propriedade-rural.entity';
 import { Safra } from '../../database/entities/safra.entity';
 import { CreateSafraDto } from './dto/create-safra.dto';
 import { UpdateSafraDto } from './dto/update-safra.dto';
@@ -9,7 +11,34 @@ import { SafraService } from './safra.service';
 
 describe('SafraService', () => {
   let service: SafraService;
-  let repository: jest.Mocked<Repository<Safra>>;
+  let safraRepository: jest.Mocked<Repository<Safra>>;
+  let propriedadeRepository: jest.Mocked<Repository<PropriedadeRural>>;
+  let cultivoRepository: jest.Mocked<Repository<Cultivo>>;
+
+  const mockPropriedadeRural: PropriedadeRural = {
+    id: '123e4567-e89b-12d3-a456-426614174000',
+    nomeFazenda: 'Fazenda Teste',
+    cidade: 'São Paulo',
+    estado: 'SP',
+    areaTotal: 1000.0,
+    areaAgricultavel: 800.0,
+    areaVegetacao: 200.0,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    produtores: [],
+    cultivos: [],
+    safras: [],
+  };
+
+  const mockCultivo: Cultivo = {
+    id: 'cultivo1',
+    areaPlantada: 100,
+    propriedadeRural: null,
+    safra: null,
+    cultura: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 
   const mockSafra: Safra = {
     id: '1',
@@ -17,17 +46,26 @@ describe('SafraService', () => {
     nome: 'Safra 2024',
     dataInicio: new Date('2024-01-01'),
     dataFim: new Date('2024-12-31'),
+    propriedadeRural: mockPropriedadeRural,
     cultivos: [],
     createdAt: new Date(),
     updatedAt: new Date(),
   };
 
   beforeEach(async () => {
-    const mockRepository = {
+    const mockSafraRepository = {
       create: jest.fn(),
       save: jest.fn(),
       find: jest.fn(),
       findOne: jest.fn(),
+      remove: jest.fn(),
+    };
+
+    const mockPropriedadeRepository = {
+      findOne: jest.fn(),
+    };
+
+    const mockCultivoRepository = {
       remove: jest.fn(),
     };
 
@@ -36,13 +74,23 @@ describe('SafraService', () => {
         SafraService,
         {
           provide: getRepositoryToken(Safra),
-          useValue: mockRepository,
+          useValue: mockSafraRepository,
+        },
+        {
+          provide: getRepositoryToken(PropriedadeRural),
+          useValue: mockPropriedadeRepository,
+        },
+        {
+          provide: getRepositoryToken(Cultivo),
+          useValue: mockCultivoRepository,
         },
       ],
     }).compile();
 
     service = module.get<SafraService>(SafraService);
-    repository = module.get(getRepositoryToken(Safra));
+    safraRepository = module.get(getRepositoryToken(Safra));
+    propriedadeRepository = module.get(getRepositoryToken(PropriedadeRural));
+    cultivoRepository = module.get(getRepositoryToken(Cultivo));
   });
 
   afterEach(() => {
@@ -58,58 +106,134 @@ describe('SafraService', () => {
       const createSafraDto: CreateSafraDto = {
         ano: 2025,
         nome: 'Safra 2025',
+        propriedadeRuralId: '123e4567-e89b-12d3-a456-426614174000',
       };
 
-      const newSafra = { ...mockSafra, ...createSafraDto, id: '2' };
+      const propriedadeSemSafra = { ...mockPropriedadeRural, safra: null };
+      const newSafra = {
+        ...mockSafra,
+        ...createSafraDto,
+        id: '2',
+        propriedadeRural: propriedadeSemSafra,
+      };
 
-      repository.findOne.mockResolvedValue(null); // Não há conflito
-      repository.create.mockReturnValue(newSafra);
-      repository.save.mockResolvedValue(newSafra);
+      propriedadeRepository.findOne.mockResolvedValue(propriedadeSemSafra);
+      safraRepository.create.mockReturnValue(newSafra);
+      safraRepository.save.mockResolvedValue(newSafra);
 
       const result = await service.create(createSafraDto);
 
-      expect(repository.findOne).toHaveBeenCalledWith({
-        where: { ano: 2025 },
+      expect(propriedadeRepository.findOne).toHaveBeenCalledWith({
+        where: { id: '123e4567-e89b-12d3-a456-426614174000' },
+        relations: ['safras'],
       });
-      expect(repository.create).toHaveBeenCalledWith(createSafraDto);
-      expect(repository.save).toHaveBeenCalledWith(newSafra);
+      expect(safraRepository.create).toHaveBeenCalledWith({
+        nome: createSafraDto.nome,
+        ano: createSafraDto.ano,
+        propriedadeRural: propriedadeSemSafra,
+      });
+      expect(safraRepository.save).toHaveBeenCalledWith(newSafra);
       expect(result).toEqual(newSafra);
     });
 
-    it('should throw ConflictException when safra for year already exists', async () => {
+    it('should throw ConflictException when propriedade already has safra for the same year', async () => {
       const createSafraDto: CreateSafraDto = {
         ano: 2024,
         nome: 'Safra 2024 Duplicada',
+        propriedadeRuralId: '123e4567-e89b-12d3-a456-426614174000',
       };
 
-      repository.findOne.mockResolvedValue(mockSafra); // Já existe
+      const propriedadeComSafra = { ...mockPropriedadeRural, safras: [mockSafra] };
+      propriedadeRepository.findOne.mockResolvedValue(propriedadeComSafra);
+
+      // Mock for the safra existence check by year
+      safraRepository.findOne.mockResolvedValue(mockSafra);
 
       await expect(service.create(createSafraDto)).rejects.toThrow(ConflictException);
 
-      expect(repository.findOne).toHaveBeenCalledWith({
-        where: { ano: 2024 },
+      expect(propriedadeRepository.findOne).toHaveBeenCalledWith({
+        where: { id: '123e4567-e89b-12d3-a456-426614174000' },
+        relations: ['safras'],
       });
-      expect(repository.create).not.toHaveBeenCalled();
-      expect(repository.save).not.toHaveBeenCalled();
+      expect(safraRepository.findOne).toHaveBeenCalledWith({
+        where: {
+          propriedadeRural: { id: '123e4567-e89b-12d3-a456-426614174000' },
+          ano: 2024,
+        },
+      });
+      expect(safraRepository.create).not.toHaveBeenCalled();
+      expect(safraRepository.save).not.toHaveBeenCalled();
+    });
+
+    it('should allow creating multiple safras for same propriedade with different years', async () => {
+      const createSafraDto: CreateSafraDto = {
+        ano: 2025, // Different year
+        nome: 'Safra 2025',
+        propriedadeRuralId: '123e4567-e89b-12d3-a456-426614174000',
+      };
+
+      const propriedadeComSafra = { ...mockPropriedadeRural, safras: [mockSafra] }; // Has 2024 safra
+      propriedadeRepository.findOne.mockResolvedValue(propriedadeComSafra);
+
+      // No existing safra for 2025
+      safraRepository.findOne.mockResolvedValue(null);
+
+      const newSafra = { ...mockSafra, ano: 2025, nome: 'Safra 2025' };
+      safraRepository.create.mockReturnValue(newSafra);
+      safraRepository.save.mockResolvedValue(newSafra);
+
+      const result = await service.create(createSafraDto);
+
+      expect(safraRepository.findOne).toHaveBeenCalledWith({
+        where: {
+          propriedadeRural: { id: '123e4567-e89b-12d3-a456-426614174000' },
+          ano: 2025,
+        },
+      });
+      expect(safraRepository.create).toHaveBeenCalledWith({
+        nome: createSafraDto.nome,
+        ano: createSafraDto.ano,
+        propriedadeRural: propriedadeComSafra,
+      });
+      expect(result).toEqual(newSafra);
+    });
+
+    it('should throw NotFoundException when propriedade not found', async () => {
+      const createSafraDto: CreateSafraDto = {
+        ano: 2025,
+        nome: 'Safra 2025',
+        propriedadeRuralId: 'invalid-id',
+      };
+
+      propriedadeRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.create(createSafraDto)).rejects.toThrow(NotFoundException);
+
+      expect(propriedadeRepository.findOne).toHaveBeenCalledWith({
+        where: { id: 'invalid-id' },
+        relations: ['safras'],
+      });
+      expect(safraRepository.create).not.toHaveBeenCalled();
+      expect(safraRepository.save).not.toHaveBeenCalled();
     });
   });
 
   describe('findAll', () => {
     it('should return all safras with relations and ordered by year desc', async () => {
       const safras = [mockSafra];
-      repository.find.mockResolvedValue(safras);
+      safraRepository.find.mockResolvedValue(safras);
 
       const result = await service.findAll();
 
-      expect(repository.find).toHaveBeenCalledWith({
-        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
+      expect(safraRepository.find).toHaveBeenCalledWith({
+        relations: ['propriedadeRural', 'cultivos', 'cultivos.cultura'],
         order: { ano: 'DESC' },
       });
       expect(result).toEqual(safras);
     });
 
     it('should return empty array when no safras exist', async () => {
-      repository.find.mockResolvedValue([]);
+      safraRepository.find.mockResolvedValue([]);
 
       const result = await service.findAll();
 
@@ -119,115 +243,66 @@ describe('SafraService', () => {
 
   describe('findOne', () => {
     it('should return safra by id with relations', async () => {
-      repository.findOne.mockResolvedValue(mockSafra);
+      safraRepository.findOne.mockResolvedValue(mockSafra);
 
       const result = await service.findOne('1');
 
-      expect(repository.findOne).toHaveBeenCalledWith({
+      expect(safraRepository.findOne).toHaveBeenCalledWith({
         where: { id: '1' },
-        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
+        relations: ['propriedadeRural', 'cultivos', 'cultivos.cultura'],
       });
       expect(result).toEqual(mockSafra);
     });
 
     it('should throw NotFoundException when safra not found', async () => {
-      repository.findOne.mockResolvedValue(null);
+      safraRepository.findOne.mockResolvedValue(null);
 
       await expect(service.findOne('999')).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('findByYear', () => {
-    it('should return safra by year with relations', async () => {
-      repository.findOne.mockResolvedValue(mockSafra);
+    it('should return safras by year with relations', async () => {
+      const safras = [mockSafra];
+      safraRepository.find.mockResolvedValue(safras);
 
       const result = await service.findByYear(2024);
 
-      expect(repository.findOne).toHaveBeenCalledWith({
+      expect(safraRepository.find).toHaveBeenCalledWith({
         where: { ano: 2024 },
-        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
+        relations: ['propriedadeRural', 'cultivos', 'cultivos.cultura'],
       });
-      expect(result).toEqual(mockSafra);
+      expect(result).toEqual(safras);
     });
 
-    it('should throw NotFoundException when safra for year not found', async () => {
-      repository.findOne.mockResolvedValue(null);
+    it('should return empty array when no safras found for year', async () => {
+      safraRepository.find.mockResolvedValue([]);
 
-      await expect(service.findByYear(2025)).rejects.toThrow(NotFoundException);
+      const result = await service.findByYear(2025);
+
+      expect(result).toEqual([]);
     });
   });
 
   describe('update', () => {
-    it('should update safra successfully without year change', async () => {
+    it('should update safra successfully', async () => {
       const updateSafraDto: UpdateSafraDto = {
         nome: 'Safra 2024 Atualizada',
       };
 
       const updatedSafra = { ...mockSafra, ...updateSafraDto };
 
-      repository.findOne.mockResolvedValue(mockSafra);
-      repository.save.mockResolvedValue(updatedSafra);
+      safraRepository.findOne.mockResolvedValue(mockSafra);
+      safraRepository.save.mockResolvedValue(updatedSafra);
 
       const result = await service.update('1', updateSafraDto);
 
-      expect(repository.findOne).toHaveBeenCalledWith({
+      expect(safraRepository.findOne).toHaveBeenCalledWith({
         where: { id: '1' },
-        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
+        relations: ['propriedadeRural', 'cultivos', 'cultivos.cultura'],
       });
-      expect(repository.save).toHaveBeenCalledWith(expect.objectContaining(updateSafraDto));
+      expect(safraRepository.save).toHaveBeenCalledWith(expect.objectContaining(updateSafraDto));
       expect(result).toEqual(updatedSafra);
-    });
-
-    it('should update safra with new year when no conflict', async () => {
-      const updateSafraDto: UpdateSafraDto = {
-        ano: 2025,
-        nome: 'Safra 2025',
-      };
-
-      const updatedSafra = { ...mockSafra, ...updateSafraDto };
-
-      repository.findOne
-        .mockResolvedValueOnce(mockSafra) // Para findOne do update
-        .mockResolvedValueOnce(null); // Para verificação de conflito - não existe
-      repository.save.mockResolvedValue(updatedSafra);
-
-      const result = await service.update('1', updateSafraDto);
-
-      expect(repository.findOne).toHaveBeenCalledTimes(2);
-      expect(repository.save).toHaveBeenCalled();
-      expect(result).toEqual(updatedSafra);
-    });
-
-    it('should throw ConflictException when updating year to existing year', async () => {
-      const updateSafraDto: UpdateSafraDto = {
-        ano: 2025,
-        nome: 'Safra 2025',
-      };
-
-      // Mock safra atual com ano diferente
-      const currentSafra = {
-        ...mockSafra,
-        ano: 2024, // Ano diferente do que estamos tentando atualizar
-      };
-
-      const existingSafra = {
-        id: '2',
-        ano: 2025,
-        nome: 'Existing Safra',
-        dataInicio: new Date(),
-        dataFim: new Date(),
-        cultivos: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      repository.findOne
-        .mockResolvedValueOnce(currentSafra as any) // Para findOne do update
-        .mockResolvedValueOnce(existingSafra as any); // Para verificação de conflito - existe
-
-      await expect(service.update('1', updateSafraDto)).rejects.toThrow(
-        'Safra para o ano 2025 já existe',
-      );
     });
 
     it('should throw NotFoundException when safra to update not found', async () => {
@@ -235,50 +310,79 @@ describe('SafraService', () => {
         nome: 'Atualizada',
       };
 
-      repository.findOne.mockResolvedValue(null);
+      safraRepository.findOne.mockResolvedValue(null);
 
       await expect(service.update('999', updateSafraDto)).rejects.toThrow(NotFoundException);
 
-      expect(repository.save).not.toHaveBeenCalled();
-    });
-
-    it('should not check for year conflict when year is not being updated', async () => {
-      const updateSafraDto: UpdateSafraDto = {
-        nome: 'Safra Atualizada',
-      };
-
-      const updatedSafra = { ...mockSafra, ...updateSafraDto };
-
-      repository.findOne.mockResolvedValue(mockSafra);
-      repository.save.mockResolvedValue(updatedSafra);
-
-      const result = await service.update('1', updateSafraDto);
-
-      expect(repository.findOne).toHaveBeenCalledTimes(1); // Apenas o findOne do update
-      expect(result).toEqual(updatedSafra);
+      expect(safraRepository.save).not.toHaveBeenCalled();
     });
   });
 
   describe('remove', () => {
     it('should remove safra successfully', async () => {
-      repository.findOne.mockResolvedValue(mockSafra);
-      repository.remove.mockResolvedValue(mockSafra);
+      const mockCultivos = [mockCultivo];
+      const safraWithCultivos = { ...mockSafra, cultivos: mockCultivos };
+
+      safraRepository.findOne.mockResolvedValue(safraWithCultivos);
+      cultivoRepository.remove.mockResolvedValue(undefined);
+      safraRepository.remove.mockResolvedValue(safraWithCultivos);
 
       await service.remove('1');
 
-      expect(repository.findOne).toHaveBeenCalledWith({
+      expect(safraRepository.findOne).toHaveBeenCalledWith({
         where: { id: '1' },
-        relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
+        relations: ['cultivos'],
       });
-      expect(repository.remove).toHaveBeenCalledWith(mockSafra);
+      expect(cultivoRepository.remove).toHaveBeenCalledWith(mockCultivos);
+      expect(safraRepository.remove).toHaveBeenCalledWith(safraWithCultivos);
+    });
+
+    it('should remove safra without cultivos successfully', async () => {
+      const safraWithoutCultivos = { ...mockSafra, cultivos: [] };
+
+      safraRepository.findOne.mockResolvedValue(safraWithoutCultivos);
+      safraRepository.remove.mockResolvedValue(safraWithoutCultivos);
+
+      await service.remove('1');
+
+      expect(safraRepository.findOne).toHaveBeenCalledWith({
+        where: { id: '1' },
+        relations: ['cultivos'],
+      });
+      expect(cultivoRepository.remove).not.toHaveBeenCalled();
+      expect(safraRepository.remove).toHaveBeenCalledWith(safraWithoutCultivos);
     });
 
     it('should throw NotFoundException when safra to remove not found', async () => {
-      repository.findOne.mockResolvedValue(null);
+      safraRepository.findOne.mockResolvedValue(null);
 
       await expect(service.remove('999')).rejects.toThrow(NotFoundException);
 
-      expect(repository.remove).not.toHaveBeenCalled();
+      expect(safraRepository.remove).not.toHaveBeenCalled();
+      expect(cultivoRepository.remove).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('findByPropriedade', () => {
+    it('should return safras by propriedade id', async () => {
+      safraRepository.find.mockResolvedValue([mockSafra]);
+
+      const result = await service.findByPropriedade('123e4567-e89b-12d3-a456-426614174000');
+
+      expect(safraRepository.find).toHaveBeenCalledWith({
+        where: { propriedadeRural: { id: '123e4567-e89b-12d3-a456-426614174000' } },
+        relations: ['propriedadeRural', 'cultivos', 'cultivos.cultura'],
+        order: { ano: 'DESC' },
+      });
+      expect(result).toEqual([mockSafra]);
+    });
+
+    it('should return empty array when no safra found for propriedade', async () => {
+      safraRepository.find.mockResolvedValue([]);
+
+      const result = await service.findByPropriedade('invalid-id');
+
+      expect(result).toEqual([]);
     });
   });
 });

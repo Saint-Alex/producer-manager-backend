@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Cultivo } from './cultivo.entity';
 import { Produtor } from './produtor.entity';
+import { Safra } from './safra.entity';
 
 @Entity('propriedades_rurais')
 export class PropriedadeRural {
@@ -44,6 +45,9 @@ export class PropriedadeRural {
 
   @OneToMany(() => Cultivo, (cultivo) => cultivo.propriedadeRural)
   cultivos: Cultivo[];
+
+  @OneToMany(() => Safra, (safra) => safra.propriedadeRural)
+  safras: Safra[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

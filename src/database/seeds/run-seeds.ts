@@ -33,9 +33,9 @@ const runSeeds = async () => {
     console.log('=================================\n');
 
     await CulturaSeeder.run(dataSource);
-    await SafraSeeder.run(dataSource);
     await ProdutorSeeder.run(dataSource);
     await PropriedadeRuralSeeder.run(dataSource);
+    await SafraSeeder.run(dataSource);
     await CultivoSeeder.run(dataSource);
 
     console.log('=================================');

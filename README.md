@@ -213,10 +213,31 @@ livenessProbe:
 
 | Problema | Solução |
 |----------|---------|
-| Erro de conexão DB | `docker-compose up -d postgres` |
+| Erro de conexão DB | `npm run docker:db` (apenas PostgreSQL + Redis) |
+| Docker build falha | Use `npm run docker:db` em vez de `docker-compose up -d` |
 | Testes falhando | `npm install sqlite3` e `npm run seed` |
 | API não inicia | Verificar variáveis do `.env` |
 | Dados ausentes | Executar `npm run seed` |
+| Husky erro no Docker | Normal - use `npm run docker:db` para desenvolvimento |
+
+## ⚠️ Questões de Modelagem
+
+### **Safras: Global vs Por Propriedade**
+
+**Implementação Atual**: Safras são globais (uma "Safra 2024" para todas as fazendas)
+```typescript
+// Todas as propriedades compartilham a mesma safra
+safraAno: 2024 // ← Mesmo para todas as fazendas
+```
+
+**Realidade Agrícola**: Cada propriedade pode ter múltiplas safras por ano
+```typescript
+// Cada propriedade deveria ter suas próprias safras
+"Fazenda A": ["Safra Soja 2024/25", "Milho Safrinha 2025"]
+"Fazenda B": ["Safra Cana 2024", "Safra Soja 2024/25"]
+```
+
+**Para evolução futura**: Considerar safras específicas por propriedade para maior flexibilidade e realismo agrícola.
 
 ---
 

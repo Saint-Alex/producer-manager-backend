@@ -8,20 +8,59 @@ export class SafraResponseDto {
   id: string;
 
   @ApiProperty({
+    description: 'Nome da safra',
+    example: 'Safra Soja 2024/25',
+  })
+  nome: string;
+
+  @ApiProperty({
     description: 'Ano da safra',
-    example: 2023,
+    example: 2024,
   })
   ano: number;
 
   @ApiProperty({
+    description: 'Data de início da safra',
+    example: '2024-09-01T00:00:00.000Z',
+    required: false,
+  })
+  dataInicio?: Date;
+
+  @ApiProperty({
+    description: 'Data de fim da safra',
+    example: '2025-03-31T00:00:00.000Z',
+    required: false,
+  })
+  dataFim?: Date;
+
+  @ApiProperty({
+    description: 'Propriedade rural onde a safra é cultivada',
+    type: 'object',
+    properties: {
+      id: { type: 'string' },
+      nomeFazenda: { type: 'string' },
+      cidade: { type: 'string' },
+      estado: { type: 'string' },
+      areaTotal: { type: 'number' },
+    },
+  })
+  propriedadeRural: {
+    id: string;
+    nomeFazenda: string;
+    cidade: string;
+    estado: string;
+    areaTotal: number;
+  };
+
+  @ApiProperty({
     description: 'Data de criação',
-    example: '2023-10-23T19:36:48.000Z',
+    example: '2024-10-23T19:36:48.000Z',
   })
   createdAt: Date;
 
   @ApiProperty({
     description: 'Data de atualização',
-    example: '2023-10-23T19:36:48.000Z',
+    example: '2024-10-23T19:36:48.000Z',
   })
   updatedAt: Date;
 
@@ -32,14 +71,8 @@ export class SafraResponseDto {
       type: 'object',
       properties: {
         id: { type: 'string' },
-        areaCultivada: { type: 'number' },
+        areaPlantada: { type: 'number' },
         cultura: {
-          type: 'object',
-          properties: {
-            nome: { type: 'string' },
-          },
-        },
-        propriedade: {
           type: 'object',
           properties: {
             nome: { type: 'string' },
@@ -50,11 +83,8 @@ export class SafraResponseDto {
   })
   cultivos?: Array<{
     id: string;
-    areaCultivada: number;
+    areaPlantada: number;
     cultura: {
-      nome: string;
-    };
-    propriedade: {
       nome: string;
     };
   }>;

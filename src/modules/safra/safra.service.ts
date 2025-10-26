@@ -1,6 +1,8 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Cultivo } from '../../database/entities/cultivo.entity';
+import { PropriedadeRural } from '../../database/entities/propriedade-rural.entity';
 import { Safra } from '../../database/entities/safra.entity';
 import { CreateSafraDto } from './dto/create-safra.dto';
 import { UpdateSafraDto } from './dto/update-safra.dto';
@@ -10,25 +12,51 @@ export class SafraService {
   constructor(
     @InjectRepository(Safra)
     private safraRepository: Repository<Safra>,
+    @InjectRepository(PropriedadeRural)
+    private propriedadeRepository: Repository<PropriedadeRural>,
+    @InjectRepository(Cultivo)
+    private cultivoRepository: Repository<Cultivo>,
   ) {}
 
   async create(createSafraDto: CreateSafraDto): Promise<Safra> {
-    // Verificar se já existe uma safra para o mesmo ano
-    const existingSafra = await this.safraRepository.findOne({
-      where: { ano: createSafraDto.ano },
+    // Verificar se a propriedade existe
+    const propriedade = await this.propriedadeRepository.findOne({
+      where: { id: createSafraDto.propriedadeRuralId },
+      relations: ['safras'],
     });
 
-    if (existingSafra) {
-      throw new ConflictException(`Safra para o ano ${createSafraDto.ano} já existe`);
+    if (!propriedade) {
+      throw new NotFoundException(
+        `Propriedade com ID ${createSafraDto.propriedadeRuralId} não encontrada`,
+      );
     }
 
-    const safra = this.safraRepository.create(createSafraDto);
+    // Verificar se já existe uma safra com o mesmo ano nesta propriedade
+    const safraExistente = await this.safraRepository.findOne({
+      where: {
+        propriedadeRural: { id: createSafraDto.propriedadeRuralId },
+        ano: createSafraDto.ano,
+      },
+    });
+
+    if (safraExistente) {
+      throw new ConflictException(
+        `A propriedade "${propriedade.nomeFazenda}" já possui uma safra para o ano ${createSafraDto.ano}`,
+      );
+    }
+
+    const safra = this.safraRepository.create({
+      nome: createSafraDto.nome,
+      ano: createSafraDto.ano,
+      propriedadeRural: propriedade,
+    });
+
     return this.safraRepository.save(safra);
   }
 
   async findAll(): Promise<Safra[]> {
     return this.safraRepository.find({
-      relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
+      relations: ['propriedadeRural', 'cultivos', 'cultivos.cultura'],
       order: { ano: 'DESC' },
     });
   }
@@ -36,7 +64,7 @@ export class SafraService {
   async findOne(id: string): Promise<Safra> {
     const safra = await this.safraRepository.findOne({
       where: { id },
-      relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
+      relations: ['propriedadeRural', 'cultivos', 'cultivos.cultura'],
     });
 
     if (!safra) {
@@ -46,39 +74,48 @@ export class SafraService {
     return safra;
   }
 
-  async findByYear(ano: number): Promise<Safra> {
-    const safra = await this.safraRepository.findOne({
+  async findByYear(ano: number): Promise<Safra[]> {
+    const safras = await this.safraRepository.find({
       where: { ano },
-      relations: ['cultivos', 'cultivos.cultura', 'cultivos.propriedadeRural'],
+      relations: ['propriedadeRural', 'cultivos', 'cultivos.cultura'],
     });
 
-    if (!safra) {
-      throw new NotFoundException(`Safra para o ano ${ano} não encontrada`);
-    }
+    return safras;
+  }
 
-    return safra;
+  async findByPropriedade(propriedadeId: string): Promise<Safra[]> {
+    const safras = await this.safraRepository.find({
+      where: { propriedadeRural: { id: propriedadeId } },
+      relations: ['propriedadeRural', 'cultivos', 'cultivos.cultura'],
+      order: { ano: 'DESC' },
+    });
+
+    return safras;
   }
 
   async update(id: string, updateSafraDto: UpdateSafraDto): Promise<Safra> {
     const safra = await this.findOne(id);
-
-    // Se o ano está sendo atualizado, verificar se não há conflito
-    if (updateSafraDto.ano && updateSafraDto.ano !== safra.ano) {
-      const existingSafra = await this.safraRepository.findOne({
-        where: { ano: updateSafraDto.ano },
-      });
-
-      if (existingSafra) {
-        throw new ConflictException(`Safra para o ano ${updateSafraDto.ano} já existe`);
-      }
-    }
 
     Object.assign(safra, updateSafraDto);
     return this.safraRepository.save(safra);
   }
 
   async remove(id: string): Promise<void> {
-    const safra = await this.findOne(id);
+    const safra = await this.safraRepository.findOne({
+      where: { id },
+      relations: ['cultivos'],
+    });
+
+    if (!safra) {
+      throw new NotFoundException(`Safra com ID ${id} não encontrada`);
+    }
+
+    // Delete cultivos first to avoid foreign key constraint violation
+    if (safra.cultivos && safra.cultivos.length > 0) {
+      await this.cultivoRepository.remove(safra.cultivos);
+    }
+
+    // Then delete the safra
     await this.safraRepository.remove(safra);
   }
 }

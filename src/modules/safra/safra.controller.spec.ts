@@ -23,6 +23,12 @@ describe('SafraController', () => {
     ano: 2025,
     createdAt: new Date('2023-01-01'),
     updatedAt: new Date('2023-01-01'),
+    propriedadeRural: {
+      id: '123e4567-e89b-12d3-a456-426614174000',
+      nomeFazenda: 'Fazenda Teste',
+      cidade: 'São Paulo',
+      estado: 'SP',
+    },
     cultivos: [],
   };
 
@@ -34,6 +40,12 @@ describe('SafraController', () => {
       ano: 2024,
       createdAt: new Date('2023-01-02'),
       updatedAt: new Date('2023-01-02'),
+      propriedadeRural: {
+        id: '123e4567-e89b-12d3-a456-426614174001',
+        nomeFazenda: 'Fazenda Teste 2',
+        cidade: 'Rio de Janeiro',
+        estado: 'RJ',
+      },
       cultivos: [],
     },
   ];
@@ -66,6 +78,7 @@ describe('SafraController', () => {
       const createDto: CreateSafraDto = {
         nome: 'Safra 2025',
         ano: 2025,
+        propriedadeRuralId: '123e4567-e89b-12d3-a456-426614174000',
       };
 
       mockSafraService.create.mockResolvedValue(mockSafra);
@@ -81,6 +94,7 @@ describe('SafraController', () => {
       const createDto: CreateSafraDto = {
         nome: 'Safra 2026',
         ano: 2026,
+        propriedadeRuralId: '123e4567-e89b-12d3-a456-426614174000',
       };
 
       const mockSafra2026 = { ...mockSafra, ...createDto };
@@ -92,31 +106,33 @@ describe('SafraController', () => {
       expect(result).toEqual(mockSafra2026);
     });
 
-    it('should handle duplicate year errors', async () => {
+    it('should handle duplicate property errors', async () => {
       const createDto: CreateSafraDto = {
         nome: 'Safra 2025',
         ano: 2025,
+        propriedadeRuralId: '123e4567-e89b-12d3-a456-426614174000',
       };
 
-      const error = new Error('Safra para este ano já existe');
-      mockSafraService.create.mockRejectedValue(error);
-
-      await expect(controller.create(createDto)).rejects.toThrow('Safra para este ano já existe');
-      expect(service.create).toHaveBeenCalledWith(createDto);
-    });
-
-    it('should handle invalid year range errors', async () => {
-      const createDto: CreateSafraDto = {
-        nome: 'Safra Inválida',
-        ano: 1999, // Ano anterior ao mínimo permitido
-      };
-
-      const error = new Error('Ano deve estar entre 2000 e 2050');
+      const error = new Error('A propriedade já possui uma safra associada');
       mockSafraService.create.mockRejectedValue(error);
 
       await expect(controller.create(createDto)).rejects.toThrow(
-        'Ano deve estar entre 2000 e 2050',
+        'A propriedade já possui uma safra associada',
       );
+      expect(service.create).toHaveBeenCalledWith(createDto);
+    });
+
+    it('should handle invalid propriedade ID errors', async () => {
+      const createDto: CreateSafraDto = {
+        nome: 'Safra Inválida',
+        ano: 2025,
+        propriedadeRuralId: 'invalid-uuid',
+      };
+
+      const error = new Error('Propriedade não encontrada');
+      mockSafraService.create.mockRejectedValue(error);
+
+      await expect(controller.create(createDto)).rejects.toThrow('Propriedade não encontrada');
       expect(service.create).toHaveBeenCalledWith(createDto);
     });
 
@@ -124,6 +140,7 @@ describe('SafraController', () => {
       const createDto: CreateSafraDto = {
         nome: 'Safra 2051',
         ano: 2051, // Ano posterior ao máximo permitido
+        propriedadeRuralId: '123e4567-e89b-12d3-a456-426614174000',
       };
 
       const error = new Error('Ano deve estar entre 2000 e 2050');
@@ -228,13 +245,16 @@ describe('SafraController', () => {
 
     it('should find safra for different years', async () => {
       const year = 2024;
-      const safra2024 = mockSafras[1];
+      const safra2024 = {
+        ...mockSafras[1],
+        ano: year,
+      };
       mockSafraService.findByYear.mockResolvedValue(safra2024);
 
       const result = await controller.findByYear(year);
 
       expect(service.findByYear).toHaveBeenCalledWith(year);
-      expect(result.ano).toBe(year);
+      expect((result as any).ano).toBe(year);
     });
 
     it('should handle not found error for year', async () => {
@@ -481,6 +501,7 @@ describe('SafraController', () => {
       const createDto: CreateSafraDto = {
         nome: 'Test',
         ano: 2025,
+        propriedadeRuralId: '123e4567-e89b-12d3-a456-426614174000',
       };
       const updateDto: UpdateSafraDto = { nome: 'Test' };
       const id = '550e8400-e29b-41d4-a716-446655440000';

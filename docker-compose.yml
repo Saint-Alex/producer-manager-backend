@@ -41,55 +41,6 @@ services:
       timeout: 3s
       retries: 3
 
-  # Aplicação NestJS (para desenvolvimento)
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: brainag-app
-    restart: unless-stopped
-    ports:
-      - '3001:3001'
-    environment:
-      NODE_ENV: development
-      DATABASE_HOST: postgres
-      DATABASE_PORT: 5432
-      DATABASE_USERNAME: brainag_user
-      DATABASE_PASSWORD: brainag_pass
-      DATABASE_NAME: brainag_db
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      JWT_SECRET: your-super-secret-jwt-key
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      - brainag-network
-    volumes:
-      - ./src:/app/src
-      - ./test:/app/test
-      - /app/node_modules
-    command: npm run start:dev
-
-  # pgAdmin para gerenciamento do banco
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: brainag-pgadmin
-    restart: unless-stopped
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@brainag.local
-      PGADMIN_DEFAULT_PASSWORD: admin123
-    ports:
-      - '5050:80'
-    depends_on:
-      - postgres
-    networks:
-      - brainag-network
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-
   # Prometheus para métricas
   prometheus:
     image: prom/prometheus:latest
@@ -115,7 +66,7 @@ services:
     container_name: brainag-grafana
     restart: unless-stopped
     ports:
-      - '3000:3000'
+      - '3030:3000'
     environment:
       GF_SECURITY_ADMIN_PASSWORD: admin123
     volumes:
@@ -130,7 +81,6 @@ services:
 volumes:
   postgres_data:
   redis_data:
-  pgadmin_data:
   prometheus_data:
   grafana_data:
 

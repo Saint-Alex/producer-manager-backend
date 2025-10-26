@@ -2,11 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Cultivo } from './cultivo.entity';
+import { PropriedadeRural } from './propriedade-rural.entity';
 
 @Entity('safras')
 export class Safra {
@@ -25,7 +28,11 @@ export class Safra {
   @Column({ name: 'data_fim', type: 'date', nullable: true })
   dataFim: Date;
 
-  @OneToMany(() => Cultivo, (cultivo) => cultivo.safra)
+  @ManyToOne(() => PropriedadeRural, (propriedade) => propriedade.safras)
+  @JoinColumn({ name: 'propriedade_rural_id' })
+  propriedadeRural: PropriedadeRural;
+
+  @OneToMany(() => Cultivo, (cultivo) => cultivo.safra, { cascade: ['remove'] })
   cultivos: Cultivo[];
 
   @CreateDateColumn({ name: 'created_at' })
