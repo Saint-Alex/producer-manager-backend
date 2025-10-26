@@ -1,6 +1,7 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Cultivo } from '../../database/entities/cultivo.entity';
 import { Cultura } from '../../database/entities/cultura.entity';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
@@ -10,6 +11,8 @@ export class CulturaService {
   constructor(
     @InjectRepository(Cultura)
     private culturaRepository: Repository<Cultura>,
+    @InjectRepository(Cultivo)
+    private cultivoRepository: Repository<Cultivo>,
   ) {}
 
   async create(createCulturaDto: CreateCulturaDto): Promise<Cultura> {
@@ -65,6 +68,19 @@ export class CulturaService {
 
   async remove(id: string): Promise<void> {
     const cultura = await this.findOne(id);
+
+    // Verificar se a cultura está sendo usada em algum cultivo
+    const cultivosCount = await this.cultivoRepository.count({
+      where: { cultura: { id } },
+    });
+
+    if (cultivosCount > 0) {
+      throw new ConflictException(
+        `Não é possível excluir a cultura "${cultura.nome}" pois ela está sendo utilizada em ${cultivosCount} cultivo(s). ` +
+          `Para excluir esta cultura, primeiro remova todos os cultivos que a utilizam.`,
+      );
+    }
+
     await this.culturaRepository.remove(cultura);
   }
 }

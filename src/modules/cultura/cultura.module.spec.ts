@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Cultivo } from '../../database/entities/cultivo.entity';
 import { Cultura } from '../../database/entities/cultura.entity';
 import { CulturaController } from './cultura.controller';
 import { CulturaModule } from './cultura.module';
@@ -11,6 +12,7 @@ describe('CulturaModule', () => {
   let culturaService: CulturaService;
   let culturaController: CulturaController;
   let culturaRepository: Repository<Cultura>;
+  let cultivoRepository: Repository<Cultivo>;
 
   beforeEach(async () => {
     const mockRepository = {
@@ -28,16 +30,29 @@ describe('CulturaModule', () => {
       })),
     };
 
+    const mockCultivoRepository = {
+      count: jest.fn(),
+      find: jest.fn(),
+      findOne: jest.fn(),
+      save: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+      create: jest.fn(),
+    };
+
     module = await Test.createTestingModule({
       imports: [CulturaModule],
     })
       .overrideProvider(getRepositoryToken(Cultura))
       .useValue(mockRepository)
+      .overrideProvider(getRepositoryToken(Cultivo))
+      .useValue(mockCultivoRepository)
       .compile();
 
     culturaService = module.get<CulturaService>(CulturaService);
     culturaController = module.get<CulturaController>(CulturaController);
     culturaRepository = module.get<Repository<Cultura>>(getRepositoryToken(Cultura));
+    cultivoRepository = module.get<Repository<Cultivo>>(getRepositoryToken(Cultivo));
   });
 
   afterEach(async () => {
@@ -59,6 +74,7 @@ describe('CulturaModule', () => {
       expect(culturaService).toBeInstanceOf(CulturaService);
       expect(culturaController).toBeInstanceOf(CulturaController);
       expect(culturaRepository).toBeDefined();
+      expect(cultivoRepository).toBeDefined();
     });
   });
 
@@ -70,6 +86,10 @@ describe('CulturaModule', () => {
 
     it('should provide Cultura repository', () => {
       expect(culturaRepository).toBeDefined();
+    });
+
+    it('should provide Cultivo repository', () => {
+      expect(cultivoRepository).toBeDefined();
     });
   });
 
@@ -96,6 +116,7 @@ describe('CulturaModule', () => {
     it('should inject repository into service', () => {
       expect(culturaService).toBeDefined();
       expect(culturaRepository).toBeDefined();
+      expect(cultivoRepository).toBeDefined();
     });
 
     it('should inject service into controller', () => {

@@ -2,6 +2,7 @@ import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Cultivo } from '../../database/entities/cultivo.entity';
 import { Cultura } from '../../database/entities/cultura.entity';
 import { CulturaService } from './cultura.service';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
@@ -10,6 +11,7 @@ import { UpdateCulturaDto } from './dto/update-cultura.dto';
 describe('CulturaService', () => {
   let service: CulturaService;
   let repository: jest.Mocked<Repository<Cultura>>;
+  let cultivoRepository: jest.Mocked<Repository<Cultivo>>;
 
   const mockCultura: Cultura = {
     id: '1',
@@ -29,6 +31,10 @@ describe('CulturaService', () => {
       remove: jest.fn(),
     };
 
+    const mockCultivoRepository = {
+      count: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CulturaService,
@@ -36,11 +42,16 @@ describe('CulturaService', () => {
           provide: getRepositoryToken(Cultura),
           useValue: mockRepository,
         },
+        {
+          provide: getRepositoryToken(Cultivo),
+          useValue: mockCultivoRepository,
+        },
       ],
     }).compile();
 
     service = module.get<CulturaService>(CulturaService);
     repository = module.get(getRepositoryToken(Cultura));
+    cultivoRepository = module.get(getRepositoryToken(Cultivo));
 
     // Limpar todos os mocks entre os testes
     jest.clearAllMocks();
@@ -225,8 +236,9 @@ describe('CulturaService', () => {
   });
 
   describe('remove', () => {
-    it('should remove cultura successfully', async () => {
+    it('should remove cultura successfully when not used in cultivos', async () => {
       repository.findOne.mockResolvedValue(mockCultura);
+      cultivoRepository.count.mockResolvedValue(0);
       repository.remove.mockResolvedValue(mockCultura);
 
       await service.remove('1');
@@ -235,7 +247,38 @@ describe('CulturaService', () => {
         where: { id: '1' },
         relations: ['cultivos', 'cultivos.propriedadeRural'],
       });
+      expect(cultivoRepository.count).toHaveBeenCalledWith({
+        where: { cultura: { id: '1' } },
+      });
       expect(repository.remove).toHaveBeenCalledWith(mockCultura);
+    });
+
+    it('should throw ConflictException when cultura is used in cultivos', async () => {
+      const testCultura = {
+        id: '1',
+        nome: 'Soja',
+        descricao: 'Soja para grãos',
+        cultivos: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      repository.findOne.mockResolvedValue(testCultura);
+      cultivoRepository.count.mockResolvedValue(3); // 3 cultivos usando esta cultura
+
+      await expect(service.remove('1')).rejects.toThrow(ConflictException);
+      await expect(service.remove('1')).rejects.toThrow(
+        'Não é possível excluir a cultura "Soja" pois ela está sendo utilizada em 3 cultivo(s). Para excluir esta cultura, primeiro remova todos os cultivos que a utilizam.',
+      );
+
+      expect(repository.findOne).toHaveBeenCalledWith({
+        where: { id: '1' },
+        relations: ['cultivos', 'cultivos.propriedadeRural'],
+      });
+      expect(cultivoRepository.count).toHaveBeenCalledWith({
+        where: { cultura: { id: '1' } },
+      });
+      expect(repository.remove).not.toHaveBeenCalled();
     });
 
     it('should throw NotFoundException when cultura to remove not found', async () => {
@@ -243,6 +286,7 @@ describe('CulturaService', () => {
 
       await expect(service.remove('999')).rejects.toThrow(NotFoundException);
 
+      expect(cultivoRepository.count).not.toHaveBeenCalled();
       expect(repository.remove).not.toHaveBeenCalled();
     });
   });
