@@ -27,6 +27,7 @@ describe('Data Source Configuration', () => {
     process.env.DATABASE_USERNAME = 'test-user';
     process.env.DATABASE_PASSWORD = 'test-pass';
     process.env.DATABASE_NAME = 'test-db';
+    process.env.NODE_ENV = 'development'; // Set for logging test
 
     // Import data source
     const AppDataSource = getAppDataSource();
@@ -54,6 +55,7 @@ describe('Data Source Configuration', () => {
     delete process.env.DATABASE_USERNAME;
     delete process.env.DATABASE_PASSWORD;
     delete process.env.DATABASE_NAME;
+    process.env.NODE_ENV = 'development'; // Set for logging test
 
     // Import data source
     const AppDataSource = getAppDataSource();
@@ -86,6 +88,8 @@ describe('Data Source Configuration', () => {
   });
 
   it('should have correct configuration structure', () => {
+    process.env.NODE_ENV = 'development'; // Set for logging test
+
     // Import data source
     const AppDataSource = getAppDataSource();
 

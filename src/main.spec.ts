@@ -108,6 +108,6 @@ describe('Main Bootstrap', () => {
     expect(SwaggerModule.setup).toHaveBeenCalledWith('api/docs', mockApp, {});
 
     // Verify server start
-    expect(mockApp.listen).toHaveBeenCalledWith(3001);
+    expect(mockApp.listen).toHaveBeenCalledWith(3001, '0.0.0.0');
   });
 });
