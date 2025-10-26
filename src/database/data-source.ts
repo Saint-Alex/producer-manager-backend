@@ -1,17 +1,21 @@
 import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
+import { getDatabaseConfig } from '../shared/config/database.config';
 
 config();
 
+const dbConfig = getDatabaseConfig();
+
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: process.env.DATABASE_HOST || 'localhost',
-  port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
-  username: process.env.DATABASE_USERNAME || 'brainag_user',
-  password: process.env.DATABASE_PASSWORD || 'brainag_pass',
-  database: process.env.DATABASE_NAME || 'brainag_db',
+  host: dbConfig.host,
+  port: dbConfig.port,
+  username: dbConfig.username,
+  password: dbConfig.password,
+  database: dbConfig.database,
+  ssl: dbConfig.ssl ? { rejectUnauthorized: false } : false,
   entities: ['src/database/entities/*.entity.ts'],
   migrations: ['src/database/migrations/*.ts'],
   synchronize: false,
-  logging: true,
+  logging: process.env.NODE_ENV === 'development',
 });

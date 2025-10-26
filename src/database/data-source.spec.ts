@@ -14,7 +14,13 @@ describe('Data Source Configuration', () => {
     jest.clearAllMocks();
   });
 
-  it('should create DataSource with environment variables', () => {
+  // Helper function to get AppDataSource with proper typing
+  const getAppDataSource = () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    return require('./data-source').AppDataSource;
+  };
+
+  it('should create DataSource with environment variables', async () => {
     // Mock process.env
     process.env.DATABASE_HOST = 'test-host';
     process.env.DATABASE_PORT = '5433';
@@ -23,7 +29,7 @@ describe('Data Source Configuration', () => {
     process.env.DATABASE_NAME = 'test-db';
 
     // Import data source
-    const { AppDataSource } = require('./data-source');
+    const AppDataSource = getAppDataSource();
 
     // Verify DataSource is created
     expect(AppDataSource).toBeDefined();
@@ -50,7 +56,7 @@ describe('Data Source Configuration', () => {
     delete process.env.DATABASE_NAME;
 
     // Import data source
-    const { AppDataSource } = require('./data-source');
+    const AppDataSource = getAppDataSource();
 
     // Verify DataSource is created with defaults
     expect(AppDataSource).toBeDefined();
@@ -73,7 +79,7 @@ describe('Data Source Configuration', () => {
     process.env.DATABASE_PORT = 'invalid-port';
 
     // Import data source
-    const { AppDataSource } = require('./data-source');
+    const AppDataSource = getAppDataSource();
 
     // Verify DataSource uses default port for invalid value
     expect(AppDataSource.options.port).toBe(5432);
@@ -81,7 +87,7 @@ describe('Data Source Configuration', () => {
 
   it('should have correct configuration structure', () => {
     // Import data source
-    const { AppDataSource } = require('./data-source');
+    const AppDataSource = getAppDataSource();
 
     // Verify all required configuration properties
     expect(AppDataSource.options).toHaveProperty('type', 'postgres');
@@ -98,7 +104,7 @@ describe('Data Source Configuration', () => {
 
   it('should have entities configuration', () => {
     // Import data source
-    const { AppDataSource } = require('./data-source');
+    const AppDataSource = getAppDataSource();
 
     // Verify entities configuration
     expect(Array.isArray(AppDataSource.options.entities)).toBe(true);
@@ -107,7 +113,7 @@ describe('Data Source Configuration', () => {
 
   it('should have migrations configuration', () => {
     // Import data source
-    const { AppDataSource } = require('./data-source');
+    const AppDataSource = getAppDataSource();
 
     // Verify migrations configuration
     expect(Array.isArray(AppDataSource.options.migrations)).toBe(true);
@@ -116,7 +122,7 @@ describe('Data Source Configuration', () => {
 
   it('should create DataSource instance', () => {
     // Import data source
-    const { AppDataSource } = require('./data-source');
+    const AppDataSource = getAppDataSource();
 
     // Verify it's a DataSource instance
     expect(AppDataSource.constructor.name).toBe('DataSource');

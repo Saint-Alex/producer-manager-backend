@@ -1,0 +1,90 @@
+{
+  "name": "Producer Manager Backend",
+  "description": "Brain Agriculture - Producer Management System API",
+  "repository": "https://github.com/seu-usuario/producer-manager-backend",
+  "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "keywords": ["node", "nestjs", "typescript", "postgresql", "agriculture"],
+  "image": "heroku/nodejs",
+  "addons": [
+    {
+      "plan": "heroku-postgresql:hobby-dev",
+      "as": "DATABASE"
+    }
+  ],
+  "env": {
+    "NODE_ENV": {
+      "description": "Environment mode",
+      "value": "production",
+      "required": true
+    },
+    "JWT_SECRET": {
+      "description": "Secret key for JWT tokens (minimum 32 characters)",
+      "generator": "secret",
+      "required": true
+    },
+    "CORS_ORIGINS": {
+      "description": "Allowed CORS origins (comma-separated URLs)",
+      "value": "https://your-frontend-app.herokuapp.com",
+      "required": true
+    },
+    "LOG_LEVEL": {
+      "description": "Logging level",
+      "value": "info"
+    },
+    "API_PREFIX": {
+      "description": "API route prefix",
+      "value": "api"
+    },
+    "SWAGGER_PATH": {
+      "description": "Swagger documentation path",
+      "value": "api/docs"
+    },
+    "METRICS_ENABLED": {
+      "description": "Enable application metrics",
+      "value": "true"
+    },
+    "PROMETHEUS_ENABLED": {
+      "description": "Enable Prometheus metrics",
+      "value": "false"
+    },
+    "RATE_LIMIT_TTL": {
+      "description": "Rate limiting time window in seconds",
+      "value": "60"
+    },
+    "RATE_LIMIT_LIMIT": {
+      "description": "Maximum requests per time window",
+      "value": "100"
+    },
+    "HEALTH_DB_TIMEOUT": {
+      "description": "Database health check timeout in ms",
+      "value": "5000"
+    },
+    "HEALTH_MEMORY_THRESHOLD": {
+      "description": "Memory usage threshold for health checks (MB)",
+      "value": "150"
+    },
+    "MAX_FILE_SIZE": {
+      "description": "Maximum file upload size in bytes",
+      "value": "5242880"
+    },
+    "UPLOAD_DEST": {
+      "description": "Directory for file uploads",
+      "value": "./uploads"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "hobby"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "scripts": {
+    "postdeploy": "npm run migration:run"
+  },
+  "stack": "heroku-22"
+}

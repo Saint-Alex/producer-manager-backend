@@ -58,8 +58,8 @@ async function bootstrap() {
   const swaggerPath = configService.get('SWAGGER_PATH') || 'api/docs';
   SwaggerModule.setup(swaggerPath, app, document);
 
-  const port = configService.get('PORT') || 3001;
-  await app.listen(port);
+  const port = process.env.PORT || configService.get('PORT') || 3001;
+  await app.listen(port, '0.0.0.0'); // Bind to all interfaces for Heroku
 
   // Graceful shutdown
   process.on('SIGTERM', () => {

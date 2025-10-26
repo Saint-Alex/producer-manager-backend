@@ -82,7 +82,9 @@ describe('Main Bootstrap', () => {
     // Give time for async bootstrap to complete
     await new Promise((resolve) => setTimeout(resolve, 100));
 
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { NestFactory } = require('@nestjs/core');
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { SwaggerModule } = require('@nestjs/swagger');
 
     // Verify NestFactory.create was called

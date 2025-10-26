@@ -16,12 +16,33 @@ export const configValidationSchema = Joi.object({
     otherwise: Joi.optional().default('http://localhost:3000'),
   }),
 
-  // Database - obrigatórios
-  DATABASE_HOST: Joi.string().required(),
-  DATABASE_PORT: Joi.number().port().required(),
-  DATABASE_USERNAME: Joi.string().required(),
-  DATABASE_PASSWORD: Joi.string().required(),
-  DATABASE_NAME: Joi.string().required(),
+  // Database - aceita DATABASE_URL ou variáveis individuais
+  DATABASE_URL: Joi.string().uri().optional(),
+  DATABASE_HOST: Joi.string().when('DATABASE_URL', {
+    is: Joi.exist(),
+    then: Joi.optional(),
+    otherwise: Joi.required(),
+  }),
+  DATABASE_PORT: Joi.number().port().when('DATABASE_URL', {
+    is: Joi.exist(),
+    then: Joi.optional(),
+    otherwise: Joi.required(),
+  }),
+  DATABASE_USERNAME: Joi.string().when('DATABASE_URL', {
+    is: Joi.exist(),
+    then: Joi.optional(),
+    otherwise: Joi.required(),
+  }),
+  DATABASE_PASSWORD: Joi.string().when('DATABASE_URL', {
+    is: Joi.exist(),
+    then: Joi.optional(),
+    otherwise: Joi.required(),
+  }),
+  DATABASE_NAME: Joi.string().when('DATABASE_URL', {
+    is: Joi.exist(),
+    then: Joi.optional(),
+    otherwise: Joi.required(),
+  }),
 
   // JWT - obrigatório
   JWT_SECRET: Joi.string()

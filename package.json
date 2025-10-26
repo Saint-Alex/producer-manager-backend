@@ -5,6 +5,10 @@
   "author": "Brain Agriculture",
   "private": true,
   "license": "UNLICENSED",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -37,7 +41,9 @@
     "docker:restart": "docker-compose restart",
     "docker:db": "docker-compose up -d postgres redis",
     "dev:setup": "npm install && npm run docker:db && sleep 5 && npm run migration:run && npm run seed",
-    "dev:reset": "npm run docker:down && npm run docker:up && sleep 10 && npm run migration:run && npm run seed"
+    "dev:reset": "npm run docker:down && npm run docker:up && sleep 10 && npm run migration:run && npm run seed",
+    "heroku-postbuild": "npm run build",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "@nestjs/common": "^10.4.0",

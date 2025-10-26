@@ -17,6 +17,7 @@ import { SafraModule } from './modules/safra/safra.module';
 // Import observability components
 import { AuditLog } from './database/entities/audit-log.entity';
 import { AuditService } from './shared/audit/audit.service';
+import { getDatabaseConfig } from './shared/config/database.config';
 import { configValidationSchema } from './shared/config/validation.schema';
 import { GlobalExceptionFilter } from './shared/filters/global-exception.filter';
 import { HealthModule } from './shared/health/health.module';
@@ -52,18 +53,22 @@ import { CorrelationIdMiddleware } from './shared/middleware/correlation-id.midd
     // Database
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DATABASE_HOST'),
-        port: configService.get('DATABASE_PORT'),
-        username: configService.get('DATABASE_USERNAME'),
-        password: configService.get('DATABASE_PASSWORD'),
-        database: configService.get('DATABASE_NAME'),
-        entities: [__dirname + '/database/entities/*.entity{.ts,.js}'],
-        migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
-        synchronize: configService.get('NODE_ENV') === 'development',
-        logging: configService.get('NODE_ENV') === 'development',
-      }),
+      useFactory: (configService: ConfigService) => {
+        const dbConfig = getDatabaseConfig();
+        return {
+          type: 'postgres',
+          host: dbConfig.host,
+          port: dbConfig.port,
+          username: dbConfig.username,
+          password: dbConfig.password,
+          database: dbConfig.database,
+          ssl: dbConfig.ssl ? { rejectUnauthorized: false } : false,
+          entities: [__dirname + '/database/entities/*.entity{.ts,.js}'],
+          migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
+          synchronize: configService.get('NODE_ENV') === 'development',
+          logging: configService.get('NODE_ENV') === 'development',
+        };
+      },
       inject: [ConfigService],
     }),
 
