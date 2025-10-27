@@ -43,10 +43,10 @@ export class PropriedadeRural {
   })
   produtores: Produtor[];
 
-  @OneToMany(() => Cultivo, (cultivo) => cultivo.propriedadeRural)
+  @OneToMany(() => Cultivo, (cultivo) => cultivo.propriedadeRural, { cascade: ['remove'] })
   cultivos: Cultivo[];
 
-  @OneToMany(() => Safra, (safra) => safra.propriedadeRural)
+  @OneToMany(() => Safra, (safra) => safra.propriedadeRural, { cascade: ['remove'] })
   safras: Safra[];
 
   @CreateDateColumn({ name: 'created_at' })

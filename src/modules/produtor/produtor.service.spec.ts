@@ -283,7 +283,7 @@ describe('ProdutorService', () => {
 
       expect(mockRepository.findOne).toHaveBeenCalledWith({
         where: { id: produtorId },
-        relations: ['propriedades', 'propriedades.cultivos'],
+        relations: ['propriedades', 'propriedades.safras', 'propriedades.cultivos'],
       });
       expect(mockQueryRunner.connect).toHaveBeenCalled();
       expect(mockQueryRunner.startTransaction).toHaveBeenCalled();
@@ -300,7 +300,7 @@ describe('ProdutorService', () => {
 
       expect(mockRepository.findOne).toHaveBeenCalledWith({
         where: { id: produtorId },
-        relations: ['propriedades', 'propriedades.cultivos'],
+        relations: ['propriedades', 'propriedades.safras', 'propriedades.cultivos'],
       });
     });
 
@@ -356,16 +356,21 @@ describe('ProdutorService', () => {
 
       await service.remove(produtorId);
 
-      expect(mockQueryRunner.manager.delete).toHaveBeenCalledWith('Cultivo', {
-        propriedadeRural: { id: 'prop1' },
+      // Verificar que os cultivos foram deletados primeiro via queryBuilder
+      expect(mockQueryBuilder.delete).toHaveBeenCalled();
+      expect(mockQueryBuilder.from).toHaveBeenCalledWith('cultivos');
+      expect(mockQueryBuilder.where).toHaveBeenCalledWith('propriedade_rural_id = :propriedadeId', {
+        propriedadeId: 'prop1',
       });
-      expect(mockQueryRunner.manager.delete).toHaveBeenCalledWith('PropriedadeRural', {
-        id: 'prop1',
-      });
-      expect(mockQueryRunner.manager.delete).toHaveBeenCalledWith('PropriedadeRural', {
-        id: 'prop2',
-      });
-      expect(mockQueryRunner.manager.delete).toHaveBeenCalledWith('Produtor', { id: produtorId });
+
+      // Verificar que as safras foram deletadas via queryBuilder
+      expect(mockQueryBuilder.from).toHaveBeenCalledWith('safras');
+
+      // Verificar que as propriedades foram deletadas via queryBuilder
+      expect(mockQueryBuilder.from).toHaveBeenCalledWith('propriedades_rurais');
+
+      // Verificar que o produtor foi deletado via queryBuilder
+      expect(mockQueryBuilder.from).toHaveBeenCalledWith('produtores');
     });
 
     it('should rollback transaction on error during removal', async () => {
@@ -385,19 +390,20 @@ describe('ProdutorService', () => {
         rollbackTransaction: jest.fn(),
         release: jest.fn(),
         manager: {
-          delete: jest.fn().mockRejectedValue(new Error('Database error')),
           createQueryBuilder: jest.fn().mockReturnValue({
             delete: jest.fn().mockReturnThis(),
             from: jest.fn().mockReturnThis(),
             where: jest.fn().mockReturnThis(),
-            execute: jest.fn().mockResolvedValue({ affected: 1 }),
+            execute: jest.fn().mockRejectedValue(new Error('Database error')),
           }),
         },
       };
 
       mockRepository.manager.connection.createQueryRunner.mockReturnValue(mockQueryRunner);
 
-      await expect(service.remove(produtorId)).rejects.toThrow('Database error');
+      await expect(service.remove(produtorId)).rejects.toThrow(
+        'Erro ao deletar produtor: Database error',
+      );
 
       expect(mockQueryRunner.rollbackTransaction).toHaveBeenCalled();
       expect(mockQueryRunner.release).toHaveBeenCalled();

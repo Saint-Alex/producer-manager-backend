@@ -19,11 +19,11 @@ export class Cultivo {
   @Column({ name: 'area_plantada', type: 'decimal', precision: 10, scale: 2, nullable: true })
   areaPlantada: number;
 
-  @ManyToOne(() => PropriedadeRural, (propriedade) => propriedade.cultivos)
+  @ManyToOne(() => PropriedadeRural, (propriedade) => propriedade.cultivos, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'propriedade_rural_id' })
   propriedadeRural: PropriedadeRural;
 
-  @ManyToOne(() => Safra, (safra) => safra.cultivos)
+  @ManyToOne(() => Safra, (safra) => safra.cultivos, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'safra_id' })
   safra: Safra;
 

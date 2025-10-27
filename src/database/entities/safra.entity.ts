@@ -28,7 +28,7 @@ export class Safra {
   @Column({ name: 'data_fim', type: 'date', nullable: true })
   dataFim: Date;
 
-  @ManyToOne(() => PropriedadeRural, (propriedade) => propriedade.safras)
+  @ManyToOne(() => PropriedadeRural, (propriedade) => propriedade.safras, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'propriedade_rural_id' })
   propriedadeRural: PropriedadeRural;
 

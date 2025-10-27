@@ -1,24 +1,38 @@
-import { ConfigService } from '@nestjs/config';
+import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
+import { getDatabaseConfig } from '../../shared/config/database.config';
 import { CultivoSeeder } from './cultivo.seeder';
 import { CulturaSeeder } from './cultura.seeder';
 import { ProdutorSeeder } from './produtor.seeder';
 import { PropriedadeRuralSeeder } from './propriedade-rural.seeder';
 import { SafraSeeder } from './safra.seeder';
 
+// Carregar variáveis de ambiente do arquivo .env
+config();
+
 // Configuração manual do DataSource para seeds
 const runSeeds = async () => {
-  const configService = new ConfigService();
+  const dbConfig = getDatabaseConfig();
+
+  console.log('🔧 Configuração do banco:');
+  console.log(`   Host: ${dbConfig.host}`);
+  console.log(`   Port: ${dbConfig.port}`);
+  console.log(`   Database: ${dbConfig.database}`);
+  console.log(`   SSL: ${dbConfig.ssl}`);
+  console.log(`   DATABASE_URL presente: ${!!process.env.DATABASE_URL}`);
+  console.log('');
 
   const dataSource = new DataSource({
     type: 'postgres',
-    host: configService.get('DATABASE_HOST', 'localhost'),
-    port: configService.get('DATABASE_PORT', 5432),
-    username: configService.get('DATABASE_USERNAME', 'brainag_user'),
-    password: configService.get('DATABASE_PASSWORD', 'brainag_pass'),
-    database: configService.get('DATABASE_NAME', 'brainag_db'),
-    entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+    host: dbConfig.host,
+    port: dbConfig.port,
+    username: dbConfig.username,
+    password: dbConfig.password,
+    database: dbConfig.database,
+    ssl: dbConfig.ssl ? { rejectUnauthorized: false } : false,
+    entities: [__dirname + '/../entities/*.entity{.ts,.js}'],
     synchronize: false, // Não usar synchronize em produção
+    logging: process.env.NODE_ENV === 'development',
   });
 
   try {

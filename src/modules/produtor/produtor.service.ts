@@ -66,7 +66,7 @@ export class ProdutorService {
   async remove(id: string): Promise<void> {
     const produtor = await this.produtorRepository.findOne({
       where: { id },
-      relations: ['propriedades', 'propriedades.cultivos'],
+      relations: ['propriedades', 'propriedades.safras', 'propriedades.cultivos'],
     });
 
     if (!produtor) {
@@ -79,13 +79,23 @@ export class ProdutorService {
     await queryRunner.startTransaction();
 
     try {
-      // 1. Deletar todos os cultivos das propriedades do produtor
+      // 1. Para cada propriedade do produtor
       for (const propriedade of produtor.propriedades) {
-        if (propriedade.cultivos && propriedade.cultivos.length > 0) {
-          await queryRunner.manager.delete('Cultivo', {
-            propriedadeRural: { id: propriedade.id },
-          });
-        }
+        // 1.1. Deletar todos os cultivos das safras da propriedade (as culturas ficam, apenas desassociam)
+        await queryRunner.manager
+          .createQueryBuilder()
+          .delete()
+          .from('cultivos')
+          .where('propriedade_rural_id = :propriedadeId', { propriedadeId: propriedade.id })
+          .execute();
+
+        // 1.2. Deletar todas as safras da propriedade (cascade delete vai cuidar dos cultivos)
+        await queryRunner.manager
+          .createQueryBuilder()
+          .delete()
+          .from('safras')
+          .where('propriedade_rural_id = :propriedadeId', { propriedadeId: propriedade.id })
+          .execute();
       }
 
       // 2. Remover relacionamentos produtor-propriedade
@@ -108,17 +118,27 @@ export class ProdutorService {
 
         // Se não há outros produtores, deletar a propriedade
         if (parseInt(propriedadeComProdutores.count) === 0) {
-          await queryRunner.manager.delete('PropriedadeRural', { id: propriedade.id });
+          await queryRunner.manager
+            .createQueryBuilder()
+            .delete()
+            .from('propriedades_rurais')
+            .where('id = :propriedadeId', { propriedadeId: propriedade.id })
+            .execute();
         }
       }
 
       // 4. Deletar o produtor
-      await queryRunner.manager.delete('Produtor', { id });
+      await queryRunner.manager
+        .createQueryBuilder()
+        .delete()
+        .from('produtores')
+        .where('id = :produtorId', { produtorId: id })
+        .execute();
 
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw error;
+      throw new BadRequestException('Erro ao deletar produtor: ' + error.message);
     } finally {
       await queryRunner.release();
     }
