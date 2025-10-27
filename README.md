@@ -52,13 +52,16 @@ http://localhost:3001/api/docs (Swagger)
 
 | Recurso | Endpoint | Descrição |
 |---------|----------|-----------|
-| Produtores | `/produtores` | CRUD de produtores rurais |
-| Propriedades | `/propriedades` | Gestão de propriedades |
-| Culturas | `/culturas` | Tipos de cultivo |
-| Safras | `/safras` | Períodos de produção |
-| Dashboard | `/dashboard` | Estatísticas do sistema |
-| Health | `/health` | Status da aplicação |
-| Metrics | `/metrics` | Métricas de monitoramento |
+| **Produtores** | `/produtores` | CRUD completo de produtores rurais |
+| **Propriedades** | `/propriedades` | Gestão de propriedades rurais |
+| **Culturas** | `/culturas` | Tipos de cultivo disponíveis |
+| **Safras** | `/safras` | Períodos de produção |
+| **Cultivos** | `/cultivos` | Relação cultura x propriedade x safra |
+| **Dashboard** | `/dashboard` | Estatísticas e métricas do sistema |
+| **Health** | `/health/*` | Status da aplicação |
+| **Metrics** | `/metrics/*` | Métricas para monitoramento |
+
+> **📖 Documentação Completa**: http://localhost:3001/api/docs (Swagger UI)
 
 ## Scripts Principais
 
@@ -76,23 +79,6 @@ npm run lint          # Verificar código
 - **Métricas**: Formato Prometheus (`/metrics`)
 - **Health Checks**: Ready/Live probes (`/health`)
 - **Audit Trail**: Rastreamento automático de mudanças
-
----
-
-## API Endpoints
-
-| Recurso | Endpoints | Descrição |
-|---------|-----------|-----------|
-| **Produtores** | `/produtores` | CRUD completo de produtores rurais |
-| **Propriedades** | `/propriedades` | Gestão de propriedades rurais |
-| **Culturas** | `/culturas` | Tipos de cultivo disponíveis |
-| **Safras** | `/safras` | Períodos de produção |
-| **Cultivos** | `/cultivos` | Relação cultura x propriedade x safra |
-| **Dashboard** | `/dashboard` | Estatísticas e métricas do sistema |
-| **Health** | `/health/*` | Status da aplicação |
-| **Metrics** | `/metrics/*` | Métricas para monitoramento |
-
-> **📖 Documentação Completa**: http://localhost:3000/api (Swagger UI)
 
 ---
 
